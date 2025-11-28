@@ -14,7 +14,7 @@
     overflow: hidden;
 }
 
-.login__left {
+.form__left {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,12 +23,12 @@
     background-color: #fff;
 }
 
-.login__logo {
+.form__logo {
     width: 40%;
     height: 40%;
 }
 
-.login__space {
+.form__space {
     width: 60%;
     height: 3px;
     border: none;
@@ -36,7 +36,7 @@
     background-color: #39A900;
 }
 
-.login__title {
+.form__title {
     color: #39A900;
     font-weight: 700;
     font-family: "Work Sans";
@@ -45,8 +45,9 @@
 }
 
 
+
 /* DERECHA */
-.login__right {
+.form__right {
     background: #a1dd83;
     padding: 60px 50px;
     display: flex;
@@ -57,39 +58,39 @@
     padding: 40px;
 }
 
-.login__welcome {
+.form__welcome {
     font-size: 30px;
     font-weight: 700;
     color: #1C5400;
 }
 
-.login__form {
+.form__form {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.login__grupo {
+.form__grupo {
     display: flex;
     flex-direction: column;
     gap: 5px;
     width: 100%;
 }
 
-.login__label {
+.form__label {
     font-weight: 600;
     color: #1C5400;
 }
 
-.login__input {
+.form__input {
     padding: 7px;
     border-radius: 5px;
     border: 1px solid #4e6d3e;
     outline: none;
 }
 
-.login__footer {
+.form__footer {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -97,13 +98,13 @@
     align-items: center;
 }
 
-.login__redirect {
+.form__redirect {
     font-size: 14px;
     font-weight: 700;
     color: #1C5400;
 }
 
-.login__button {
+.form__button {
     padding: 12px 0;
     border-radius: 7px;
     border: none;
@@ -112,7 +113,7 @@
     width: 70%;
 }
 
-.login__link {
+.form__link {
     text-decoration: none;
     color: #143501;
 }

@@ -1,29 +1,29 @@
 <div class="bodyContent">
     <div class="login">
         <!-- Columna izquierda -->
-        <div class="login__left">
-            <img src="../../../public/img Sena.png" alt="Logo SENA" class="login__logo">
-            <hr class="login__space">
-            <h2 class="login__title">Gestión <br> Biblioteca</h2>
+        <div class="form__left">
+            <img src="../../../public/img Sena.png" alt="Logo SENA" class="form__logo">
+            <hr class="form__space">
+            <h2 class="form__title">Gestión <br> Biblioteca</h2>
         </div>
         <!-- Columna derecha -->
-        <div class="login__right">
-            <h2 class="login__welcome">Bienvenido/a</h2>
-            <form class="login__form">
-                <div class="login__grupo">
-                    <label class="login__label">No. documento:</label>
-                    <input type="text" class="login__input">
+        <div class="form__right">
+            <h2 class="form__welcome">Bienvenido/a</h2>
+            <form class="form__form" id="formulario" novalidate autocomplete="off"> 
+                <div class="form__grupo">
+                    <label class="form__label">No. documento:</label>
+                    <input class="form__input" type="text" required id="documento"  >
                 </div>
-                <div class="login__grupo">
-                    <label class="login__label">Motivo de Ingreso:</label>
-                    <select class="login__input">
-                        <option value="">Seleccione...</option>
+                <div class="form__grupo">
+                    <label class="form__label">Motivo de Ingreso:</label>
+                    <select class="form__input motivos">
+                        <option value="" id="motivo">Seleccione</option>
                     </select>
                 </div>
-                <div class="login__footer">
-                    <button class="login__button">Registrar Asistencia</button>
-                    <p class="login__redirect">
-                        ¿Nuevo/a por aquí? <a href="#" class="login__link">Regístrate</a>
+                <div class="form__footer">
+                    <button class="form__button">Registrar Asistencia</button>
+                    <p class="form__redirect">
+                        ¿Nuevo/a por aquí? <a href="#" class="form__link">Regístrate</a>
                     </p>
                 </div>
             </form>
