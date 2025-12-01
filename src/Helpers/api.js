@@ -23,24 +23,38 @@ export const get = async (endpoint, params = {}) => {
 export const post = async (endpoint, data) => {
     try {
         const response = await fetch(`${url}${endpoint}`, {
-            // method: 'POST',
-            // headers: await getAuthHeaders(),
-            // body: JSON.stringify(data)
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
         });
+
         const responseData = await response.json();
 
+        // Manejar errores HTTP como 422
+        if (!response.ok) {
+            return {
+                success: false,
+                message: responseData.message || "Error desconocido",
+                errors: responseData.errors || [],
+                data: null
+            };
+        }
+
         return {
-            ok: response.ok,
+            success: true,
             message: responseData.message || "",
-            errors: responseData.erros || [],
+            errors: responseData.errors || [],
             data: responseData.data || null
         };
 
     } catch (error) {
         console.error("Error en POST:", error);
-        return { ok: false, message: "Error inesperado", errors: [], data: null };
+        return { success: false, message: "Error inesperado", errors: [], data: null };
     }
 };
+
 
 
 export const login = async (documento, contrasena) => {

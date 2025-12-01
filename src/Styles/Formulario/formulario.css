@@ -7,9 +7,9 @@
 
 .login {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 50%;
-    height: 60%;
+    grid-template-columns: repeat(2, 1fr);
+    width: 60%;
+    height: 70%;
     border-radius: 12px;
     overflow: hidden;
 }
@@ -49,7 +49,6 @@
 /* DERECHA */
 .form__right {
     background: #a1dd83;
-    padding: 60px 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -84,7 +83,8 @@
 }
 
 .form__input {
-    padding: 7px;
+    width: 100%;
+    padding: 8px;
     border-radius: 5px;
     border: 1px solid #4e6d3e;
     outline: none;
@@ -116,4 +116,22 @@
 .form__link {
     text-decoration: none;
     color: #143501;
+}
+
+.space {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    row-gap: 25px;
+    align-items: center;
+}
+
+.space > *:nth-child(7) {
+    grid-column: 1 / 3;      
+    display: flex;
+    justify-content: center;   
+}
+
+.oculto{
+    display: none;
 }

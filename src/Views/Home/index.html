@@ -12,18 +12,22 @@
             <form class="form__form" id="formulario" novalidate autocomplete="off"> 
                 <div class="form__grupo">
                     <label class="form__label">No. documento:</label>
-                    <input class="form__input" type="text" required id="documento"  >
+                    <input class="form__input" type="text" required id="documento" name="usuario_id"  >
                 </div>
                 <div class="form__grupo">
-                    <label class="form__label">Motivo de Ingreso:</label>
-                    <select class="form__input motivos">
-                        <option value="" id="motivo">Seleccione</option>
+                    <label class="form__label" >Motivo de Ingreso:</label>
+                    <select class="form__input motivos" name="motivo">
+                        <option value="">Seleccione</option>
                     </select>
+                </div>
+                <div class="form__grupo activo oculto">
+                    <label class="form__label">Evento:</label>
+                    <input class="form__input" type="text" id="evento" name="evento"  >
                 </div>
                 <div class="form__footer">
                     <button class="form__button">Registrar Asistencia</button>
                     <p class="form__redirect">
-                        ¿Nuevo/a por aquí? <a href="#" class="form__link">Regístrate</a>
+                        ¿Nuevo/a por aquí? <a href="#/Register" class="form__link">Regístrate</a>
                     </p>
                 </div>
             </form>

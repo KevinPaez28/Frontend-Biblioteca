@@ -4,13 +4,13 @@ import { routes } from "./routes";
 // import { error } from "../Helpers/alertas.js";
 
 // Redirecciona a una ruta determinada
-export const redirigirARuta = (ruta) => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  if (!usuario) {
-    alert("Acceso no autorizado");
-  }
-  location.hash = ruta; // siempre redirige a la ruta indicada
-};
+// export const redirigirARuta = (ruta) => {
+//   const usuario = JSON.parse(localStorage.getItem("usuario"));
+//   if (!usuario) {
+//     alert("Acceso no autorizado");
+//   }
+//   location.hash = ruta; // siempre redirige a la ruta indicada
+// };
 
 // Función principal del enrutador SPA
 export const router = async (elemento) => {
