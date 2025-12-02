@@ -1,6 +1,10 @@
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 <div class="bodyContent">
     <div class="login">
         <div class="form__left">
+            <div class="left_back">
+            <a href="#/Home" class="form__link"><i class="ri-arrow-left-line"></i></a>
+            </div>
             <img src="../../../public/img Sena.png" alt="Logo SENA" class="form__logo">
             <hr class="form__space">
             <h2 class="form__title">Gestión <br> Biblioteca</h2>
@@ -27,11 +31,11 @@
 
                 <div class="form__grupo">
                     <label class="form__label">Rol en el Sena:</label>
-                    <select class="form__input" name="rol_sena" required>
+                    <select class="form__input rol" name="rol" required>
                         <option value="">Seleccione</option>
                     </select>
                 </div>
-
+                
                 <div class="form__grupo">
                     <label class="form__label">Correo Electrónico:</label>
                     <input class="form__input" type="email" name="correo" required>
@@ -40,6 +44,20 @@
                 <div class="form__grupo">
                     <label class="form__label">Teléfono:</label>
                     <input class="form__input" type="tel" name="telefono" required>
+                </div>
+
+                <div class="form__grupo activo oculto">
+                    <label class="form__label">Ficha</label>
+                    <select class="form__input ficha" name="ficha" required>
+                        <option value="">Seleccione</option>
+                    </select>
+                </div>
+
+                <div class="form__grupo activo oculto">
+                    <label class="form__label">Programa</label>
+                    <select class="form__input programa" name="programa" required>
+                        <option value="">Seleccione</option>
+                    </select>
                 </div>
 
                 <div class="form__footer">
