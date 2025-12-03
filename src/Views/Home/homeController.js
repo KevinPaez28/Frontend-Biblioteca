@@ -46,10 +46,10 @@ export default async () => {
     })
 
     // SUBMIT
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-        if (!validarCampos(e)) {
+        if (!validarCampos(event)) {
             error("Por favor corrige los campos con error");
             return;
         }

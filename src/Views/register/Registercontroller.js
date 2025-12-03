@@ -37,14 +37,14 @@ export default async () => {
     fichas.data.forEach(f => {
         const op = document.createElement("option");
         op.value = f.id;
-        op.textContent = f.name;
+        op.textContent = f.ficha;
         selectFicha.append(op);
     });
 
     programas.data.forEach(p => {
         const op = document.createElement("option");
         op.value = p.id;
-        op.textContent = p.name;
+        op.textContent = p.training_program;
         selectPrograma.append(op);
     });
 
@@ -64,16 +64,11 @@ export default async () => {
         }
     })
 
-    inputDocumento.addEventListener("input", () => {
-        validarNumeros(inputDocumento);
-    });
-
-
     // ========= SUBMIT FORM =============
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-        if (!validarCampos(e)) {
+        if (!validarCampos(event)) {
             error("Por favor corrige los campos marcados");
             return;
         }
@@ -81,17 +76,18 @@ export default async () => {
         const data = {
             nombres: datos.nombres,
             apellidos: datos.apellidos,
-            usuario_id: datos.usuario_id,
-            rol_sena: datos.rol_sena,
-            ficha: datos.rol_sena_1,        // segundo select con mismo name
-            programa: datos.rol_sena_2,     // tercer select con mismo name
+            documento: String(datos.usuario_id),
+            rol_sena: datos.rol,
+            ficha_id: datos.ficha,        
+            programa: datos.programa,     
             correo: datos.correo,
-            telefono: datos.telefono,
+            telefono: String(datos.telefono),
+            estados_id: 1
         };
 
         console.log("DATA ENVIADA:", data);
 
-        const response = await post("usuarios/create", data);
+        const response = await post("user/create", data);
 
         if (!response.success) {
             if (response.errors) {

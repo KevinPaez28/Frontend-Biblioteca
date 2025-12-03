@@ -1,0 +1,35 @@
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+<div class="bodyContent">
+    <div class="login">
+        <div class="form__left">
+            <img src="../../../public/img Sena.png" alt="Logo SENA" class="form__logo">
+            <hr class="form__space">
+            <h2 class="form__title">Gestión <br> Biblioteca</h2>
+        </div>
+
+        <div class="form__right">
+            <h2 class="form__welcome">Bienvenido/a</h2>
+
+            <form class="form__form" id="formulario" novalidate autocomplete="off">
+
+                <div class="form__grupo">
+                    <label class="form__label">Documento:</label>
+                    <input class="form__input" type="text" id="documento" name="usuario_id" required>
+                </div>
+
+                <div class="form__grupo">
+                    <label class="form__label">Contraseña:</label>
+                    <input class="form__input" type="password" name="password" required>
+
+                    <div class="form__redirect">
+                        <a href="#/Recuperar" class="form__link">¿Olvidaste tu Contraseña?</a>
+                    </div>
+                </div>
+
+                <div class="form__footer">
+                    <button type="submit" class="form__button">Iniciar Sesión</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
