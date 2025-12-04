@@ -108,7 +108,7 @@ export const validarPassword = (e) => {
 // Validar todos los campos del formulario
 export let datos = null;
 export const validarCampos = (event) => {
-  event.preventDefault();
+  
   let valido = true;
   datos = {};
 
@@ -120,7 +120,6 @@ export const validarCampos = (event) => {
   );
 
   campos.forEach((campo) => {
-    if (campo.type === "email") valido = validarCorreo({ target: campo }) && valido;
     if (campo.type === "password") valido = validarPassword({ target: campo }) && valido;
 
 

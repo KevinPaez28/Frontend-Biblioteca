@@ -1,16 +1,11 @@
 import "../../Styles/Formulario/Formulario.css"
 
-import "../../Styles/Formulario/Formulario.css";
 import { get, post } from "../../Helpers/api";
 import { validarCampos, datos, validarNumeros } from "../../Helpers/Modules/modules";
 import { success, error } from "../../Helpers/alertas";
 
 export default async () => {
-
     const form = document.querySelector(".form__form");
-
-    // Inputs
-    const inputDocumento = document.querySelector("#documento");
 
     // Selects
     const selectRol = document.querySelector(".rol");
@@ -21,10 +16,6 @@ export default async () => {
     const roles = await get("roles");
     const fichas = await get("ficha");
     const programas = await get("programa");
-    console.log(roles);
-    console.log(fichas);
-    console.log(programas);
-    
 
     // ======= RELLENAR SELECTS ========
     roles.data.forEach(r => {
@@ -48,46 +39,50 @@ export default async () => {
         selectPrograma.append(op);
     });
 
-
     selectRol.addEventListener("change", () => {
-        const roles_id = roles.data.find(rls => rls.name.toLowerCase() == "aprendiz");
+        const roles_id = roles.data.find(rls => rls.name.toLowerCase() === "aprendiz");
         const rls = roles_id.id;
         const clase = document.querySelectorAll(".form__grupo.activo");
         if (selectRol.value == rls) {
-
             clase.forEach(g => g.classList.remove("oculto"));
-        }
-        else {
+        } else {
             clase.forEach(g => g.classList.add("oculto"));
             selectFicha.value = "";
             selectPrograma.value = "";
         }
-    })
+    });
 
     // ========= SUBMIT FORM =============
     form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+        event.preventDefault();
 
+        // Validar campos
         if (!validarCampos(event)) {
             error("Por favor corrige los campos marcados");
             return;
         }
 
-        const data = {
-            nombres: datos.nombres,
-            apellidos: datos.apellidos,
-            documento: String(datos.usuario_id),
-            rol_sena: datos.rol,
-            ficha_id: datos.ficha,        
-            programa: datos.programa,     
-            correo: datos.correo,
-            telefono: String(datos.telefono),
-            estados_id: 1
-        };
+        const datosEnviar = {};
+        //tomamos todos los elementos del formulario y los agregamos 
+        // al objeto datosEnviar
+        for (let i = 0; i < form.elements.length; i++) {
+            const campo = form.elements[i];
+            if (campo.hasAttribute('name')) {
+                datosEnviar[campo.name] = campo.value.trim();
+            }
+        }
 
-        console.log("DATA ENVIADA:", data);
+        //a claves del objeto le asignamos los valores de los inputs
+        datosEnviar.documento=(datosEnviar.documento);
+        datosEnviar.rol_sena = (datosEnviar.rol);
+        datosEnviar.ficha_id = (datosEnviar.ficha);
+        datosEnviar.programa = (datosEnviar.programa);
+        datosEnviar.telefono = (datosEnviar.telefono);
+        datosEnviar.estados_id = 1;
 
-        const response = await post("user/create", data);
+        console.log("DATA ENVIADA:", datosEnviar);
+
+        const response = await post("user/create", datosEnviar);
 
         if (!response.success) {
             if (response.errors) {
@@ -101,4 +96,5 @@ export default async () => {
         success(response.message || "Registrado correctamente");
         form.reset();
     });
+
 };

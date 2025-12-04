@@ -4,33 +4,38 @@ import { validarCampos, datos } from "../../Helpers/Modules/modules";
 import { success, error } from "../../Helpers/alertas";
 
 export default async () => {
+    const form = document.querySelector(" .form__form");
+    const documento = document.querySelector(".documento");
+    const password = document.querySelector(".contrasena");
+    
+    // SUBMIT
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    const form = document.querySelector(".form__form");
+        // if (!validarCampos(e)) {
+        //     error("Por favor corrige los campos marcados");
+        //     return;
+        // }
+        
 
-    // Inputs
-    const inputDocumento = document.querySelector("#documento");
-    const inputPassword = document.querySelector("#password");
-
-    // ========= SUBMIT FORM =============
-    form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-        if (!validarCampos(event)) {
-            error("Por favor corrige los campos marcados");
-            return;
-        }
-
+        
+        
         const data = {
-            document: String(datos.usuario_id),   
-            password: datos.password              
+            document:documento.value,   // viene del input name="documento"
+            password:password.value      // viene del input name="password"
         };
+        
+        console.log(data);
 
-        console.log("DATA ENVIADA LOGIN:", data);
+        console.log("DATA ENVIADA:", data);
 
-        const response = await post("auth/login", data);
+        const response = await post("login", data);
+
+        console.log("RESPUESTA DEL BACKEND:", response);
+
 
         if (!response.success) {
-            if (response.errors) {
+            if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {
                 error(response.message || "Credenciales incorrectas");
@@ -38,13 +43,7 @@ export default async () => {
             return;
         }
 
-        // El backend ya crea las cookies (access + refresh)
         success("Bienvenido");
-
-        // Redirección después de login
-        setTimeout(() => {
-            window.location.href = "/dashboard"; 
-        }, 600);
+        form.reset();
     });
-
 };
