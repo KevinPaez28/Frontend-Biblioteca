@@ -1,6 +1,6 @@
 import "../../Styles/Formulario/Formulario.css";
 import { get, post } from "../../Helpers/api";
-import { validarCampos, datos, validarNumeros } from "../../Helpers/Modules/modules";
+import { validarCampos, datos } from "../../Helpers/Modules/modules";
 import { success, error } from "../../Helpers/alertas";
 
 export default async () => {
@@ -20,6 +20,7 @@ export default async () => {
         selectMotivos.append(option);
     });
 
+    console.log(eventos);
 
     eventos.data.forEach(m => {
         const events = document.createElement("option");
@@ -53,11 +54,8 @@ export default async () => {
             return;
         }
 
-        const data = {
-            usuario_id: datos.usuario_id,
-            motivo: datos.motivo,
-            evento: datos.evento
-        };
+        const data = { ...datos };
+
 
         console.log("DATA ENVIADA:", data);
 

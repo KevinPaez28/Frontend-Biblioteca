@@ -1,6 +1,6 @@
 import "../../Styles/Formulario/Formulario.css";
 import { post } from "../../Helpers/api";
-import { validarCampos, datos } from "../../Helpers/Modules/modules";
+import { validarCampos,datos } from "../../Helpers/Modules/modules";
 import { success, error } from "../../Helpers/alertas";
 
 export default async () => {
@@ -12,11 +12,10 @@ export default async () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // if (!validarCampos(e)) {
-        //     error("Por favor corrige los campos marcados");
-        //     return;
-        // }
-        
+        if (!validarCampos(e)) {
+            error("Por favor corrige los campos marcados");
+            return;
+        }     
 
         
         

@@ -1,4 +1,14 @@
-const teclasEspeciales = ["Backspace", "Tab", "Enter", "ArrowLeft", "ArrowRight", "Delete"];
+// Teclas especiales permitidas
+const teclasEspeciales = [
+  "Backspace",
+  "Tab",
+  "Enter",
+  "ArrowLeft",
+  "ArrowRight",
+  "Delete",
+];
+
+// ================== VALIDACIONES DE TECLADO ==================
 
 // Validar solo texto (sin números)
 export const validarTexto = (event) => {
@@ -20,13 +30,24 @@ export const validarNumeros = (event) => {
   }
 };
 
-// Validar campo vacío
+// Máximo de caracteres
+export const validarMaximo = (event, maximo) => {
+  const key = event.key;
+  if (!teclasEspeciales.includes(key) && event.target.value.length >= maximo) {
+    event.preventDefault();
+  }
+};
+
+// ================== ERRORES GENÉRICOS ==================
+
+// Validar campo vacío / select sin opción
 export const validarCampo = (event) => {
-  let campo = event.target;
-  const campoContenedor = campo.closest('.form__grupo');
+  const campo = event.target;
+  const campoContenedor = campo.closest(".form__grupo");
 
   if (
-    ((campo.tagName === "INPUT" || campo.tagName === "TEXTAREA") && campo.value.trim() === "") ||
+    ((campo.tagName === "INPUT" || campo.tagName === "TEXTAREA") &&
+      campo.value.trim() === "") ||
     (campo.tagName === "SELECT" && campo.selectedIndex === 0)
   ) {
     agregarError(campoContenedor);
@@ -38,26 +59,41 @@ export const validarCampo = (event) => {
 };
 
 // Agregar error
-export const agregarError = (campoContenedor, mensaje = "El campo es obligatorio.") => {
+export const agregarError = (
+  campoContenedor,
+  mensaje = "El campo es obligatorio."
+) => {
   if (!campoContenedor) return;
-  campoContenedor.classList.add('error');
-  campoContenedor.style.setProperty('--error-message', `"${mensaje}"`);
+  campoContenedor.classList.add("error");
+  campoContenedor.style.setProperty("--error-message", `"${mensaje}"`);
 };
 
 // Quitar error
 export const quitarError = (campoContenedor) => {
   if (!campoContenedor) return;
-  campoContenedor.classList.remove('error');
+  campoContenedor.classList.remove("error");
 };
 
-// Validar correo
+// ================== VALIDACIÓN ESPECÍFICA: CORREO ==================
+
 export const validarCorreo = (e) => {
   const correo = e.target;
-  const campoContenedor = correo.closest('.form__grupo');
-  const regexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/;
+  const campoContenedor = correo.closest(".form__grupo");
+  const valor = correo.value.trim();
 
-  if (!regexp.test(correo.value)) {
-    agregarError(campoContenedor, 'Formato de correo inválido');
+  // Nota: \. para obligar al punto antes del TLD
+  const regexp =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  // Vacío
+  if (valor === "") {
+    agregarError(campoContenedor, "El campo es obligatorio");
+    return false;
+  }
+
+  // Formato inválido
+  if (!regexp.test(valor)) {
+    agregarError(campoContenedor, "Formato de correo inválido");
     return false;
   }
 
@@ -65,39 +101,47 @@ export const validarCorreo = (e) => {
   return true;
 };
 
-// Validar contraseña
+// ================== VALIDACIÓN ESPECÍFICA: CONTRASEÑA ==================
+
 export const validarPassword = (e) => {
   const contrasena = e.target;
-  const campoContenedor = contrasena.closest('.form__grupo');
-  const regexp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  const campoContenedor = contrasena.closest(".form__grupo");
+  const valor = contrasena.value;
 
-  if (!/[A-Z]/.test(contrasena.value)) {
-    agregarError(campoContenedor, 'Debe tener una mayúscula');
+  // Al menos: 1 minúscula, 1 mayúscula, 1 número, 1 caracter especial, 8+ chars
+  const regexp =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+  if (!/[A-Z]/.test(valor)) {
+    agregarError(campoContenedor, "Debe tener una mayúscula");
     return false;
   }
 
-  if (!/[a-z]/.test(contrasena.value)) {
-    agregarError(campoContenedor, 'Debe tener una minúscula');
+  if (!/[a-z]/.test(valor)) {
+    agregarError(campoContenedor, "Debe tener una minúscula");
     return false;
   }
 
-  if (!/\d/.test(contrasena.value)) {
-    agregarError(campoContenedor, 'Debe tener un número');
+  if (!/\d/.test(valor)) {
+    agregarError(campoContenedor, "Debe tener un número");
     return false;
   }
 
-  if (!/\W/.test(contrasena.value)) {
-    agregarError(campoContenedor, 'Debe tener un caracter especial');
+  if (!/[\W_]/.test(valor)) {
+    agregarError(
+      campoContenedor,
+      "Debe tener un caracter especial"
+    );
     return false;
   }
 
-  if (!/^.{8,}$/.test(contrasena.value)) {
-    agregarError(campoContenedor, 'Mínimo 8 caracteres');
+  if (!/^.{8,}$/.test(valor)) {
+    agregarError(campoContenedor, "Mínimo 8 caracteres");
     return false;
   }
 
-  if (!regexp.test(contrasena.value)) {
-    agregarError(campoContenedor, 'Formato inválido');
+  if (!regexp.test(valor)) {
+    agregarError(campoContenedor, "Formato inválido");
     return false;
   }
 
@@ -105,30 +149,49 @@ export const validarPassword = (e) => {
   return true;
 };
 
-// Validar todos los campos del formulario
+// ================== VALIDAR FORMULARIO COMPLETO ==================
+
 export let datos = null;
+
 export const validarCampos = (event) => {
-  
   let valido = true;
   datos = {};
 
+  // Solo campos requeridos y de tipo INPUT / TEXTAREA / SELECT
   const campos = [...event.target].filter(
     (elemento) =>
       elemento.hasAttribute("required") &&
-      (elemento.tagName === "INPUT" || elemento.tagName === "TEXTAREA" || elemento.tagName === "SELECT") ||
-      elemento.value
+      (elemento.tagName === "INPUT" ||
+        elemento.tagName === "TEXTAREA" ||
+        elemento.tagName === "SELECT")
   );
 
   campos.forEach((campo) => {
-    if (campo.type === "password") valido = validarPassword({ target: campo }) && valido;
+    const nombre = campo.name;
 
+    // Validaciones específicas
+    if (campo.type === "email") {
+      valido = validarCorreo({ target: campo }) && valido;
+    }
 
-    if (!validarCampo({ target: campo })) valido = false;
+    if (campo.type === "password") {
+      valido = validarPassword({ target: campo }) && valido;
+    }
 
-    if (!isNaN(campo.value)) datos[campo.getAttribute("name")] = Number(campo.value.trim());
-    else datos[campo.getAttribute("name")] = campo.value.trim();
+    // Validación genérica (vacío / select sin opción)
+    const okCampo = validarCampo({ target: campo });
+    if (!okCampo) valido = false;
 
+    // Guardar datos limpios
+    const valor = campo.value.trim();
+    if (!isNaN(valor) && valor !== "") {
+      datos[nombre] = Number(valor);
+    } else {
+      datos[nombre] = valor;
+    }
   });
 
+  console.log("✅ Final valido:", valido);
   return valido;
 };
+

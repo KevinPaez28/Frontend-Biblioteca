@@ -1,7 +1,7 @@
 import "../../Styles/Formulario/Formulario.css"
 
 import { get, post } from "../../Helpers/api";
-import { validarCampos, datos, validarNumeros } from "../../Helpers/Modules/modules";
+import { validarCampos, datos } from "../../Helpers/Modules/modules";
 import { success, error } from "../../Helpers/alertas";
 
 export default async () => {
@@ -41,6 +41,8 @@ export default async () => {
 
     selectRol.addEventListener("change", () => {
         const roles_id = roles.data.find(rls => rls.name.toLowerCase() === "aprendiz");
+        console.log(roles_id.id);
+
         const rls = roles_id.id;
         const clase = document.querySelectorAll(".form__grupo.activo");
         if (selectRol.value == rls) {
@@ -56,29 +58,24 @@ export default async () => {
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        // Validar campos
-        if (!validarCampos(event)) {
-            error("Por favor corrige los campos marcados");
-            return;
-        }
+        const esValido = validarCampos(event);
+        console.log("¿Formulario válido?:", esValido, datos);
 
-        const datosEnviar = {};
-        //tomamos todos los elementos del formulario y los agregamos 
-        // al objeto datosEnviar
-        for (let i = 0; i < form.elements.length; i++) {
-            const campo = form.elements[i];
-            if (campo.hasAttribute('name')) {
-                datosEnviar[campo.name] = campo.value.trim();
-            }
-        }
+        if (!esValido) return;
 
-        //a claves del objeto le asignamos los valores de los inputs
-        datosEnviar.documento=(datosEnviar.documento);
-        datosEnviar.rol_sena = (datosEnviar.rol);
-        datosEnviar.ficha_id = (datosEnviar.ficha);
-        datosEnviar.programa = (datosEnviar.programa);
-        datosEnviar.telefono = (datosEnviar.telefono);
-        datosEnviar.estados_id = 1;
+        // Aquí ya tienes todos los campos limpios en `datos`
+        const datosEnviar = {
+            nombres: datos.nombres,
+            apellidos: datos.apellidos,
+            documento:String(datos.documento),
+            rol_sena: datos.rol,
+            ficha_id: datos.ficha || null,
+            programa: datos.programa || null,
+            correo: datos.correo,
+            contrasena: datos.password,
+            telefono: String(datos.telefono),
+            estados_id: 1,
+        };
 
         console.log("DATA ENVIADA:", datosEnviar);
 
@@ -86,7 +83,7 @@ export default async () => {
 
         if (!response.success) {
             if (response.errors) {
-                response.errors.forEach(err => error(err));
+                response.errors.forEach((err) => error(err));
             } else {
                 error(response.message || "Error al registrar");
             }
@@ -96,5 +93,4 @@ export default async () => {
         success(response.message || "Registrado correctamente");
         form.reset();
     });
-
 };
