@@ -1,48 +1,51 @@
-import "../../Styles/Formulario/Formulario.css";
-import { post } from "../../Helpers/api";
-import { validarCampos,datos } from "../../Helpers/Modules/modules";
+import "../../Styles/Formulario/Formulario.css"
+
+import { get, post } from "../../Helpers/api";
+import * as validate from "../../Helpers/Modules/modules"; // validaciones
 import { success, error } from "../../Helpers/alertas";
 
 export default async () => {
-    const form = document.querySelector(" .form__form");
-    const documento = document.querySelector(".documento");
-    const password = document.querySelector(".contrasena");
-    
-    // SUBMIT
-    form.addEventListener("submit", async (e) => {
+
+    // ================= OBTENER ELEMENTOS DEL DOM =================
+    const form = document.querySelector(".form__form");
+
+    const campos = form.querySelectorAll("input");
+
+    campos.forEach(campo => {
+        if (campo.id === "documento") {
+            // Validar solo números y longitud máxima mientras se escribe
+            campo.addEventListener("keydown", e => {
+                validate.validarNumeros(e);
+                validate.validarMaximo(e, campo.maxLength || 10);
+            });
+            // Validar longitud mínima y campo requerido al perder el foco
+            campo.addEventListener("blur", e => {
+                validate.validarMinimo(e, campo.minLength || 6);
+                validate.validarCampo(e);
+            });
+            return; // Salimos del forEach para no aplicar otras validaciones
+        }
+    });
+
+    // ================= SUBMIT DEL FORMULARIO =================
+    form.addEventListener("submit", async e => {
         e.preventDefault();
 
-        if (!validarCampos(e)) {
-            error("Por favor corrige los campos marcados");
-            return;
-        }     
+        if (!validate.validarCampos(e)) return;
 
-        
-        
-        const data = {
-            document:documento.value,   // viene del input name="documento"
-            password:password.value      // viene del input name="password"
-        };
-        
+        // Obtenemos los datos validados
+        const data = { ...validate.datos };
         console.log(data);
-
-        console.log("DATA ENVIADA:", data);
 
         const response = await post("login", data);
 
-        console.log("RESPUESTA DEL BACKEND:", response);
-
-
         if (!response.success) {
-            if (response.errors && response.errors.length > 0) {
-                response.errors.forEach(err => error(err));
-            } else {
-                error(response.message || "Credenciales incorrectas");
-            }
+            if (response.errors) response.errors.forEach(err => error(err));
+            else error(response.message || "Error al iniciar sesión");
             return;
         }
 
-        success("Bienvenido");
+        success(response.message)
         form.reset();
     });
 };

@@ -1,83 +1,108 @@
 import "../../Styles/Formulario/Formulario.css";
+
 import { get, post } from "../../Helpers/api";
-import { validarCampos, datos } from "../../Helpers/Modules/modules";
+import * as validate from "../../Helpers/Modules/modules"; // validaciones
 import { success, error } from "../../Helpers/alertas";
 
 export default async () => {
+    // ================= OBTENER ELEMENTOS DEL DOM =================
+    // Obtenemos el formulario principal
     const form = document.querySelector(".form__form");
+    // Obtenemos los selects por clase
     const selectMotivos = document.querySelector(".motivos");
-    const selecteventos = document.querySelector(".eventos");
+    const selectEventos = document.querySelector(".eventos");
 
+    // ================= CARGAR DATOS DESDE API =================
+    // Traemos los motivos y los eventos de hoy desde la API
     const motivos = await get("motivos");
     const eventos = await get("eventos/today");
 
-    console.log(motivos);
-
+    // ================= RELLENAR SELECTS =================
+    // Rellenamos select de motivos
     motivos.data.forEach(m => {
-        const option = document.createElement("option");
-        option.value = m.id;
-        option.textContent = m.name;
-        selectMotivos.append(option);
+        const op = document.createElement("option");
+        op.value = m.id;
+        op.textContent = m.name;
+        selectMotivos.append(op);
     });
 
-    console.log(eventos);
-
-    eventos.data.forEach(m => {
-        const events = document.createElement("option");
-        events.value = m.id;
-        events.textContent = m.name;
-        selecteventos.append(events);
+    // Rellenamos select de eventos
+    eventos.data.forEach(ev => {
+        const op = document.createElement("option");
+        op.value = ev.id;
+        op.textContent = ev.name;
+        selectEventos.append(op);
     });
 
-
-
+    // ================= EVENTO CAMBIO DE MOTIVO =================
+    // Mostramos el select de eventos solo si el motivo seleccionado es "evento"
     selectMotivos.addEventListener("change", () => {
-        const motivo_Id = motivos.data.find(mtv => mtv.name.toLowerCase() == "evento");
-        const mtv = motivo_Id.id;
-        console.log(mtv);
+        const motivoEvento = motivos.data.find(m => m.name.toLowerCase() === "evento");
         const clase = document.querySelector(".form__grupo.activo");
-        if (selectMotivos.value == mtv) {
-
+        if (selectMotivos.value == motivoEvento?.id) {
             clase.classList.remove("oculto");
-        }
-        else {
+        } else {
             clase.classList.add("oculto");
-            selecteventos.value = "";
+            // Limpiamos el select de eventos si no corresponde
+            selectEventos.value = "";
         }
-    })
+    });
 
-    // SUBMIT
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault()
-        if (!validarCampos(event)) {
-            error("Por favor corrige los campos con error");
-            return;
+    // ================= VALIDACIONES DE CAMPOS =================
+    // Tomamos todos los inputs, selects y textareas del formulario
+    const campos = form.querySelectorAll("input, select, textarea");
+
+    campos.forEach(campo => {
+        // ================= NUMEROS: Documento =================
+        if (campo.id === "documento") {
+            // Validar solo números y longitud máxima mientras se escribe
+            campo.addEventListener("keydown", e => {
+                validate.validarNumeros(e);
+                validate.validarMaximo(e, campo.maxLength || 10);
+            });
+            // Validar longitud mínima y campo requerido al perder el foco
+            campo.addEventListener("blur", e => {
+                validate.validarMinimo(e, campo.minLength || 6);
+                validate.validarCampo(e);
+            });
+            return; // Salimos del forEach para no aplicar otras validaciones
         }
 
-        const data = { ...datos };
+        // ================= VALIDACIÓN GENERAL =================
+        // Para otros campos: validar que no estén vacíos al perder el foco
+        campo.addEventListener("blur", validate.validarCampo);
+    });
 
+    // ================= SUBMIT DEL FORMULARIO =================
+    form.addEventListener("submit", async e => {
+        e.preventDefault(); // Evitamos el envío por defecto
 
-        console.log("DATA ENVIADA:", data);
+        // Validaciones generales antes de enviar
+        if (!validate.validarCampos(e)) return;
 
+        // Obtenemos los datos validados
+        const data = { ...validate.datos };
+
+        // Enviamos datos a la API
         const response = await post("asistencia/create", data);
-
-        console.log("RESPUESTA DEL BACKEND:", response);
-
-        if (!response.success) { //si la respuesta no fue 200 entra en el if
-            if (response.errors && response.errors.length > 0) {
-                // Recorremos todos los errores manualmente
-                for (let i = 0; i < response.errors.length; i++) {
-                    let errMsg = response.errors[i]; // Tomamos cada mensaje de error
-                    error(errMsg);                    // Lo mostramos usando con la función error()
-                }
-            } else {
-                // Si no hay arreglo de errores, mostramos el mensaje general
-                error(response.message || "Error al registrar la asistencia");
-            }
+        console.log(data);
+        
+        // ================= MANEJO DE RESPUESTAS =================
+        
+        if (!response.success) {
+            // Si hay errores, mostramos cada uno
+            if (response.errors){
+                response.errors.forEach(err => error(err));
+                console.log(response.errors);
+            } 
+            // Si solo hay mensaje general
+            
+            else error(response.message || "Error al registrar");
             return;
         }
 
-        success(response.message || "Asistencia registrada con éxito");
-        form.reset();
+        // Si todo sale bien
+        success(response.message || "Asistencia registrada correctamente");
+        form.reset(); // Limpiamos el formulario
     });
 };

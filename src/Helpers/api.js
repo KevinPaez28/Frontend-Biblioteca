@@ -59,23 +59,31 @@ export const post = async (endpoint, data) => {
 
 export const login = async (documento, contrasena) => {
     try {
-        const response = await fetch(`${url}/api/user/login`, {
+        const response = await fetch(`${url}user/login`, { 
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify({ documento, contrasena })
         });
 
         const data = await response.json();
+
         return {
             ok: response.ok,
             message: data.message || "",
-            errors: data.erros || [],
+            errors: data.errors || [],  
             data: data.data || null,
             token: data.token || null
         };
 
     } catch (error) {
         console.error("Error en login:", error);
-        return { ok: false, message: "Error inesperado al iniciar sesión", errors: [], data: null, token: null };
+        return {
+            ok: false,
+            message: "Error inesperado al iniciar sesión",
+            errors: [],
+            data: null,
+            token: null
+        };
     }
 };

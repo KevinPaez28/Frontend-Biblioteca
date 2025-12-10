@@ -3,7 +3,7 @@
     <div class="login">
         <div class="form__left">
             <div class="left_back">
-            <a href="#/Home" class="form__link"><i class="ri-arrow-left-line"></i></a>
+                <a href="#/Home" class="form__link"><i class="ri-arrow-left-line"></i></a>
             </div>
             <img src="../../../public/img Sena.png" alt="Logo SENA" class="form__logo">
             <hr class="form__space">
@@ -16,17 +16,17 @@
             <form class="form__form space" id="formulario" novalidate autocomplete="off">
                 <div class="form__grupo">
                     <label class="form__label">Nombres:</label>
-                    <input class="form__input" type="text" name="nombres" required>
+                    <input class="form__input" type="text" name="nombres" maxLength="15" required>
                 </div>
 
                 <div class="form__grupo">
                     <label class="form__label">Apellidos:</label>
-                    <input class="form__input" type="text" name="apellidos" required>
+                    <input class="form__input" type="text" name="apellidos" maxLength="15" required>
                 </div>
 
                 <div class="form__grupo">
                     <label class="form__label">No. Documento:</label>
-                    <input class="form__input" type="text" id="documento" name="documento" required>
+                    <input class="form__input" type="text" id="documento" name="documento" maxlength="10" minLength="8" required>
                 </div>
 
                 <div class="form__grupo">
@@ -35,26 +35,25 @@
                         <option value="">Seleccione</option>
                     </select>
                 </div>
-                
+
                 <div class="form__grupo">
                     <label class="form__label">Correo Electrónico:</label>
-                    <input class="form__input" type="email" name="correo" required>
+                    <input class="form__input" type="email" name="correo" maxlength="50" required>
                 </div>
 
                 <div class="form__grupo">
                     <label class="form__label">Contraseña:</label>
-                    <input class="form__input" type="password" name="password" required>
+                    <input class="form__input" type="password" name="contrasena" minLength="10" required>
                 </div>
-
 
                 <div class="form__grupo">
                     <label class="form__label">Teléfono:</label>
-                    <input class="form__input" type="text" name="telefono" required>
+                    <input class="form__input" type="text" id="telefono" name="telefono" maxlength="10" minLength="10" required>
                 </div>
 
                 <div class="form__grupo activo oculto">
                     <label class="form__label">Ficha</label>
-                    <select class="form__input ficha" name="ficha">
+                    <select class="form__input ficha" name="ficha_id">
                         <option value="">Seleccione</option>
                     </select>
                 </div>
