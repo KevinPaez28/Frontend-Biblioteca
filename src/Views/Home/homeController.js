@@ -74,7 +74,7 @@ export default async () => {
     });
 
     // ================= SUBMIT DEL FORMULARIO =================
-    form.addEventListener("submit", async e => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault(); // Evitamos el envío por defecto
 
         // Validaciones generales antes de enviar
@@ -89,16 +89,13 @@ export default async () => {
         
         // ================= MANEJO DE RESPUESTAS =================
         
-        if (!response.success) {
-            // Si hay errores, mostramos cada uno
-            if (response.errors){
+        if (!response.ok || (response.errors && response.errors.length > 0)) {
+            if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
-                console.log(response.errors);
-            } 
-            // Si solo hay mensaje general
-            
-            else error(response.message || "Error al registrar");
-            return;
+            } else {
+                error(response.message || "Error al iniciar sesión");
+            }
+            return; // Salimos para no mostrar success
         }
 
         // Si todo sale bien

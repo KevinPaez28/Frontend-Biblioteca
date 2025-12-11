@@ -119,7 +119,11 @@ export default async () => {
         e.preventDefault(); // Evitamos el envío por defecto
 
         // Validaciones generales antes de enviar
-        if (!validate.validarCampos(e)) return;
+        if (!validate.validarCampos(e)) {
+            console.log("mal");
+            
+            return;
+        }
 
         // Obtenemos los datos validados
         const data = { ...validate.datos };

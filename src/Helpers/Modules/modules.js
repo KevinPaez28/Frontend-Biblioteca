@@ -148,10 +148,26 @@ export const validarPassword = (e) => {
   return true;
 };
 
+// Validar password en login
+export const validarPasswordLogin = (e) => {
+  const campo = e.target;
+  const contenedor = campo.closest(".form__grupo");
+  const valor = campo.value.trim();
+
+  if (valor === "") {
+    agregarError(contenedor, "La contraseña es obligatoria");
+    return false;
+  }
+
+  quitarError(contenedor);
+  return true;
+};
+
+
 // ================== VALIDAR FORMULARIO COMPLETO ==================
 export let datos = null;
 
-export const validarCampos = (event) => {
+export const validarCampos = (event, contexto = null) => {
   let valido = true;
   datos = {};
 
@@ -173,8 +189,13 @@ export const validarCampos = (event) => {
     }
 
     if (campo.type === "password") {
-      valido = validarPassword({ target: campo }) && valido;
+      if(contexto === "login"){
+        valido = validarPasswordLogin({ target: campo }) && valido;
+      }else{
+        valido = validarPassword({ target: campo }) && valido;
+      }
     }
+
 
     // Validación de vacío solo si es required
     if (campo.hasAttribute("required")) {

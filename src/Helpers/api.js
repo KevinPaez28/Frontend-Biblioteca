@@ -57,23 +57,22 @@ export const post = async (endpoint, data) => {
 
 
 
-export const login = async (documento, contrasena) => {
+export const login = async (content) => {
     try {
-        const response = await fetch(`${url}user/login`, { 
+        const response = await fetch(`${url}login`, { 
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify({ documento, contrasena })
+            body: JSON.stringify(content)
         });
 
         const data = await response.json();
 
         return {
             ok: response.ok,
-            message: data.message || "",
+            message: data.message || "Error desconocido",
             errors: data.errors || [],  
-            data: data.data || null,
-            token: data.token || null
+            data: data.data || null
         };
 
     } catch (error) {
@@ -82,8 +81,9 @@ export const login = async (documento, contrasena) => {
             ok: false,
             message: "Error inesperado al iniciar sesión",
             errors: [],
-            data: null,
-            token: null
+            data: null
         };
     }
 };
+
+

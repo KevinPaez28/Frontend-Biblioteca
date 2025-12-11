@@ -1,14 +1,10 @@
-import "../../Styles/Formulario/Formulario.css"
-
-import { get, login, post } from "../../Helpers/api";
-import * as validate from "../../Helpers/Modules/modules"; // validaciones
+import "../../Styles/Formulario/Formulario.css";
+import { post } from "../../Helpers/api"; 
+import * as validate from "../../Helpers/Modules/modules"; 
 import { success, error } from "../../Helpers/alertas";
 
 export default async () => {
-
-    // ================= OBTENER ELEMENTOS DEL DOM =================
     const form = document.querySelector(".form__form");
-
     const campos = form.querySelectorAll("input");
 
     campos.forEach(campo => {
@@ -23,31 +19,27 @@ export default async () => {
                 validate.validarMinimo(e, campo.minLength || 6);
                 validate.validarCampo(e);
             });
-            return; // Salimos del forEach para no aplicar otras validaciones
         }
     });
 
-    // ================= SUBMIT DEL FORMULARIO =================
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         if (!validate.validarCampos(e,"login")) {
-            console.log("dañado");
+            console.log("Campos inválidos");
             return;
         }
-        
 
-        // Obtenemos los datos validados
         const data = {
-            document: String(validate.datos.document),
-            password: String(validate.datos.password)
+            document: String(validate.datos.document)
         };
 
-        console.log(data);
-        
-        const response = await login(data);
+        console.log("Datos a enviar:", data);
 
-        // ===== Manejo de errores =====
+        // Llamada a tu endpoint de recuperación de contraseña
+        const response = await post('forgot-password', data);
+
+        // Manejo de errores
         if (!response.ok || (response.errors && response.errors.length > 0)) {
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
@@ -57,8 +49,9 @@ export default async () => {
             return; // Salimos para no mostrar success
         }
 
-        // ===== Login exitoso =====
-        success(response.message || "Inicio de sesión exitoso");
+
+        // Éxito
+        success(response.message || "Se ha enviado el correo de recuperación correctamente");
         form.reset();
     });
 };
