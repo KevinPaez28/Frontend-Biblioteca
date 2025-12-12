@@ -34,13 +34,14 @@ export default async () => {
             document: String(validate.datos.document)
         };
 
+
         console.log("Datos a enviar:", data);
 
         // Llamada a tu endpoint de recuperación de contraseña
-        const response = await post('forgot-password', data);
+        const response = await post('Reset-password', data);      
 
         // Manejo de errores
-        if (!response.ok || (response.errors && response.errors.length > 0)) {
+        if (!response.success || (response.errors && response.errors.length > 0)) {
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {
@@ -48,10 +49,16 @@ export default async () => {
             }
             return; // Salimos para no mostrar success
         }
+        localStorage.setItem("email_reset", response.data.email);
 
 
         // Éxito
-        success(response.message || "Se ha enviado el correo de recuperación correctamente");
+        success(response.message || "Se ha enviado el correo de recuperación correctamente");    
         form.reset();
+                
+        window.location.hash = `#/Resetcode`
+
+        
     });
+
 };

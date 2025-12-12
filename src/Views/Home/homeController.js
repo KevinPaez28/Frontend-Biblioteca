@@ -74,6 +74,7 @@ export default async () => {
     });
 
     // ================= SUBMIT DEL FORMULARIO =================
+    
     form.addEventListener("submit", async (e) => {
         e.preventDefault(); // Evitamos el envío por defecto
 

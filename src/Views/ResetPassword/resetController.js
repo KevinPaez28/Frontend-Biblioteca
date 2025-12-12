@@ -7,24 +7,16 @@ export default async () => {
     const form = document.querySelector(".form__form");
     const campos = form.querySelectorAll("input");
 
+    // Campo de información
     const textoInfo = document.querySelector(".form__descripcion");
 
-    const correoOculto = localStorage.getItem("email_reset");
-
-    if (correoOculto) {
-        textoInfo.textContent = `Se ha enviado un código al correo ${correoOculto}`;
-    } else {
-        textoInfo.textContent = "Ingrese su documento para continuar.";
-    }
+    // Tomamos email y token del localStorage
+    const resetToken = localStorage.getItem("reset_token");
 
     campos.forEach(campo => {
-
-        // Validación específica para el campo email
-        if (campo.id === "email") {
-
-            // Validar email mientras escribe
+        // Validaciones de los campos de contraseña
+        if (campo.id === "newPassword" || campo.id === "confirmPassword") {
             campo.addEventListener("blur", e => {
-                validate.validarEmail(e); // si ya tienes esto en tus módulos
                 validate.validarCampo(e);
             });
         }
@@ -34,38 +26,44 @@ export default async () => {
         e.preventDefault();
 
         // Validación general de todos los campos
-        if (!validate.validarCampos(e, "email-verify")) {
+        if (!validate.validarCampos(e, "reset-password")) {
             console.log("Campos inválidos");
             return;
         }
 
-        const data = {
-            token: String(validate.datos.code)
-        };
 
-        localStorage.setItem("reset_token", validate.datos.code);
+
+        // Preparamos el objeto para enviar al backend
+        const data = {
+            token: resetToken,            // token del localStorage
+            password: validate.datos.newPassword,
+            password_confirmation:validate.datos.confirmPassword,
+        };
 
         console.log("Datos a enviar:", data);
 
-        // POST al endpoint que envía el código
-        const response = await post('validate', data);
+        // POST al endpoint de cambio de contraseña
+        const response = await post('Reset-password/change', data);
 
-        // Manejo de errores e
+        // Manejo de errores
         if (!response.success || (response.errors && response.errors.length > 0)) {
-
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {
-                error(response.message || "Error enviando el código");
+                error(response.message || "Error al cambiar la contraseña");
             }
-
-            return; // no mostrar success
+            return;
         }
 
-        // ÉXITO
-        success(response.message || "Código enviado al correo correctamente");
+        // Éxito
+        success(response.message || "Contraseña cambiada correctamente");
         form.reset();
 
-        window.location.hash = `#/ResetPassword`
+        // Limpiamos el token del storage por seguridad
+        localStorage.removeItem("reset_token");
+
+        
+        // Redirigimos al login
+        window.location.hash = "#/Login";
     });
 };

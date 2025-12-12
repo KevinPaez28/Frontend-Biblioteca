@@ -1,7 +1,9 @@
 import homeController from "../Views/Home/homeController"
 import logincontroller from "../Views/Login/logincontroller"
 import Registercontroller from "../Views/register/Registercontroller"
-import resetcontroller from "../Views/password/resetcontroller"
+import codePasswordController from "../Views/CodePassword/codePasswordController"
+import passwordControllerjs from "../Views/password/DocumentController.js"
+import resetController from "../Views/ResetPassword/resetController"
 
 export const routes = {
     Home: {
@@ -21,9 +23,19 @@ export const routes = {
     },
     Reset: {
         path: "password/index.html",
-        controller: resetcontroller,
+        controller: passwordControllerjs,
+        private: false
+    },
+    Resetcode: {
+        path: "CodePassword/index.html",
+        controller: codePasswordController,
+        private: false
+    },
+    ResetPassword: {
+        path: "ResetPassword/index.html",
+        controller: resetController,
         private: false
     }
-
+    
 }
 

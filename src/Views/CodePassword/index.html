@@ -3,6 +3,9 @@
     <div class="login">
         <!-- Lado izquierdo con logo -->
         <div class="form__left">
+            <div class="left_back">
+                <a href="#/Reset" class="form__link"><i class="ri-arrow-left-line"></i></a>
+            </div>
             <img src="../../../public/img Sena.png" alt="Logo SENA" class="form__logo">
             <hr class="form__space">
             <h2 class="form__title">Gestión <br> Biblioteca</h2>
@@ -15,10 +18,10 @@
                 
             </p>
 
-            < form class="form__form" id="formulario" novalidate autocomplete="off">
+            <form class="form__form" id="formulario" novalidate autocomplete="off">
                 <div class="form__grupo">
-                    <label class="form__label">Documento:</label>
-                    <input class="form__input documento" type="text" id="documento" name="document" maxlength="10" minlength="8" required>
+                    <label class="form__label">Codigo:</label>
+                    <input class="form__input documento" type="text" id="code" name="code" minlength="8" required>
                 </div>
 
                 <div class="form__footer">
