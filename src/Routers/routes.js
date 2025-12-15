@@ -1,41 +1,46 @@
 import homeController from "../Views/Home/homeController"
-import logincontroller from "../Views/Login/logincontroller"
-import Registercontroller from "../Views/register/Registercontroller"
-import codePasswordController from "../Views/CodePassword/codePasswordController"
-import passwordControllerjs from "../Views/password/DocumentController.js"
-import resetController from "../Views/ResetPassword/resetController"
+import Registercontroller from "../Views/auth/register/Registercontroller.js" 
+import codePasswordController from "../Views/auth/verify-code/codePasswordController.js"
+import passwordControllerjs from "../Views/auth/password-code/DocumentController.js"
+import resetController from "../Views/auth/reset-password/resetController.js"
+import logincontroller from "../Views/auth/login/logincontroller.js"
+import dashboardController from "../Views/auth/dashboard/dashboardController.js"
 
 export const routes = {
     Home: {
-        path: "Home/index.html",
+        path: "home/index.html",
         controller: homeController,
         private: false
     },
     Register: {
-        path: "register/index.html",
+        path: "auth/register/index.html",
         controller: Registercontroller,
         private: false
     },
     Login: {
-        path: "Login/index.html",
+        path: "auth/login/index.html",
         controller: logincontroller,
         private: false
     },
     Reset: {
-        path: "password/index.html",
+        path: "auth/password-code/index.html",
         controller: passwordControllerjs,
         private: false
     },
-    Resetcode: {
-        path: "CodePassword/index.html",
+    Verifycode: {
+        path: "auth/verify-code/index.html",
         controller: codePasswordController,
         private: false
     },
     ResetPassword: {
-        path: "ResetPassword/index.html",
+        path: "auth/reset-password/index.html",
         controller: resetController,
         private: false
+    },
+    Dashboard: {
+        path: "auth/dashboard/index.html",
+        controller: dashboardController,
+        private: false
     }
-    
 }
 

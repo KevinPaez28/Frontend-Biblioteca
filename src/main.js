@@ -1,7 +1,6 @@
 import './style.css';
 import { router } from './Routers/router.js';
 
-document.querySelector('body');
 
 const main = document.querySelector('#app');
 

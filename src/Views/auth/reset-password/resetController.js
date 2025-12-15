@@ -1,10 +1,10 @@
-import "../../Styles/Formulario/Formulario.css";
-import { post } from "../../Helpers/api"; 
-import * as validate from "../../Helpers/Modules/modules"; 
-import { success, error } from "../../Helpers/alertas";
+import "../../../Components/Formulario/formulario.css"
+import { post } from "../../../Helpers/api"; 
+import * as validate from "../../../Helpers/Modules/modules"; 
+import { success, error } from "../../../Helpers/alertas";
 
 export default async () => {
-    const form = document.querySelector(".form__form");
+    const form = document.querySelector("#formulario_resetPassword");
     const campos = form.querySelectorAll("input");
 
     // Campo de información

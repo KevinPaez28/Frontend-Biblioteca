@@ -1,8 +1,9 @@
-import "../../Styles/Formulario/Formulario.css";
+import "../../Components/Formulario/formulario.css"
 
 import { get, post } from "../../Helpers/api";
 import * as validate from "../../Helpers/Modules/modules"; // validaciones
 import { success, error } from "../../Helpers/alertas";
+console.count("HomeController cargado");
 
 export default async () => {
     // ================= OBTENER ELEMENTOS DEL DOM =================
@@ -75,11 +76,11 @@ export default async () => {
 
     // ================= SUBMIT DEL FORMULARIO =================
     
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault(); // Evitamos el envío por defecto
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Evitamos el envío por defecto
 
         // Validaciones generales antes de enviar
-        if (!validate.validarCampos(e)) return;
+        if (!validate.validarCampos(event)) return;
 
         // Obtenemos los datos validados
         const data = { ...validate.datos };
@@ -87,10 +88,12 @@ export default async () => {
         // Enviamos datos a la API
         const response = await post("asistencia/create", data);
         console.log(data);
+        console.count("POST asistencia");
+
         
         // ================= MANEJO DE RESPUESTAS =================
         
-        if (!response.ok || (response.errors && response.errors.length > 0)) {
+        if (!response.success || (response.errors && response.errors.length > 0)) {
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {

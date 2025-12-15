@@ -170,8 +170,8 @@ export let datos = null;
 export const validarCampos = (event, contexto = null) => {
   let valido = true;
   datos = {};
+  const errores = []; // <-- aquí guardaremos los errores
 
-  // Tomar todos los campos INPUT, TEXTAREA y SELECT (no solo required)
   const campos = [...event.target].filter(
     (elemento) =>
       elemento.tagName === "INPUT" ||
@@ -183,35 +183,47 @@ export const validarCampos = (event, contexto = null) => {
     const nombre = campo.name;
     const valor = campo.value.trim();
 
+    let okCampo = true;
+
     // Validaciones específicas
     if (campo.type === "email") {
-      valido = validarCorreo({ target: campo }) && valido;
+      okCampo = validarCorreo({ target: campo }) && okCampo;
+      if (!okCampo) errores.push({ campo: nombre, mensaje: campo.closest(".form__grupo").style.getPropertyValue("--error-message") });
     }
 
-    if (campo.type === "password") {
-      if(contexto === "login"){
-        valido = validarPasswordLogin({ target: campo }) && valido;
-      }else{
-        valido = validarPassword({ target: campo }) && valido;
+    if (campo.type === "password" && !campo.closest(".form__grupo").classList.contains("oculto")) {
+      if (contexto === "login") {
+        okCampo = validarPasswordLogin({ target: campo }) && okCampo;
+      } else {
+        okCampo = validarPassword({ target: campo }) && okCampo;
       }
     }
 
 
-    // Validación de vacío solo si es required
+    // Validación de vacío
     if (campo.hasAttribute("required")) {
-      const okCampo = validarCampo({ target: campo });
-      if (!okCampo) valido = false;
+      const okVacio = validarCampo({ target: campo });
+      if (!okVacio) {
+        okCampo = false;
+        errores.push({ campo: nombre, mensaje: campo.closest(".form__grupo").style.getPropertyValue("--error-message") });
+      }
     }
+
+    valido = okCampo && valido;
 
     // Guardar datos limpios
     if (nombre === "documento" || nombre === "telefono") {
-      datos[nombre] = valor; // siempre string
+      datos[nombre] = valor;
     } else if (!isNaN(valor) && valor !== "") {
-      datos[nombre] = Number(valor); // otros campos numéricos sí se convierten
+      datos[nombre] = Number(valor);
     } else {
-      datos[nombre] = valor; // texto o select aunque no sea requerido
+      datos[nombre] = valor;
     }
   });
 
+  if (!valido) {
+    console.log("Errores de validación:", errores); // <-- imprime errores
+  }
   return valido;
 };
+

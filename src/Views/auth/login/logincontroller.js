@@ -1,10 +1,14 @@
-import "../../Styles/Formulario/Formulario.css";
-import { post } from "../../Helpers/api"; 
-import * as validate from "../../Helpers/Modules/modules"; 
-import { success, error } from "../../Helpers/alertas";
+import "../../../Components/Formulario/formulario.css"
+
+import { get, login, post } from "../../../Helpers/api";
+import * as validate from "../../../Helpers/Modules/modules"; // validaciones
+import { success, error } from "../../../Helpers/alertas";
 
 export default async () => {
-    const form = document.querySelector(".form__form");
+
+    // ================= OBTENER ELEMENTOS DEL DOM =================
+    const form = document.querySelector("#formulario_login");
+
     const campos = form.querySelectorAll("input");
 
     campos.forEach(campo => {
@@ -19,28 +23,32 @@ export default async () => {
                 validate.validarMinimo(e, campo.minLength || 6);
                 validate.validarCampo(e);
             });
+            return; // Salimos del forEach para no aplicar otras validaciones
         }
     });
 
+    // ================= SUBMIT DEL FORMULARIO =================
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         if (!validate.validarCampos(e,"login")) {
-            console.log("Campos inválidos");
+            console.log("dañado");
             return;
         }
+        
 
+        // Obtenemos los datos validados
         const data = {
-            document: String(validate.datos.document)
+            document: String(validate.datos.document),
+            password: String(validate.datos.password)
         };
 
-
-        console.log("Datos a enviar:", data);
-
-        // Llamada a tu endpoint de recuperación de contraseña
-        const response = await post('Reset-password', data);      
-
-        // Manejo de errores
+        console.log(data);
+        
+        const response = await login(data);
+        console.log(response);
+        
+        // ===== Manejo de errores =====
         if (!response.success || (response.errors && response.errors.length > 0)) {
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
@@ -49,16 +57,9 @@ export default async () => {
             }
             return; // Salimos para no mostrar success
         }
-        localStorage.setItem("email_reset", response.data.email);
 
-
-        // Éxito
-        success(response.message || "Se ha enviado el correo de recuperación correctamente");    
+        // ===== Login exitoso =====
+        success(response.message || "Inicio de sesión exitoso");
         form.reset();
-                
-        window.location.hash = `#/Resetcode`
-
-        
     });
-
 };

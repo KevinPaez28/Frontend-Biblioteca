@@ -1,13 +1,13 @@
-import "../../Styles/Formulario/Formulario.css"
+import "../../../Components/Formulario/formulario.css"
 
-import { get, post } from "../../Helpers/api";
-import * as validate from "../../Helpers/Modules/modules"; // validaciones
-import { success, error } from "../../Helpers/alertas";
+import { get, post } from "../../../Helpers/api";
+import * as validate from "../../../Helpers/Modules/modules"; // validaciones
+import { success, error } from "../../../Helpers/alertas";
 
 export default async () => {
     // ================= OBTENER ELEMENTOS DEL DOM =================
     // Obtenemos el formulario principal
-    const form = document.querySelector(".form__form");
+    const form = document.querySelector("#formulario_register");
     // Obtenemos los selects por clase
     const selectRol = document.querySelector(".rol");
     const selectFicha = document.querySelector(".ficha");
@@ -47,23 +47,39 @@ export default async () => {
     // ================= EVENTO CAMBIO DE ROL =================
     // Escuchamos cuando cambia el select de rol
     selectRol.addEventListener("change", () => {
-        // Buscamos el rol aprendiz en la lista de roles
+        // Buscamos el rol aprendiz y admin en la lista de roles
         const aprendiz = roles.data.find(r => r.name.toLowerCase() === "aprendiz");
+        const admin = roles.data.find(r => r.name.toLowerCase() === "administrador");
+
         // Seleccionamos los grupos del formulario que tengan la clase activo
         const clase = document.querySelectorAll(".form__grupo.activo");
+        const passwordGroup = document.querySelector(".form__grupo.password");
 
         // Si el rol seleccionado es aprendiz
         if (selectRol.value == aprendiz.id) {
-            // Removemos la clase oculto para mostrar los campos
+            // Mostrar los campos de ficha y programa
             clase.forEach(g => g.classList.remove("oculto"));
-        } else {
-            // Si no es aprendiz, ocultamos los campos
-            clase.forEach(g => g.classList.add("oculto"));
-            // Limpiamos los selects dependientes
+            passwordGroup.classList.add("oculto");  // Ocultar contraseña
+            // Limpiar el campo de contraseña
+            passwordGroup.querySelector("input").value = "";
+        } else if (selectRol.value == admin.id) {
+            // Si el rol seleccionado es administrador, mostrar el campo de contraseña
+            passwordGroup.classList.remove("oculto");
+            clase.forEach(g => g.classList.add("oculto"));  // Ocultar ficha y programa
+            // Limpiar los selects dependientes
             selectFicha.value = "";
             selectPrograma.value = "";
+        } else {
+            // Si no es ni aprendiz ni administrador, ocultamos todo
+            clase.forEach(g => g.classList.add("oculto"));
+            passwordGroup.classList.add("oculto");
+            // Limpiar los campos
+            selectFicha.value = "";
+            selectPrograma.value = "";
+            passwordGroup.querySelector("input").value = "";
         }
     });
+
 
     // ================= VALIDACIONES DE CAMPOS =================
     // Tomamos todos los inputs y selects del formulario
@@ -108,20 +124,28 @@ export default async () => {
         }
 
         // ================= CONTRASEÑA =================
+        // ================= CONTRASEÑA =================
         if (campo.type === "password") {
-            // Validar reglas de contraseña al perder el foco
-            campo.addEventListener("blur", validate.validarPassword);
+            // Validar reglas de contraseña solo si el campo NO está oculto
+            campo.addEventListener("blur", e => {
+                if (!campo.closest(".form__grupo").classList.contains("oculto")) {
+                    validate.validarPassword(e);
+                } else {
+                    // Quitar error si estaba presente antes
+                    validate.quitarError(campo.closest(".form__grupo"));
+                }
+            });
         }
+
     });
 
     // ================= SUBMIT DEL FORMULARIO =================
-    form.addEventListener("submit", async e => {
-        e.preventDefault(); // Evitamos el envío por defecto
+    form.addEventListener("submit", async event => {
+        event.preventDefault(); // Evitamos el envío por defecto
 
         // Validaciones generales antes de enviar
-        if (!validate.validarCampos(e)) {
-            console.log("mal");
-            
+        if (!validate.validarCampos(event)) {
+
             return;
         }
 

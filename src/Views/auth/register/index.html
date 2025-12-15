@@ -13,7 +13,7 @@
         <div class="form__right">
             <h2 class="form__welcome">Bienvenido/a</h2>
 
-            <form class="form__form space" id="formulario" novalidate autocomplete="off">
+            <form class="form__form space" id="formulario_register" novalidate autocomplete="off">
                 <div class="form__grupo">
                     <label class="form__label">Nombres:</label>
                     <input class="form__input" type="text" name="nombres" maxLength="15" required>
@@ -41,9 +41,9 @@
                     <input class="form__input" type="email" name="correo" maxlength="50" required>
                 </div>
 
-                <div class="form__grupo">
+                <div class="form__grupo password oculto">
                     <label class="form__label">Contraseña:</label>
-                    <input class="form__input" type="password" name="contrasena" minLength="10" required>
+                    <input class="form__input" type="password" name="contrasena">
                 </div>
 
                 <div class="form__grupo">

@@ -1,9 +1,10 @@
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 <div class="bodyContent">
     <div class="login">
         <!-- Lado izquierdo con logo -->
         <div class="form__left">
             <div class="left_back">
-                <a href="#/Resetcode" class="form__link"><i class="ri-arrow-left-line"></i></a>
+                <a href="#/Reset" class="form__link"><i class="ri-arrow-left-line"></i></a>
             </div>
             <img src="../../../public/img Sena.png" alt="Logo SENA" class="form__logo">
             <hr class="form__space">
@@ -13,17 +14,18 @@
         <!-- Lado derecho con formulario de recuperación -->
         <div class="form__right">
             <h2 class="form__welcome">Restauración <br> Contraseña</h2>
-            <form class="form__form" id="formulario" novalidate autocomplete="off">
+            <p class="form__descripcion">
+                
+            </p>
+
+            <form class="form__form" id="formulario_verifyCode" novalidate autocomplete="off">
                 <div class="form__grupo">
-                    <label class="form__label">Nueva Contraseña:</label>
-                    <input class="form__input" type="password" id="newPassword" name="newPassword" required>
+                    <label class="form__label">Codigo:</label>
+                    <input class="form__input documento" type="text" id="code" name="code" minlength="8" required>
                 </div>
-                <div class="form__grupo">
-                    <label class="form__label">Confirmar Nueva Contraseña:</label>
-                    <input class="form__input" type="password" id="confirmPassword" name="confirmPassword" required>
-                </div>
+
                 <div class="form__footer">
-                    <button type="submit" class="form__button">Cambiar Contraseña</button>
+                    <button type="submit" class="form__button">Enviar</button>
                 </div>
             </form>
         </div>
