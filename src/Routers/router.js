@@ -1,71 +1,44 @@
-import { routes } from "./routes";
-// import { isTokenExpired, refreshAccessToken } from "../Helpers/api.js";
-// import { tienePermiso } from "../Helpers/Modules/modules.js";
-// import { error } from "../Helpers/alertas.js";
+// Función principal del enrutador SPA
+import { routes } from './routes.js';
+
 
 // Redirecciona a una ruta determinada
-// export const redirigirARuta = (ruta) => {
-//   const usuario = JSON.parse(localStorage.getItem("usuario"));
-//   if (!usuario) {
-//     alert("Acceso no autorizado");
-//   }
-//   location.hash = ruta; // siempre redirige a la ruta indicada
-// };
-
-// Función principal del enrutador SPA
-export const router = async (elemento) => {
-  const hash = location.hash.slice(2); // Eliminamos "#/"
-  const segmentos = hash.split("/").filter(seg => seg); // Extrae y filtra los segmentos del hash
-
-  // Redirigir a Home si no hay segmentos
-  if (segmentos.length === 0) {
-    redirigirARuta("#/Home");
-    return;
+export const redirigirARuta = (ruta) => {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  if (!usuario) {
+    alert("Acceso no autorizado");
   }
-  // Buscar la ruta y extraer parametros
-  const resultadoRuta = encontrarRuta(routes, segmentos);
-
-  if (!resultadoRuta) {
-    console.warn("Ruta inválida:", hash);
-    elemento.innerHTML = `<h2>Ruta no encontrada</h2>`;
-    return;
-  }
-
-  const [ruta, params] = resultadoRuta;
-
-  // Verificar acceso privado
-  if (ruta.private) {
-    let token = localStorage.getItem("token");
-
-    // 👉 Si no hay token
-    if (!token) {
-      localStorage.clear();
-      redirigirARuta("#/Home");
-      return null;
-    }
-
-    // 👉 Si está vencido
-    if (isTokenExpired(token)) {
-      token = await refreshAccessToken();
-      if (!token) {
-        localStorage.clear();
-        redirigirARuta("#/Home");
-        return null;
-      }
-    }
-
-    if (ruta.can && !tienePermiso(ruta.can)) {
-      await error('Usted no tiene acceso a este lugar');
-      window.history.back();
-      return null;
-    }
-  }
-
-  // Cargar la vista HTML y ejecutar el controlador JS
-  await cargarVista(ruta, elemento, params);
-  // await ruta.controller(params);
+  location.hash = ruta; // siempre redirige a la ruta indicada
 };
 
+
+export const router = async (app) => {
+  const hash = location.hash.slice(2);
+  const segmentos = hash.split('/').filter(Boolean);
+
+  const resultado = encontrarRuta(routes, segmentos);
+  if (!resultado) {
+    app.innerHTML = `<h2>Ruta no encontrada</h2>`;
+    return;
+  }
+
+  const [ruta, params] = resultado;
+
+  //  Autenticación
+  if (ruta.private && !isAuth()) {
+    location.hash = '#/login';
+    return;
+  }
+
+  //  Permisos
+  if (ruta.permissions && !tienePermisos(ruta.permissions)) {
+    app.innerHTML = `<h2>No tienes permisos</h2>`;
+    return;
+  }
+
+  // AQUÍ SÍ se usa cargarVista
+  await cargarVista(ruta, app, params);
+};
 
 
 export const encontrarRuta = (routes, segmentos) => {

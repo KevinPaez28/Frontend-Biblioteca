@@ -1,0 +1,134 @@
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.contenido-dashboard {
+    padding: 3px 18px;
+    background: #f4f6f9;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ===== RUTA ===== */
+.ruta-dashboard {
+    font-size: 12px;
+    margin-bottom: 6px;
+    color: #9ca3af;
+}
+
+.ruta-dashboard span {
+    font-weight: 600;
+    color: #9ca3af;
+    
+}
+
+/* ===== TÍTULO ===== */
+.titulo-dashboard {
+    font-size: 28px;
+    font-weight: 800;
+    color: #39a900;
+    margin-bottom: 16px;
+}
+
+/* ===== SECCIONES ===== */
+.seccion-dashboard {
+    border-radius: 0;
+    padding: 10px 16px;
+}
+
+/* ===== ENCABEZADO SECCIÓN CON LÍNEA ===== */
+.encabezado-seccion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #39a900;
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+}
+
+.encabezado-seccion span {
+    font-size: 17px;
+    white-space: nowrap;
+}
+
+/* Línea horizontal */
+.encabezado-seccion::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    background-color: #39a900;
+    opacity: 0.35;
+}
+
+/* ===== TARJETAS ===== */
+.tarjetas-dashboard {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/* ===== TARJETA ===== */
+.tarjeta-dashboard {
+    width: 250px;
+    height: 130px;
+    background: #9BD37F;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #ffffff;
+}
+
+/* ===== TEXTO TARJETA ===== */
+.tarjeta-titulo {
+    color: #1C5400;
+    font-size: 17px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: -15px;
+    padding: 10px 12px;
+    
+}
+.tarjeta-linea{
+    border-top: 2px solid #fff;
+    padding: -10px -10px;
+    
+}
+/* ===== CONTENIDO TARJETA ===== */
+.tarjeta-contenido {
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tarjeta-contenido i {
+    font-size: 40px;
+    color: #1C5400;
+}
+
+.tarjeta-contenido span {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1C5400;
+}
+
+/* ===== EVENTOS ===== */
+.mensaje-vacio {
+    font-size: 14px;
+    text-align: center;
+    color: #9ed28a;
+    padding: 20px 0;
+}
+
+/* ===== ESTADÍSTICAS ===== */
+.estadisticas-dashboard {
+    width: 100%;
+    min-height: 180px;
+    border: 2px solid #39a900;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-weight: 600;
+    font-size: 14px;
+}

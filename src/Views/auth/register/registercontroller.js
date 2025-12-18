@@ -157,7 +157,7 @@ export default async () => {
         const response = await post("user/create", data);
 
         // ================= MANEJO DE RESPUESTAS =================
-        if (!response.success) {
+        if (!response.ok) {
             // Si hay errores, mostramos cada uno
             if (response.errors) response.errors.forEach(err => error(err));
             // Si solo hay mensaje general

@@ -1,36 +1,89 @@
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-<aside class="sidebar">
-    <div class="sidebar__header">
-        <img src="/public/Img_senablack.png" alt="SENA" class="sidebar__logo">
-        <h1 class="sidebar__title">Gestión<br>Biblioteca</h1>
-    </div>
+    <div class="contenido-dashboard">
 
-    <nav class="sidebar__nav">
-        <ul class="sidebar__menu">
-            <li><a href="#"><i class="ri-dashboard-line"></i> Dashboard</a></li>
-            <li><a href="#"><i class="ri-time-line"></i> Horarios</a></li>
-            <li><a href="#"><i class="ri-timer-line"></i> Jornadas</a></li>
-            <li><a href="#"><i class="ri-checkbox-circle-line"></i> Asistencias</a></li>
-            <li><a href="#"><i class="ri-file-list-line"></i> Motivos</a></li>
-            <li><a href="#"><i class="ri-building-line"></i> Áreas</a></li>
-            <li><a href="#"><i class="ri-calendar-line"></i> Eventos</a></li>
-            <li><a href="#"><i class="ri-user-line"></i> Usuarios</a></li>
-            <li><a href="#"><i class="ri-group-line"></i> Aprendices</a></li>
-            <li><a href="#"><i class="ri-calendar-event-line"></i> Asistencia Eventos</a></li>
-            <li><a href="#"><i class="ri-shield-user-line"></i> Roles</a></li>
-            <li><a href="#"><i class="ri-history-line"></i> Historial</a></li>
+        <!-- Ruta / ubicación -->
+        <div class="ruta-dashboard">
+            Inicio / <span>Panel de control</span>
+        </div>
 
-            <div class="sidebar__footer">
-                <div class="sidebar__user">
-                    <i class="ri-user-3-fill"></i>
-                    <span>Kevin Paez</span>
+        <!-- Título principal -->
+        <h1 class="titulo-dashboard">Dashboard</h1>
+
+        <!-- ===== SECCIÓN ASISTENCIAS ===== -->
+        <section class="seccion-dashboard">
+
+            <div class="encabezado-seccion">
+                <span>Asistencias</span>
+            </div>
+
+            <div class="tarjetas-dashboard">
+
+                <!-- Asistencias hoy -->
+                <div class="tarjeta-dashboard">
+                    <p class="tarjeta-titulo">Total Dia</p>
+                    <hr class="tarjeta-linea">
+                    <div class="tarjeta-contenido">
+                        <i class="ri-user-line"></i>
+                        <span id="totalDia">0</span>
+                    </div>
                 </div>
 
-                <button class="sidebar__logout">
-                    <i class="ri-logout-box-line"></i>
-                    Cerrar Sesión
-                </button>
+                <!-- Asistencias semana -->
+                <div class="tarjeta-dashboard">
+                    <p class="tarjeta-titulo">Total semana</p>
+                    <hr class="tarjeta-linea">
+                    <div class="tarjeta-contenido">
+                        <i class="ri-user-line"></i>
+                        <span id="totalSemana">0</span>
+                    </div>
+                </div>
+
+                <!-- Asistencias mes -->
+                <div class="tarjeta-dashboard">
+                    <p class="tarjeta-titulo">Total mes</p>
+                    <hr class="tarjeta-linea">
+                    <div class="tarjeta-contenido">
+                        <i class="ri-user-line"></i>
+                        <span id="totalMes">0</span>
+                    </div>
+                </div>
+
+                <!-- Egresados -->
+                <div class="tarjeta-dashboard">
+                    <p class="tarjeta-titulo">Total Egresados mes</p>
+                    <hr class="tarjeta-linea">
+                    <div class="tarjeta-contenido">
+                        <i class="ri-user-line"></i>
+                        <span id="totalEgresados">0</span>
+                    </div>
+                </div>
+
             </div>
-        </ul>
-    </nav>
-</aside>
+        </section>
+
+        <!-- ===== SECCIÓN EVENTOS ===== -->
+        <section class="seccion-dashboard">
+
+            <div class="encabezado-seccion">
+                <span>Eventos</span>
+            </div>
+
+            <p class="mensaje-vacio">
+                No hay eventos disponibles para hoy
+            </p>
+
+        </section>
+
+        <!-- ===== SECCIÓN ESTADÍSTICAS ===== -->
+        <section class="seccion-dashboard">
+
+            <div class="encabezado-seccion">
+                <span>Estadísticas</span>
+            </div>
+
+            <div class="estadisticas-dashboard">
+                <!-- Aquí van las gráficas -->
+            </div>
+
+        </section>
+
+    </div>

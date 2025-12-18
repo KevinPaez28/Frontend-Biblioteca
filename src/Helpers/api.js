@@ -35,7 +35,7 @@ export const post = async (endpoint, data) => {
         // Manejar errores HTTP como 422
         if (!response.ok) {
             return {
-                success: false,
+                ok: false,
                 message: responseData.message || "Error desconocido",
                 errors: responseData.errors || [],
                 data: null
@@ -43,7 +43,7 @@ export const post = async (endpoint, data) => {
         }
 
         return {
-            success: true,
+            ok: true,
             message: responseData.message || "",
             errors: responseData.errors || [],
             data: responseData.data || null
@@ -51,7 +51,7 @@ export const post = async (endpoint, data) => {
 
     } catch (error) {
         console.error("Error en POST:", error);
-        return { success: false, message: "Error inesperado", errors: [], data: null };
+        return { ok: false, message: "Error inesperado", errors: [], data: null };
     }
 };
 

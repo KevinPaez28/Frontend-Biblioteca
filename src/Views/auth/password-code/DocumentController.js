@@ -41,13 +41,13 @@ export default async () => {
         const response = await post('Reset-password', data);      
 
         // Manejo de errores
-        if (!response.success || (response.errors && response.errors.length > 0)) {
+        if (!response.ok || (response.errors && response.errors.length > 0)) {
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {
                 error(response.message || "Error al iniciar sesión");
             }
-            return; // Salimos para no mostrar success
+            return; // Salimos para no mostrar ok
         }
         localStorage.setItem("email_reset", response.data.email);
 

@@ -51,7 +51,7 @@ export default async () => {
         const response = await post('validate', data);
 
         // Manejo de errores e
-        if (!response.success || (response.errors && response.errors.length > 0)) {
+        if (!response.ok || (response.errors && response.errors.length > 0)) {
 
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
@@ -59,7 +59,7 @@ export default async () => {
                 error(response.message || "Error enviando el código");
             }
 
-            return; // no mostrar success
+            return; // no mostrar ok
         }
 
         // ÉXITO

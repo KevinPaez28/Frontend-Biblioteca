@@ -31,11 +31,11 @@ export default async () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        if (!validate.validarCampos(e,"login")) {
+        if (!validate.validarCampos(e, "login")) {
             console.log("dañado");
             return;
         }
-        
+
 
         // Obtenemos los datos validados
         const data = {
@@ -43,23 +43,29 @@ export default async () => {
             password: String(validate.datos.password)
         };
 
-        console.log(data);
         
         const response = await login(data);
         console.log(response);
         
+
+
         // ===== Manejo de errores =====
-        if (!response.success || (response.errors && response.errors.length > 0)) {
+        if (!response.ok || (response.errors && response.errors.length > 0)) {
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {
                 error(response.message || "Error al iniciar sesión");
             }
-            return; // Salimos para no mostrar success
+            return; // Salimos para no mostrar ok
         }
-
         // ===== Login exitoso =====
         success(response.message || "Inicio de sesión exitoso");
+        localStorage.setItem("role_id", response.data.role_id);
+        localStorage.setItem(
+            "permissions",
+            JSON.stringify(response.data.permissions)
+        );
+        window.location.hash = "#/Dashboard";
         form.reset();
     });
 };
