@@ -31,7 +31,7 @@ function manejarSidebar() {
   if (role) {
     document.body.classList.add("with-role");
     if (sidebar) {
-      sidebar.style.display = "block";
+      sidebar.classList.remove("block");
     }
   } else {
     document.body.classList.add("no-role");
@@ -44,14 +44,14 @@ function manejarSidebar() {
 
 //  Inicio
 window.addEventListener('DOMContentLoaded', async () => {
-  await cargarSidebar();   // primero existe
-  manejarSidebar();        // luego se muestra
+  await cargarSidebar();   
+  manejarSidebar();        
   router(app);
 });
 
 // Cambio de ruta
 window.addEventListener('hashchange', async () => {
-  await cargarSidebar();   // por si entra directo con rol
+  await cargarSidebar();   
   manejarSidebar();
   router(app);
 });

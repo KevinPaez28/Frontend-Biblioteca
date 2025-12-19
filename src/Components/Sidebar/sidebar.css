@@ -1,78 +1,113 @@
 .sidebar {
-    width: 260px;
-    min-height: 100vh;
+    width: 300px;
+    min-height: 100vh;       
     background-color: #39A900;
     color: #fff;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;         
+    overflow-x: hidden;
 }
 
-/* ===== HEADER ===== */
+
 .sidebar__header {
-    padding: 20px;
+    padding: 22px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
+    gap: 13px;
+    flex-shrink: 0; 
 }
 
 .sidebar__logo {
-    width: 45px;
+    width: 50px;
 }
 
 .sidebar__title {
     border-left: 1px solid #fff;
-    padding-left: 15px;
-    font-size: 18px;
+    padding-left: 16px;
+    font-size: 19px;
     font-weight: 600;
 }
 
 .sidebar__nav {
-    flex: 1;               
-    overflow-y: auto;
-    overflow-x: hidden;
+    flex: 1;          
+    display: flex;
+    flex-direction: column;
+    min-height: 0;    
 }
 
-.sidebar__nav::-webkit-scrollbar {
-    width: auto;
+.sidebar__menu {
+    flex: 1;          
+    overflow-y: auto;
+    overflow-x: hidden;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .sidebar__menu li a {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 20px;
+    padding: 16px 22px;
     color: #fff;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .sidebar__menu li a:hover {
     background-color: rgba(255, 255, 255, 0.15);
 }
 
+.sidebar__menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar__menu::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.4);
+    border-radius: 10px;
+}
+
 .sidebar__footer {
-    padding: 23px;
+    height: 140px;
     border-top: 1px solid rgba(255,255,255,0.2);
+    padding: 0px 15px;
 }
 
 .sidebar__user {
     display: flex;
-    align-items: center;
     gap: 10px;
-    font-size: 14px;
-    margin-bottom: 15px;
+    font-size: 17px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding: 7px 15px;
+    border-radius: 5px;
+    background-color: #328a07;  
+    align-items: center;
+    justify-content: center;
+}
+
+.Perfil{
+    padding: 7px;
+    background-color: #fff;
+    border-radius:20px ;
+    color: #000;
 }
 
 .sidebar__logout {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background-color: #2f8f00;
+    display: flex;
+    gap: 10px;
+    font-size: 17px;
+    margin-top: 15px;
+    margin-bottom: 12px;
+    padding: 15px 15px;
+    border-radius: 5px;
+    background-color: #246106; 
     color: #fff;
-    font-size: 14px;
+    border: none;
     cursor: pointer;
-    border-radius: 4px;
+    width: 100%;
+    justify-content: center;
 }
 
 .sidebar__logout:hover {

@@ -5,7 +5,7 @@ import { get } from "../../../Helpers/api.js";
 
 export default async () => {
 
-    // Peticiones al backend
+    // ================= PETICIONES ASISTENCIA =================
     const totalDia = await get("asistencia/total-dia");
     const totalSemana = await get("asistencia/total-semana");
     const totalMes = await get("asistencia/total-mes");
@@ -38,5 +38,53 @@ export default async () => {
         valorEgresados = totalEgresados.data.total;
     }
     document.querySelector("#totalEgresados").textContent = valorEgresados;
+
+
+    // ================= EVENTOS =================
+    const eventos = await get("eventos/today"); // endpoint GET
+
+    const contenedorEventos = document.querySelector(".eventos-lista");
+
+    if (eventos && eventos.data && eventos.data.length > 0) {
+
+        eventos.data.forEach(evento => {
+
+            const article = document.createElement("article");
+            article.classList.add("evento-card");
+
+            const badge = document.createElement("span");
+            badge.classList.add("evento-badge");
+            badge.textContent = "Hoy";
+
+            const titulo = document.createElement("h3");
+            titulo.classList.add("evento-titulo");
+            titulo.textContent = evento.name;
+
+            const sub = document.createElement("p");
+            sub.classList.add("evento-sub");
+            sub.textContent = `● ${evento.mandated}`;
+
+            const footer = document.createElement("div");
+            footer.classList.add("evento-footer");
+
+            const hora = document.createElement("span");
+            hora.textContent = "10:00 a.m"; // si luego viene del backend, se cambia
+
+            const fecha = document.createElement("span");
+            fecha.textContent = evento.date;
+
+            footer.appendChild(hora);
+            footer.appendChild(fecha);
+
+            article.appendChild(badge);
+            article.appendChild(titulo);
+            article.appendChild(sub);
+            article.appendChild(footer);
+
+            contenedorEventos.appendChild(article);
+        });
+
+    } else {
+        contenedorEventos.textContent = "No hay eventos próximos";
+    }
 };
-    

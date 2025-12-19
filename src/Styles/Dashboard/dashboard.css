@@ -1,40 +1,42 @@
-/* ===== CONTENEDOR PRINCIPAL ===== */
 .contenido-dashboard {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 3px 18px;
     background: #f4f6f9;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-/* ===== RUTA ===== */
-.ruta-dashboard {
+  }
+  
+  .contenido-dashboard::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .ruta-dashboard {
     font-size: 12px;
+    margin-top: 6px;
     margin-bottom: 6px;
     color: #9ca3af;
-}
-
-.ruta-dashboard span {
+  }
+  
+  .ruta-dashboard span {
     font-weight: 600;
     color: #9ca3af;
-    
-}
-
-/* ===== TÍTULO ===== */
-.titulo-dashboard {
+  }
+  
+  .titulo-dashboard {
     font-size: 28px;
     font-weight: 800;
     color: #39a900;
-    margin-bottom: 16px;
-}
-
-/* ===== SECCIONES ===== */
-.seccion-dashboard {
+    margin-bottom: 12px;
+  }
+  
+  .seccion-dashboard {
     border-radius: 0;
-    padding: 10px 16px;
-}
-
-/* ===== ENCABEZADO SECCIÓN CON LÍNEA ===== */
-.encabezado-seccion {
+    width: 100%;
+    height: 30%;
+    padding: 10px;
+  }
+  
+  .encabezado-seccion {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -43,30 +45,28 @@
     color: #39a900;
     margin-bottom: 12px;
     padding-bottom: 4px;
-}
-
-.encabezado-seccion span {
+  }
+  
+  .encabezado-seccion span {
     font-size: 17px;
     white-space: nowrap;
-}
-
-/* Línea horizontal */
-.encabezado-seccion::after {
+    color: #1C5400;
+  }
+  
+  .encabezado-seccion::after {
     content: "";
     flex: 1;
     height: 2px;
     background-color: #39a900;
     opacity: 0.35;
-}
-
-/* ===== TARJETAS ===== */
-.tarjetas-dashboard {
+  }
+  
+  .tarjetas-dashboard {
     display: flex;
-    justify-content: space-evenly;
-}
-
-/* ===== TARJETA ===== */
-.tarjeta-dashboard {
+    justify-content: space-between;
+  }
+  
+  .tarjeta-dashboard {
     width: 250px;
     height: 130px;
     background: #9BD37F;
@@ -75,54 +75,50 @@
     flex-direction: column;
     justify-content: space-between;
     color: #ffffff;
-}
-
-/* ===== TEXTO TARJETA ===== */
-.tarjeta-titulo {
+  }
+  
+  .tarjeta-titulo {
     color: #1C5400;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 700;
     text-align: center;
     margin-bottom: -15px;
     padding: 10px 12px;
-    
-}
-.tarjeta-linea{
+  }
+  
+  .tarjeta-linea {
     border-top: 2px solid #fff;
     padding: -10px -10px;
-    
-}
-/* ===== CONTENIDO TARJETA ===== */
-.tarjeta-contenido {
-    padding: 10px 12px;
+  }
+  
+  .tarjeta-contenido {
+    padding: 9px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.tarjeta-contenido i {
+  }
+  
+  .tarjeta-contenido i {
     font-size: 40px;
     color: #1C5400;
-}
-
-.tarjeta-contenido span {
-    font-size: 26px;
+  }
+  
+  .tarjeta-contenido span {
+    font-size: 35px;
     font-weight: 700;
     color: #1C5400;
-}
-
-/* ===== EVENTOS ===== */
-.mensaje-vacio {
+  }
+  
+  .mensaje-vacio {
     font-size: 14px;
     text-align: center;
     color: #9ed28a;
     padding: 20px 0;
-}
-
-/* ===== ESTADÍSTICAS ===== */
-.estadisticas-dashboard {
+  }
+  
+  .estadisticas-dashboard {
     width: 100%;
-    min-height: 180px;
+    height: 180px;
     border: 2px solid #39a900;
     border-radius: 10px;
     display: flex;
@@ -131,4 +127,67 @@
     color: #9ca3af;
     font-weight: 600;
     font-size: 14px;
-}
+  }
+  
+  .eventos-lista {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;        
+    overflow-y: hidden;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .eventos-lista::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .eventos-lista::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 10px;
+  }
+  
+  .evento-card {
+    flex: 0 0 260px;
+    height: 140px;
+    background: linear-gradient(#31b300, #137400);
+    border-radius: 10px;
+    padding: 8px 14px;
+    color: #fff;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .evento-badge {
+    align-self: flex-start;
+    background: #f5f9f0;
+    color: #3a8a00;
+    font-size: 12px;
+     padding: 4px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  
+  .evento-titulo {
+    font-size: 18px;
+    font-weight: 800;
+    margin-top: 6px;
+  }
+  
+  .evento-sub {
+    font-size: 13px;
+    margin-top: 2px;
+  }
+  
+  .evento-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    background: rgba(0,0,0,0.25);
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+  }
+  
