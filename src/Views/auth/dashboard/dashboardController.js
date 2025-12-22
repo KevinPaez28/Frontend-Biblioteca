@@ -1,5 +1,6 @@
 import "../../../Components/sidebar/sidebar.css";
 import "../../../Styles/Dashboard/dashboard.css";
+import { cargarGraficaLineas, cargarGraficaCircular } from "./Graficas.js"
 
 import { get } from "../../../Helpers/api.js";
 
@@ -87,4 +88,7 @@ export default async () => {
     } else {
         contenedorEventos.textContent = "No hay eventos próximos";
     }
+
+    await cargarGraficaLineas();
+    await cargarGraficaCircular();
 };

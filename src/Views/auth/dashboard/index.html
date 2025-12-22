@@ -18,7 +18,7 @@
 
             <!-- Asistencias hoy -->
             <div class="tarjeta-dashboard">
-                <p class="tarjeta-titulo">Total dia</p>
+                <p class="tarjeta-titulo">Total día</p>
                 <hr class="tarjeta-linea">
                 <div class="tarjeta-contenido">
                     <i class="ri-user-line"></i>
@@ -59,13 +59,14 @@
         </div>
     </section>
 
-    <!-- ===== SECCIÓN EVENTOS (NUEVA) ===== -->
+    <!-- ===== SECCIÓN EVENTOS ===== -->
     <section class="seccion-dashboard">
         <div class="encabezado-seccion">
             <span>Eventos</span>
         </div>
 
         <div class="eventos-lista">
+            <!-- aquí luego puedes listar eventos si quieres -->
         </div>
     </section>
 
@@ -75,7 +76,18 @@
             <span>Estadísticas</span>
         </div>
 
-        <div class="estadisticas-dashboard">
+        <div class="estadisticas-dashboard graficas">
+
+            <!-- Gráfica de líneas -->
+            <div class="grafica-lineas">
+                <canvas id="graficaLineas"></canvas>
+            </div>
+
+            <!-- Gráfica circular -->
+            <div class="grafica-circular">
+                <canvas id="graficaCircular"></canvas>
+            </div>
+
         </div>
     </section>
 

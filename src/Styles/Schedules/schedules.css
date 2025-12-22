@@ -1,0 +1,165 @@
+.page {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px 40px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 12px 18px;
+    border: 1px solid #16a34a;
+    border-radius: 10px;
+    background-color: #f0fdf4;
+}
+
+.breadcrumb {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.header h1 {
+    font-size: 26px;
+    color: #16a34a;
+}
+
+/* Botones más grandes */
+.btn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background-color: #16a34a;
+    color: #fff;
+}
+
+.btn-outline {
+    background-color: #ffffff;
+    color: #16a34a;
+    border: 1px solid #16a34a;
+}
+
+.btn-editar,
+.btn-eliminar {
+    width: 75px;
+    height: 35px;
+    text-align: center;
+    align-content: center;
+    border: none;
+    border-radius: 10px; 
+}
+
+.btn-ver {
+    border-radius: 10px;
+    width: 75px;
+    height: 35px;
+    text-align: center;
+    align-content: center;
+    border: 1px solid #22c55e;
+    color: #39A900;
+}
+
+.btn-editar {
+    background-color: #39A900;
+    color: #ffffff;
+}
+
+.btn-eliminar {
+    background-color: #DC3545;
+    color: #fff;
+}
+
+/* Filtro */
+.filter-section {
+    display: flex;
+    margin: 16px 0;
+    gap: 10px;
+}
+
+.input-filter {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+/* Tabla */
+.table-section {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.table thead {
+    background-color: #f9fafb;
+}
+
+.table th,
+.table td {
+    padding: 12px 10px;
+    text-align: left;
+}
+
+.table th {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+/* Badges más grandes y coloridos */
+.badge-time,
+.badge-morning,
+.badge-afternoon,
+.badge-night {
+    display: inline-block;
+    width: 80px;
+    height: 40px;
+    text-align: center;
+    align-content: center;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.badge-time {
+    background-color: #E8F5E9;
+    color: #1A4D0A;
+}
+
+.badge-morning,
+.badge-afternoon,
+.badge-night {
+    background-color: #FFE9A3;
+    color: #1A4D0A;
+}
+
+/* Acciones columna */
+.table td:last-child {
+    display: flex;
+    gap: 6px;
+    white-space: nowrap;
+}
