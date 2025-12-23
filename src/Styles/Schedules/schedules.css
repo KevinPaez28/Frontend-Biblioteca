@@ -12,9 +12,7 @@
     align-items: center;
     margin-bottom: 20px;
     padding: 12px 18px;
-    border: 1px solid #16a34a;
     border-radius: 10px;
-    background-color: #f0fdf4;
 }
 
 .breadcrumb {
@@ -25,7 +23,7 @@
 
 .header h1 {
     font-size: 26px;
-    color: #16a34a;
+    color: var(--color-verdeFontandLineal);
 }
 
 /* Botones más grandes */
@@ -43,14 +41,14 @@
 }
 
 .btn-primary {
-    background-color: #16a34a;
+    background-color: var(--color-verdeFontandLineal);
     color: #fff;
 }
 
 .btn-outline {
-    background-color: #ffffff;
-    color: #16a34a;
-    border: 1px solid #16a34a;
+    background-color: var(--color-verdeFontandLineal);
+    color: var(--color-blanco);
+    border: 1px solid var(--color-verdeFontandLineal);
 }
 
 .btn-editar,
@@ -70,12 +68,12 @@
     text-align: center;
     align-content: center;
     border: 1px solid #22c55e;
-    color: #39A900;
+    color: var(--color-principal);
 }
 
 .btn-editar {
-    background-color: #39A900;
-    color: #ffffff;
+    background-color: var(--color-principal);
+    color: var(--color-blanco);
 }
 
 .btn-eliminar {
@@ -89,7 +87,11 @@
     margin: 16px 0;
     gap: 10px;
 }
-
+.titulo-accion{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .input-filter {
     flex: 1;
     padding: 10px 12px;
@@ -100,7 +102,7 @@
 
 /* Tabla */
 .table-section {
-    background-color: #ffffff;
+    background-color: var(--color-blanco);
     border-radius: 12px;
     padding: 18px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
@@ -160,6 +162,6 @@
 /* Acciones columna */
 .table td:last-child {
     display: flex;
-    gap: 6px;
+    gap: 10px;
     white-space: nowrap;
 }

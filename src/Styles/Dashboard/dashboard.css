@@ -25,7 +25,7 @@
 .titulo-dashboard {
   font-size: 28px;
   font-weight: 800;
-  color: #39a900;
+  color: var(--color-principal);
   margin-bottom: 12px;
 }
 
@@ -42,7 +42,7 @@
   gap: 10px;
   font-size: 14px;
   font-weight: 700;
-  color: #39a900;
+  color: var(--color-principal);
   margin-bottom: 12px;
   padding-bottom: 4px;
 }
@@ -50,14 +50,14 @@
 .encabezado-seccion span {
   font-size: 17px;
   white-space: nowrap;
-  color: #1C5400;
+  color: var(--color-verdeOscuroPrincipal);
 }
 
 .encabezado-seccion::after {
   content: "";
   flex: 1;
   height: 2px;
-  background-color: #39a900;
+  background-color: var(--color-principal);
   opacity: 0.35;
 }
 
@@ -69,16 +69,15 @@
 .tarjeta-dashboard {
   width: 250px;
   height: 130px;
-  background: #9BD37F;
+  background: var(--color-lateralForm);
   border-radius: 6px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: #ffffff;
 }
 
 .tarjeta-titulo {
-  color: #1C5400;
+  color: var(--color-verdeOscuroPrincipal);
   font-size: 20px;
   font-weight: 700;
   text-align: center;
@@ -100,13 +99,13 @@
 
 .tarjeta-contenido i {
   font-size: 40px;
-  color: #1C5400;
+  color: var(--color-verdeOscuroPrincipal);
 }
 
 .tarjeta-contenido span {
   font-size: 35px;
   font-weight: 700;
-  color: #1C5400;
+  color: var(--color-verdeOscuroPrincipal);
 }
 
 .mensaje-vacio {
@@ -162,7 +161,7 @@
 .evento-badge {
   align-self: flex-start;
   background: #f5f9f0;
-  color: #3a8a00;
+  color: var(--color-verdeOscuroPrincipal);
   font-size: 12px;
   padding: 4px 14px;
   border-radius: 20px;

@@ -1,34 +1,47 @@
-import "../../../Styles/Schedules/Schedules.css"
+import "../../../Styles/Schedules/Schedules.css";
+import { get } from "../../../Helpers/api.js";
+import { abrirModalHorario } from "./viewSchedules/SchedulesModal.js";
+
 export default async (params = null) => {
-    const jornadas = await get("jornadas/horarios");
+
+    const jornadas = await get("horarios/jornadas");
 
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
 
     if (jornadas && jornadas.data && jornadas.data.length > 0) {
+
         jornadas.data.forEach((item, index) => {
+
             const tr = document.createElement("tr");
 
+            // ===== # =====
             const td1 = document.createElement("td");
             td1.textContent = index + 1;
 
+            // ===== NOMBRE =====
             const td2 = document.createElement("td");
-            td2.textContent = item.jornada;
+            td2.textContent = `Horario ${index + 1}`;
 
+            // ===== HORA INICIO =====
             const td3 = document.createElement("td");
             const spanInicio = document.createElement("span");
             spanInicio.classList.add("badge-time");
             spanInicio.textContent = item.start_time;
             td3.appendChild(spanInicio);
 
+            // ===== HORA FIN =====
             const td4 = document.createElement("td");
             const spanFin = document.createElement("span");
             spanFin.classList.add("badge-time");
             spanFin.textContent = item.end_time;
             td4.appendChild(spanFin);
 
+            // ===== JORNADA =====
             const td5 = document.createElement("td");
             const spanJornada = document.createElement("span");
+
             const jornadaLower = item.jornada.toLowerCase();
+
             if (jornadaLower.includes("mañana")) {
                 spanJornada.classList.add("badge-morning");
                 spanJornada.textContent = "Mañana";
@@ -39,22 +52,34 @@ export default async (params = null) => {
                 spanJornada.classList.add("badge-night");
                 spanJornada.textContent = "Noche";
             }
+
             td5.appendChild(spanJornada);
 
+            // ===== ACCIONES =====
             const td6 = document.createElement("td");
+
             const btnVer = document.createElement("button");
             btnVer.classList.add("btn-ver");
             btnVer.textContent = "Ver";
+
+            // 👉 AQUÍ SE ABRE EL MODAL
+            btnVer.addEventListener("click", () => {
+                abrirModalHorario(item, index);
+            });
+
             const btnEditar = document.createElement("button");
             btnEditar.classList.add("btn-editar");
             btnEditar.textContent = "Editar";
+
             const btnEliminar = document.createElement("button");
             btnEliminar.classList.add("btn-eliminar");
             btnEliminar.textContent = "Eliminar";
+
             td6.appendChild(btnVer);
             td6.appendChild(btnEditar);
             td6.appendChild(btnEliminar);
 
+            // ===== APPEND FINAL =====
             tr.appendChild(td1);
             tr.appendChild(td2);
             tr.appendChild(td3);
@@ -64,8 +89,13 @@ export default async (params = null) => {
 
             tbody.appendChild(tr);
         });
-    } else {
-        tbody.textContent = "No hay horarios registrados";
-    }
 
-}
+    } else {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 6;
+        td.textContent = "No hay horarios registrados";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+    }
+};

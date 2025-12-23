@@ -57,11 +57,11 @@
     height: 3px;
     border: none;
     border-radius: 10px;
-    background-color: #39A900;
+    background-color: var(--color-principal);
 }
 
 .form__title {
-    color: #39A900;
+    color: var(--color-principal);
     font-weight: 700;
     font-family: "Work Sans";
     font-style: normal;
@@ -70,7 +70,7 @@
 
 /* DERECHA */
 .form__right {
-    background: #a1dd83;
+    background: var(--color-lateralForm);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -82,7 +82,7 @@
 .form__welcome {
     font-size: 30px;
     font-weight: 700;
-    color: #1C5400;
+    color: var(--color-verdeOscuroPrincipal);
 }
 
 .form__form {
@@ -102,7 +102,7 @@
 
 .form__label {
     font-weight: 600;
-    color: #1C5400;
+    color: var(--color-verdeOscuroPrincipal);
 }
 
 .form__input {
@@ -125,14 +125,14 @@
 .form__redirect {
     font-size: 14px;
     font-weight: 700;
-    color: #1C5400;
+    color: var(--color-verdeOscuroPrincipal);
 }
 
 .form__button {
     padding: 12px 0;
     border-radius: 7px;
     border: none;
-    background-color: #1C5400;
+    background-color: var(--color-verdeOscuroPrincipal);
     color: #fff;
     width: 70%;
 }
@@ -175,7 +175,7 @@
 
 .form__descripcion {
     text-align: center;       
-    color: #1C5400;            
+    color: var(--color-verdeOscuroPrincipal);            
     max-width: 300px;          
     margin-bottom: 20px;       
 }
