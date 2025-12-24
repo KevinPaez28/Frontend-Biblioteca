@@ -1,10 +1,17 @@
 import "../../../Styles/Schedules/Schedules.css";
 import { get } from "../../../Helpers/api.js";
 import { abrirModalHorario } from "./viewSchedules/SchedulesModal.js";
+import { abrirModalCrearHorario } from "./Createschedules/createSchedules.js";
+
 
 export default async (params = null) => {
 
     const jornadas = await get("horarios/jornadas");
+    const btnNuevoHorario = document.getElementById("btnNuevoHorario");
+
+    btnNuevoHorario.addEventListener("click", () => {
+        abrirModalCrearHorario();
+    });
 
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
 
@@ -62,7 +69,6 @@ export default async (params = null) => {
             btnVer.classList.add("btn-ver");
             btnVer.textContent = "Ver";
 
-            // 👉 AQUÍ SE ABRE EL MODAL
             btnVer.addEventListener("click", () => {
                 abrirModalHorario(item, index);
             });
