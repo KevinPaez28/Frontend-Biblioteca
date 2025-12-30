@@ -18,6 +18,9 @@ export default async (params = null) => {
 
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
 
+    tbody.innerHTML = "";
+
+
     if (jornadas && jornadas.data && jornadas.data.length > 0) {
 
         jornadas.data.forEach((item, index) => {

@@ -8,7 +8,7 @@ export const refreshToken = async () => {
     try {
         await fetch(`${url}refresh-token`, {
             method: 'POST',
-            credentials: 'include', 
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${getCookie('refresh_token')}`
@@ -99,10 +99,10 @@ export const post = async (endpoint, datos) => {
 };
 
 // PUT
-export const put = async (endpoint, datos) => {
+export const pacth = async (endpoint, datos) => {
     try {
         let response = await fetch(`${url}${endpoint}`, {
-            method: 'PUT',
+            method: 'PATCH',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
@@ -236,8 +236,8 @@ export const login = async (content) => {
             data: data.data || null
         };
 
-    } catch (error) {
-        console.error("Error en login:", error);
+    } catch (err) {
+        console.error("Error en login:", err);
         return {
             ok: false,
             message: "Error inesperado al iniciar sesión",
@@ -246,5 +246,6 @@ export const login = async (content) => {
         };
     }
 };
+
 
 

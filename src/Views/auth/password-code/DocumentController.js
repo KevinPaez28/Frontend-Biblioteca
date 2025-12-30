@@ -1,6 +1,6 @@
 import "../../../Components/Formulario/formulario.css"
-import { post } from "../../../Helpers/api"; 
-import * as validate from "../../../Helpers/Modules/modules"; 
+import { post } from "../../../Helpers/api";
+import * as validate from "../../../Helpers/Modules/modules";
 import { success, error } from "../../../Helpers/alertas";
 
 export default async () => {
@@ -22,10 +22,14 @@ export default async () => {
         }
     });
 
+    let enviando = false;
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        if (!validate.validarCampos(e,"login")) {
+        if (enviando) return; // evita doble envío
+
+        if (!validate.validarCampos(e, "login")) {
             console.log("Campos inválidos");
             return;
         }
@@ -34,31 +38,33 @@ export default async () => {
             document: String(validate.datos.document)
         };
 
-
         console.log("Datos a enviar:", data);
 
-        // Llamada a tu endpoint de recuperación de contraseña
-        const response = await post('Reset-password', data);      
+        enviando = true; // bloqueamos mientras se procesa la petición
 
-        // Manejo de errores
-        if (!response.ok || (response.errors && response.errors.length > 0)) {
-            if (response.errors && response.errors.length > 0) {
+        const response = await post('Reset-password', data);
+
+        if (!response || !response.success) {
+            // Si hay errores, mostramos solo error
+            if (response?.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {
-                error(response.message || "Error al iniciar sesión");
+                error(response?.message || "Error al enviar la recuperación");
             }
-            return; // Salimos para no mostrar ok
+            enviando = false; // desbloqueamos
+            return;
         }
+
+        // Guardamos el email para el siguiente paso
         localStorage.setItem("email_reset", response.data.email);
 
-
         // Éxito
-        success(response.message || "Se ha enviado el correo de recuperación correctamente");    
+        success(response.message || "Se ha enviado el correo de recuperación correctamente");
         form.reset();
-                
-        window.location.hash = `#/Verifycode`
+        enviando = false; // desbloqueamos
 
-        
+        window.location.hash = `#/Verifycode`;
     });
+
 
 };

@@ -16,26 +16,39 @@ export const abrirModalCrearHorario = async () => {
         const form = document.querySelector("#formHorario");
 
         btnCerrar.addEventListener("click", cerrarModal);
-        form.addEventListener("submit", crearHorario);
+
+        let enviando = false; // bandera para evitar envíos dobles
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            if (enviando) return; // si ya se está enviando, no hacemos nada
+
+            if (!validate.validarCampos(event)) return;
+
+            const payload = { ...validate.datos };
+
+            try {
+                enviando = true; // activamos bandera
+                const response = await post("horarios/create", payload);
+                console.log(response);
+                
+                // ===== Manejo de respuesta según success =====
+                if (!response.success) {
+                    cerrarModal();
+                    error(response.message || "Error al crear el horario");
+                    enviando = false;
+                    return;
+                }
+
+                cerrarModal();
+                success(response.message || "Horario creado correctamente");
+            } catch (err) {
+                console.error(err);
+                error("Ocurrió un error inesperado");
+            }
+
+            enviando = false; // liberamos bandera
+        });
     });
-};
-
-/* ===== CREAR HORARIO ===== */
-const crearHorario = async (event) => {
-    event.preventDefault();
-
-    if (!validate.validarCampos(event)) return;
-
-    const payload = { ...validate.datos };
-
-    const response = await post("horarios/create", payload);
-
-    if (!response.ok) {
-        cerrarModal();
-        error(response.message);
-        return;
-    }
-
-    cerrarModal();
-    success("Horario creado correctamente");
 };

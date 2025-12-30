@@ -7,7 +7,7 @@ import { success, error } from "../../../Helpers/alertas";
 export default async () => {
     // ================= OBTENER ELEMENTOS DEL DOM =================
     // Obtenemos el formulario principal
-    const form = document.querySelector("#formulario_register");
+    const form = document.querySelector("#formulario_register");  
     // Obtenemos los selects por clase
     const selectRol = document.querySelector(".rol");
     const selectFicha = document.querySelector(".ficha");
@@ -124,7 +124,6 @@ export default async () => {
         }
 
         // ================= CONTRASEÑA =================
-        // ================= CONTRASEÑA =================
         if (campo.type === "password") {
             // Validar reglas de contraseña solo si el campo NO está oculto
             campo.addEventListener("blur", e => {
@@ -140,32 +139,33 @@ export default async () => {
     });
 
     // ================= SUBMIT DEL FORMULARIO =================
+    let enviando = false;
+
     form.addEventListener("submit", async event => {
-        event.preventDefault(); // Evitamos el envío por defecto
+        event.preventDefault();
+        if (enviando) return; // evita doble envío
 
-        // Validaciones generales antes de enviar
-        if (!validate.validarCampos(event)) {
+        if (!validate.validarCampos(event)) return;
 
-            return;
-        }
-
-        // Obtenemos los datos validados
         const data = { ...validate.datos };
+        enviando = true; // bloqueamos mientras se procesa
 
-        // Enviamos datos a la API
         const response = await post("user/create", data);
 
-        // ================= MANEJO DE RESPUESTAS =================
-        if (!response.ok) {
-            // Si hay errores, mostramos cada uno
-            if (response.errors) response.errors.forEach(err => error(err));
-            // Si solo hay mensaje general
-            else error(response.message || "Error al registrar");
+        if (!response || !response.success) {
+            if (response?.errors && response.errors.length > 0) {
+                response.errors.forEach(err => error(err));
+            } else {
+                error(response?.message || "Error al crear el usuario");
+            }
+            enviando = false; // desbloqueamos si hay error
             return;
         }
 
-        // Si todo sale bien
-        success(response.message || "Registrado correctamente");
-        form.reset(); // Limpiamos el formulario
+        success(response.message || "Usuario creado exitosamente");
+        form.reset();
+        enviando = false; // desbloqueamos al terminar
     });
+
+
 };

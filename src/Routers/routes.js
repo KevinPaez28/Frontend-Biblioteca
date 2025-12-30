@@ -1,11 +1,13 @@
 import homeController from "../Views/home/homeController.js"
-import Registercontroller from "../Views/auth/register/Registercontroller.js" 
+import Registercontroller from "../Views/auth/register/registercontroller.js" 
 import codePasswordController from "../Views/auth/verify-code/codePasswordController.js"
 import passwordControllerjs from "../Views/auth/password-code/DocumentController.js"
 import resetController from "../Views/auth/reset-password/resetController.js"
 import logincontroller from "../Views/auth/login/logincontroller.js"
 import dashboardController from "../Views/auth/dashboard/dashboardController.js"
 import schedulesController from "../Views/auth/schedules/schedulesController.js"
+import shiftsController from "../Views/auth/shifts/shiftsController.js"
+
 export const routes = {
     Home: {
         path: "home/index.html",
@@ -46,6 +48,11 @@ export const routes = {
         path: "auth/schedules/index.html",
         controller: schedulesController,
         private: false
+    },
+    Jornadas:{
+        path:"auth/shifts/index.html",
+        controller: shiftsController,
+        private:false
     }
 }
 

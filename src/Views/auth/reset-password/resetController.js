@@ -1,10 +1,12 @@
-import "../../../Components/Formulario/formulario.css"
-import { post } from "../../../Helpers/api"; 
-import * as validate from "../../../Helpers/Modules/modules"; 
+import "../../../Components/Formulario/formulario.css";
+import { post } from "../../../Helpers/api";
+import * as validate from "../../../Helpers/Modules/modules";
 import { success, error } from "../../../Helpers/alertas";
 
 export default async () => {
     const form = document.querySelector("#formulario_resetPassword");
+    if (!form) return console.error("Formulario no encontrado");
+
     const campos = form.querySelectorAll("input");
 
     // Campo de información
@@ -14,7 +16,6 @@ export default async () => {
     const resetToken = localStorage.getItem("reset_token");
 
     campos.forEach(campo => {
-        // Validaciones de los campos de contraseña
         if (campo.id === "newPassword" || campo.id === "confirmPassword") {
             campo.addEventListener("blur", e => {
                 validate.validarCampo(e);
@@ -22,48 +23,50 @@ export default async () => {
         }
     });
 
+    // Bandera para evitar envíos dobles
+    let enviando = false;
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        if (enviando) return; // si ya se está enviando, no hacemos nada
 
-        // Validación general de todos los campos
         if (!validate.validarCampos(e, "reset-password")) {
             console.log("Campos inválidos");
             return;
         }
 
-
-
-        // Preparamos el objeto para enviar al backend
         const data = {
-            token: resetToken,            // token del localStorage
+            token: resetToken,
             password: validate.datos.newPassword,
-            password_confirmation:validate.datos.confirmPassword,
+            password_confirmation: validate.datos.confirmPassword,
         };
 
         console.log("Datos a enviar:", data);
 
-        // POST al endpoint de cambio de contraseña
-        const response = await post('Reset-password/change', data);
+        enviando = true; // bloqueamos nuevos envíos
 
-        // Manejo de errores
-        if (!response.ok || (response.errors && response.errors.length > 0)) {
-            if (response.errors && response.errors.length > 0) {
-                response.errors.forEach(err => error(err));
-            } else {
-                error(response.message || "Error al cambiar la contraseña");
+        try {
+            const response = await post('Reset-password/change', data);
+
+            if (!response || !response.success) {
+                if (response.errors && response.errors.length > 0) {
+                    response.errors.forEach(err => error(err));
+                } else {
+                    error(response.message || "Error al cambiar la contraseña");
+                }
+                enviando = false; // desbloqueamos aquí
+                return;
             }
-            return;
+
+            success(response.message || "Contraseña cambiada correctamente");
+            form.reset();
+            localStorage.removeItem("reset_token");
+            window.location.hash = "#/Login";
+
+        } catch (err) {
+            console.error(err);
+            error("Ocurrió un error inesperado");
+            enviando = false; // desbloqueamos si hay error
         }
-
-        // Éxito
-        success(response.message || "Contraseña cambiada correctamente");
-        form.reset();
-
-        // Limpiamos el token del storage por seguridad
-        localStorage.removeItem("reset_token");
-
-        
-        // Redirigimos al login
-        window.location.hash = "#/Login";
     });
 };

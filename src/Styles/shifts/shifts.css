@@ -1,0 +1,112 @@
+/* ====== CONTENEDOR GENERAL ====== */
+.jornadas {
+    padding: 20px 25px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Ruta */
+.ruta {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-bottom: 5px;
+}
+
+.titulo {
+    font-size: 22px;
+    font-weight: 600;
+    color: #16a34a;
+    margin-bottom: 15px;
+}
+
+/* ====== CARDS ====== */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Card individual */
+.card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Header card */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ====== SWITCH ====== */
+.switch {
+    position: relative;
+    width: 42px;
+    height: 22px;
+}
+
+.switch input {
+    display: none;
+}
+
+.switch span {
+    position: absolute;
+    inset: 0;
+    background: #e5e7eb;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.switch span::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 2px;
+    left: 2px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked+span {
+    background: #22c55e;
+}
+
+.switch input:checked+span::before {
+    transform: translateX(20px);
+}
+
+/* ====== BODY CARD ====== */
+.card-body {
+    margin-top: 12px;
+}
+
+.card-body small {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+/* Lista horarios (backend) */
+.horarios {
+    min-height: 60px;
+    border: 1px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 12px;
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+
+
