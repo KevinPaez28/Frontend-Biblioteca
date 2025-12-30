@@ -74,6 +74,7 @@
 .btn-editar {
     background-color: var(--color-principal);
     color: var(--color-blanco);
+    width: 22%;
 }
 
 .btn-eliminar {

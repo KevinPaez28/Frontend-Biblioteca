@@ -1,7 +1,7 @@
 import "../../../Components/Formulario/formulario.css"
 
 import { get, post } from "../../../Helpers/api";
-import * as validate from "../../../Helpers/Modules/modules"; // validaciones
+import * as validate from "../../../Helpers/Modules/modules";
 import { success, error } from "../../../Helpers/alertas";
 
 export default async () => {
@@ -151,7 +151,6 @@ export default async () => {
 
         // Obtenemos los datos validados
         const data = { ...validate.datos };
-        console.log(data);
 
         // Enviamos datos a la API
         const response = await post("user/create", data);

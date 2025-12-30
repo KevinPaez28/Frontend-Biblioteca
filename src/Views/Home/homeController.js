@@ -17,7 +17,7 @@ export default async () => {
     // Traemos los motivos y los eventos de hoy desde la API
     const motivos = await get("motivos");
     const eventos = await get("eventos/today");
-
+    
     // ================= RELLENAR SELECTS =================
     // Rellenamos select de motivos
     motivos.data.forEach(m => {

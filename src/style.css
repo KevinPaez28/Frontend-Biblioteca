@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-@import url("./Helpers/Customs/CustomsPropeties.css") ;
+@import url("./Helpers/Customs/CustomsPropeties.css");
 
-*{
+* {
   margin: 0px;
   padding: 0;
   box-sizing: border-box;
@@ -10,23 +10,43 @@
   font-style: normal;
 }
 
-#app{
-  width: 100%;
-}
-
 body {
   min-height: 100vh;
+  margin: 0;
 }
 
+/* Fondo cuando NO hay sesión */
 body.no-role {
   display: block;
-  background-image: url("../public/fondo.png");
+  background-image: url('../public/fondo.png');
+  /* tu imagen */
+  background-size: cover;
+  background-position: center;
 }
 
+/* Layout cuando hay sesión */
 body.with-role {
   display: flex;
   flex-direction: row;
   height: 100vh;
-  background: #f0f2f5;
+  background-color: #fff;
+  /* fondo blanco */
 }
 
+
+.sidebar {
+  width: 230px;
+  height: 100vh;
+  background-color: var(--color-principal);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+#app {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}

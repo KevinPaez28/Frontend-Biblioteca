@@ -1,57 +1,218 @@
+import { getCookie } from './getCookies.js';
+import { cerrarTodos } from './modalManagement.js';
+import { error } from './alertas.js';
 
 const url = "http://localhost:8000/api/"
 
-export const get = async (endpoint, params = {}) => {
+export const refreshToken = async () => {
     try {
-        const queryString = new URLSearchParams(params).toString();
-        const response = await fetch(`${url}${endpoint}${queryString}`, {
-            // headers: await getAuthHeaders()
+        await fetch(`${url}refresh-token`, {
+            method: 'POST',
+            credentials: 'include', 
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('refresh_token')}`
+            },
+            body: JSON.stringify([])
+        });
+    } catch (err) {
+        console.error('Error al refrescar token:', err);
+    }
+};
+
+// GET
+export const get = async (endpoint) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
+            }
         });
 
-        const data = await response.json();
-        if (!response.ok) {
-            console.error("Error en GET:", data?.error || "Error desconocido");
-            return null;
+        if (response.status === 401) {
+            await refreshToken();
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
+                }
+            });
+
+            if (response.status === 401) {
+                cerrarTodos();
+                error("Sesión expirada");
+                window.location.href = '#/login';
+                return null;
+            }
         }
-        return data;
-    } catch (error) {
-        console.error("Error en GET:", error);
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error en GET:', err);
         return null;
     }
 };
 
-export const post = async (endpoint, data) => {
+// POST
+export const post = async (endpoint, datos) => {
     try {
-        const response = await fetch(`${url}${endpoint}`, {
+        let response = await fetch(`${url}${endpoint}`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(datos)
         });
 
-        const responseData = await response.json();
+        if (response.status === 401) {
+            await refreshToken();
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
+                },
+                body: JSON.stringify(datos)
+            });
 
-        // Manejar errores HTTP como 422
-        if (!response.ok) {
-            return {
-                ok: false,
-                message: responseData.message || "Error desconocido",
-                errors: responseData.errors || [],
-                data: null
-            };
+            if (response.status === 401) {
+                cerrarTodos();
+                error("Sesión expirada");
+                window.location.href = '#/login';
+                return null;
+            }
         }
 
-        return {
-            ok: true,
-            message: responseData.message || "",
-            errors: responseData.errors || [],
-            data: responseData.data || null
-        };
+        return await response.json();
+    } catch (err) {
+        console.error('Error en POST:', err);
+        return null;
+    }
+};
 
-    } catch (error) {
-        console.error("Error en POST:", error);
-        return { ok: false, message: "Error inesperado", errors: [], data: null };
+// PUT
+export const put = async (endpoint, datos) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
+            },
+            body: JSON.stringify(datos)
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
+                },
+                body: JSON.stringify(datos)
+            });
+
+            if (response.status === 401) {
+                cerrarTodos();
+                error("Sesión expirada");
+                window.location.href = '#/login';
+                return null;
+            }
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error en PUT:', err);
+        return null;
+    }
+};
+
+// PATCH
+export const patch = async (endpoint, datos) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
+            },
+            body: JSON.stringify(datos)
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
+                },
+                body: JSON.stringify(datos)
+            });
+
+            if (response.status === 401) {
+                cerrarTodos();
+                error("Sesión expirada");
+                window.location.href = '#/login';
+                return null;
+            }
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error en PATCH:', err);
+        return null;
+    }
+};
+
+// DELETE
+export const delet = async (endpoint) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
+            }
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
+                }
+            });
+
+            if (response.status === 401) {
+                cerrarTodos();
+                error("Sesión expirada");
+                window.location.href = '#/login';
+                return null;
+            }
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error en DELETE:', err);
+        return null;
     }
 };
 
@@ -59,7 +220,7 @@ export const post = async (endpoint, data) => {
 
 export const login = async (content) => {
     try {
-        const response = await fetch(`${url}login`, { 
+        const response = await fetch(`${url}login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -71,7 +232,7 @@ export const login = async (content) => {
         return {
             ok: response.ok,
             message: data.message || "Error desconocido",
-            errors: data.errors || [],  
+            errors: data.errors || [],
             data: data.data || null
         };
 

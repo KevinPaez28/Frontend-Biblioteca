@@ -1,19 +1,11 @@
-// Función principal del enrutador SPA
-import { routes } from './routes.js';
+import { routes } from './routes';
+import { renderSidebar } from '../components/sidebar/sidebar.js';
+import { isAuth, isAdmin } from '../helpers/auth.js';
 
+let sidebarCargado = false;
 
-// Redirecciona a una ruta determinada
-export const redirigirARuta = (ruta) => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  if (!usuario) {
-    alert("Acceso no autorizado");
-  }
-  location.hash = ruta; // siempre redirige a la ruta indicada
-};
-
-
-export const router = async (app) => {
-  const hash = location.hash.slice(2);
+export const router = async (sidebar, app) => {
+  const hash = location.hash.slice(1);
   const segmentos = hash.split('/').filter(Boolean);
 
   const resultado = encontrarRuta(routes, segmentos);
@@ -24,103 +16,65 @@ export const router = async (app) => {
 
   const [ruta, params] = resultado;
 
-  //  Autenticación
+  // Solo usuarios autenticados
   if (ruta.private && !isAuth()) {
     location.hash = '#/login';
     return;
   }
 
-  //  Permisos
-  if (ruta.permissions && !tienePermisos(ruta.permissions)) {
-    app.innerHTML = `<h2>No tienes permisos</h2>`;
-    return;
+  // Mostrar sidebar solo si es admin
+  if (!sidebarCargado && isAdmin()) {
+    renderSidebar(sidebar);
+    sidebarCargado = true;
   }
 
-  // AQUÍ SÍ se usa cargarVista
-  await cargarVista(ruta, app, params);
-};
-
-
-export const encontrarRuta = (routes, segmentos) => {
-  let rutaActual = routes;
-  let rutaEncontrada = false;
-  let parametros = {};
-
-  if (segmentos.length === 3 && segmentos[2].includes("=")) {
-    parametros = extraerParametros(segmentos[2]);
-    segmentos.pop();
+  // Cargar la vista en main
+  if (ruta.path) {
+    await cargarVista(ruta.path, app);
   }
 
-  for (let i = 0; i < segmentos.length; i++) {
-    const segmento = segmentos[i];
-
-    if (rutaActual[segmento]) {
-      rutaActual = rutaActual[segmento];
-      rutaEncontrada = true;
-    } else {
-      rutaEncontrada = false;
-      break;
-    }
-
-    // 🔥 Aquí estaba la diferencia
-    if (esGrupoRutas(rutaActual)) {
-      if (rutaActual["/"] && i === segmentos.length - 1) {
-        rutaActual = rutaActual["/"];
-        rutaEncontrada = true;
-      }
-    }
-  }
-
-  return rutaEncontrada ? [rutaActual, parametros] : null;
+  // Ejecutar controlador si existe
+  if (ruta.controller) await ruta.controller(params);
 };
 
-
-// Extrae un objeto clave-valor desde un string de parámetros tipo "id=1&modo=editar"
-const extraerParametros = (parametros) => {
-  const pares = parametros.split("&");
-  const params = {};
-  pares.forEach(par => {
-    const [clave, valor] = par.split("=");
-    params[clave] = valor;
-  });
-  return params;
-};
-
-// Carga una vista HTML externa dentro de un elemento
-const cargarVista = async (ruta, elemento, params = {}) => {
+const cargarVista = async (path, elemento) => {
   try {
-    if (ruta.private) {
-      const usuario = JSON.parse(localStorage.getItem("usuario"));
-      if (!usuario) {
-        alert("Acceso no autorizado");
-        location.hash = "#/Home";
-        return;
-      }
-    }
-
-    const response = await fetch(`./src/views/${ruta.path}`);
-    if (!response.ok) throw new Error("Vista no encontrada");
-
-    const contenido = await response.text();
-    elemento.innerHTML = contenido;
-
-    if (ruta.controller) {
-      ruta.controller(params); // ahora sí pasa los parámetros correctamente
-    }
-
-  } catch (error) {
-    console.error(error);
+    const response = await fetch(`./src/views/${path}`);
+    if (!response.ok) throw new Error("No se pudo cargar la vista");
+    const html = await response.text();
+    elemento.innerHTML = html;
+  } catch (err) {
+    console.error(err);
     elemento.innerHTML = `<h2>Error al cargar la vista</h2>`;
   }
 };
 
+const encontrarRuta = (routes, segmentos) => {
+  let rutaActual = routes;
+  let parametros = {};
 
-// Verifica si un objeto representa un grupo de rutas (todas sus claves son objetos)
-const esGrupoRutas = (obj) => {
-  for (let key in obj) {
-    if (typeof obj[key] !== 'object' || obj[key] === null) {
-      return false;
+  if (segmentos.length > 0) {
+    const ultimo = segmentos[segmentos.length - 1];
+    if (ultimo.includes("=")) {
+      parametros = extraerParametros(ultimo);
+      segmentos.pop();
     }
   }
-  return true;
+
+  for (let i = 0; i < segmentos.length; i++) {
+    const segmento = segmentos[i];
+    if (rutaActual[segmento]) rutaActual = rutaActual[segmento];
+    else return null;
+  }
+
+  return [rutaActual, parametros];
+};
+
+const extraerParametros = (paramStr) => {
+  const params = {};
+  paramStr.split("&").forEach(par => {
+    const [key, value] = par.split("=");
+    params[key] = value;
+  });
+  return params;
 };

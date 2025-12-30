@@ -1,62 +1,41 @@
+import { post } from "../../../../Helpers/api.js";
+import * as validate from "../../../../Helpers/Modules/modules";
+import "../../../../Styles/Schedules/SchedulesModal.css";
+import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
+import htmlCrearHorario from "./index.html?raw";
+import { success, error } from "../../../../Helpers/alertas.js";
+
 export const abrirModalCrearHorario = async () => {
 
     mostrarModal(htmlCrearHorario);
 
-    requestAnimationFrame(async () => {
+    // ESPERAMOS a que el modal ya esté pintado
+    requestAnimationFrame(() => {
 
-        /* ===== CARGAR JORNADAS ===== */
-        const jornadas = await get("horarios/jornadas");
-        const select = document.querySelector("#selectJornada");
+        const btnCerrar = document.querySelector("#btnCerrarModal");
+        const form = document.querySelector("#formHorario");
 
-        if (jornadas?.data) {
-            jornadas.data.forEach(jornada => {
-                const option = document.createElement("option");
-                option.value = jornada.id;
-                option.textContent = jornada.name;
-                select.appendChild(option);
-            });
-        }
-
-        /* ===== EVENTOS ===== */
-        document
-            .querySelector("#btnCerrarModal")
-            .addEventListener("click", cerrarModal);
-
-        document
-            .querySelector("#btnCrearHorario")
-            .addEventListener("click", crearHorario);
+        btnCerrar.addEventListener("click", cerrarModal);
+        form.addEventListener("submit", crearHorario);
     });
 };
 
-/* ===== CREAR HORARIO (POST) ===== */
-const crearHorario = async () => {
+/* ===== CREAR HORARIO ===== */
+const crearHorario = async (event) => {
+    event.preventDefault();
 
-    const name = document.querySelector("#inputNombre").value.trim();
-    const jornada_id = document.querySelector("#selectJornada").value;
-    const start_time = document.querySelector("#inputInicio").value;
-    const end_time = document.querySelector("#inputFin").value;
+    if (!validate.validarCampos(event)) return;
 
-    if (!name || !jornada_id || !start_time || !end_time) {
-        alert("Complete todos los campos");
-        return;
-    }
+    const payload = { ...validate.datos };
 
-    const payload = {
-        name,
-        jornada_id,
-        start_time,
-        end_time
-    };
-
-    const response = await post("horarios", payload);
+    const response = await post("horarios/create", payload);
 
     if (!response.ok) {
-        alert(response.message || "Error al crear horario");
+        cerrarModal();
+        error(response.message);
         return;
     }
 
     cerrarModal();
-    alert("Horario creado correctamente 😎");
-
-    // aquí puedes recargar la lista si quieres
+    success("Horario creado correctamente");
 };

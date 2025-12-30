@@ -1,12 +1,15 @@
 import "../../../Styles/Schedules/Schedules.css";
 import { get } from "../../../Helpers/api.js";
 import { abrirModalHorario } from "./viewSchedules/SchedulesModal.js";
+import { editarmodalHorario } from "./editschedules/editschedules.js";
 import { abrirModalCrearHorario } from "./Createschedules/createSchedules.js";
 
 
 export default async (params = null) => {
 
     const jornadas = await get("horarios/jornadas");
+    console.log(jornadas);
+    
     const btnNuevoHorario = document.getElementById("btnNuevoHorario");
 
     btnNuevoHorario.addEventListener("click", () => {
@@ -27,8 +30,8 @@ export default async (params = null) => {
 
             // ===== NOMBRE =====
             const td2 = document.createElement("td");
-            td2.textContent = `Horario ${index + 1}`;
-
+            td2.textContent = item.horario;
+            
             // ===== HORA INICIO =====
             const td3 = document.createElement("td");
             const spanInicio = document.createElement("span");
@@ -72,10 +75,13 @@ export default async (params = null) => {
             btnVer.addEventListener("click", () => {
                 abrirModalHorario(item, index);
             });
-
+            
             const btnEditar = document.createElement("button");
             btnEditar.classList.add("btn-editar");
             btnEditar.textContent = "Editar";
+            btnEditar.addEventListener("click", () => {
+                editarmodalHorario(item, index);
+            });
 
             const btnEliminar = document.createElement("button");
             btnEliminar.classList.add("btn-eliminar");

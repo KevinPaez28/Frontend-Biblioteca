@@ -1,57 +1,29 @@
+import { router } from './Routers/router.js';
+import { isAuth, isAdmin } from './helpers/auth.js';
 import './style.css';
-import { router } from './Routers/router';
 
-const app = document.querySelector('#app');
-let sidebarCargado = false;
+const sidebar = document.querySelector("#sidebar");
+const app = document.querySelector("#app");
 
-// Cargar sidebar solo si hay rol
-async function cargarSidebar() {
-  const role = localStorage.getItem("role_id");
-
-  if (!role || sidebarCargado) return;
-
-  try {
-    const resp = await fetch('./src/layouts/sidebar/index.html');
-    const html = await resp.text();
-    document.body.insertAdjacentHTML('afterbegin', html);
-    sidebarCargado = true;
-  } catch (e) {
-    console.error("Error cargando sidebar", e);
-  }
-}
-
-//  Mostrar u ocultar sidebar
-function manejarSidebar() {
-  const role = localStorage.getItem("role_id");
-  const sidebar = document.querySelector('.sidebar');
-
-  // SIEMPRE definir estado visual
-  document.body.classList.remove("no-role", "with-role");
-
-  if (role) {
-    document.body.classList.add("with-role");
-    if (sidebar) {
-      sidebar.classList.remove("block");
-    }
+// Función para manejar clases del body según rol
+const actualizarBody = () => {
+  if (isAdmin()) {
+    document.body.classList.add('with-role');
+    document.body.classList.remove('no-role');
   } else {
-    document.body.classList.add("no-role");
-    if (sidebar) {
-      sidebar.style.display = "none";
-    }
+    document.body.classList.add('no-role');
+    document.body.classList.remove('with-role');
   }
-}
+};
 
-
-//  Inicio
+// Inicialización al cargar la página
 window.addEventListener('DOMContentLoaded', async () => {
-  await cargarSidebar();   
-  manejarSidebar();        
-  router(app);
+  actualizarBody();
+  await router(sidebar, app);
 });
 
-// Cambio de ruta
+// Reaccionar a cambios de hash (rutas)
 window.addEventListener('hashchange', async () => {
-  await cargarSidebar();   
-  manejarSidebar();
-  router(app);
+  actualizarBody();
+  await router(sidebar, app);
 });
