@@ -98,46 +98,6 @@ export const post = async (endpoint, datos) => {
     }
 };
 
-// PUT
-export const pacth = async (endpoint, datos) => {
-    try {
-        let response = await fetch(`${url}${endpoint}`, {
-            method: 'PATCH',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
-            },
-            body: JSON.stringify(datos)
-        });
-
-        if (response.status === 401) {
-            await refreshToken();
-            response = await fetch(`${url}${endpoint}`, {
-                method: 'PUT',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                },
-                body: JSON.stringify(datos)
-            });
-
-            if (response.status === 401) {
-                cerrarTodos();
-                error("Sesión expirada");
-                window.location.href = '#/login';
-                return null;
-            }
-        }
-
-        return await response.json();
-    } catch (err) {
-        console.error('Error en PUT:', err);
-        return null;
-    }
-};
-
 // PATCH
 export const patch = async (endpoint, datos) => {
     try {

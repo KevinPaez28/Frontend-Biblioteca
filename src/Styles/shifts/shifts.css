@@ -1,13 +1,6 @@
-/* ====== CONTENEDOR GENERAL ====== */
-.jornadas {
-    padding: 20px 25px;
-    font-family: 'Poppins', sans-serif;
-}
-
-/* Ruta */
 .ruta {
     font-size: 13px;
-    color: #9ca3af;
+    color: var(--color-gris);
     margin-bottom: 5px;
 }
 
@@ -18,14 +11,13 @@
     margin-bottom: 15px;
 }
 
-/* ====== CARDS ====== */
 .cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    height: 40%;
 }
 
-/* Card individual */
 .card {
     background: #ffffff;
     border-radius: 10px;
@@ -33,7 +25,6 @@
     border: 1px solid #e5e7eb;
 }
 
-/* Header card */
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -41,12 +32,11 @@
 }
 
 .card-header h3 {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 600;
     color: #111827;
 }
 
-/* ====== SWITCH ====== */
 .switch {
     position: relative;
     width: 42px;
@@ -86,27 +76,59 @@
     transform: translateX(20px);
 }
 
-/* ====== BODY CARD ====== */
 .card-body {
     margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .card-body small {
     display: block;
-    font-size: 12px;
+    font-size: 15px;
     color: #6b7280;
     margin-bottom: 8px;
 }
 
-/* Lista horarios (backend) */
 .horarios {
-    min-height: 60px;
-    border: 1px dashed #d1d5db;
+    position: relative;        /* Para que la X se posicione dentro */
+    min-height: 50px;
+    width: 100%;
     border-radius: 8px;
-    padding: 8px;
     font-size: 12px;
-    color: #9ca3af;
-    margin-bottom: 10px;
+    background-color: var(--color-grisCardJornadas);
+    color: var(--color-fontJornadas);
+    padding: 10px;
 }
 
+.horarios.datos {
+    padding-right: 25px;       /* espacio para la X */
+}
 
+.horario-nombre {
+    font-size: 15px;
+}
+
+.horario-horas {
+    font-size: 14px;
+    margin: 2px 0 0 0;
+}
+
+.horario-eliminar {
+    position: absolute;
+    top: 20px;
+    right: 5px;
+    cursor: pointer;
+    color: #ef4444;
+    font-weight: bold;
+    font-size: 14px;
+}
+.card.deshabilitado {
+    opacity: 0.5;              /* bloque visual */
+    pointer-events: none;       /* bloquea todo */
+}
+
+.card.deshabilitado .switch,
+.card.deshabilitado input[type="checkbox"] {
+    pointer-events: auto;       /* permite seguir usando el checkbox */
+}

@@ -42,7 +42,9 @@
 
 .btn-primary {
     background-color: var(--color-verdeFontandLineal);
-    color: #fff;
+    color: var(--color-blanco);
+    /* border-radius: 10px;
+    padding: 5px; */
 }
 
 .btn-outline {
