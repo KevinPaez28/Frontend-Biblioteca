@@ -1,6 +1,6 @@
 export function isAuth() {
 
-    if(localStorage.getItem('user_id')) return true;
+    if(localStorage.getItem('role_id')) return true;
 
     return false;
 

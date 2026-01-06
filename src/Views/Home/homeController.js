@@ -93,14 +93,14 @@ export default async () => {
         
         // ================= MANEJO DE RESPUESTAS =================
         
-        if (!response.ok || (response.errors && response.errors.length > 0)) {
-            if (response.errors && response.errors.length > 0) {
-                response.errors.forEach(err => error(err));
-            } else {
-                error(response.message || "Error al iniciar sesión");
+         if (!response || !response.success) {
+                if (response?.errors && response.errors.length > 0) {
+                    response.errors.forEach(err => error(err));
+                } else {
+                    error(response?.message || "Error al actualizar la jornada");
+                }
+                return;
             }
-            return; // Salimos para no mostrar ok
-        }
 
         // Si todo sale bien
         success(response.message || "Asistencia registrada correctamente");

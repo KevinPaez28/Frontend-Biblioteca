@@ -123,6 +123,7 @@
 
 .table th,
 .table td {
+    color: var(--color-fontJornadas);
     padding: 12px 10px;
     text-align: left;
 }
