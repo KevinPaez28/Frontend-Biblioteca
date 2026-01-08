@@ -1,6 +1,6 @@
 import { patch } from "../../../../Helpers/api.js";
 import * as validate from "../../../../Helpers/Modules/modules";
-import "../../../../Styles/Schedules/SchedulesModal.css";
+import"../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlEditarHorario from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
@@ -25,7 +25,7 @@ export const editarmodalHorario = (horario) => {
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            if (enviando) return; // ya se está enviando
+            if (enviando) return; 
 
             if (!validate.validarCampos(e)) return;
 

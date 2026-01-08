@@ -9,6 +9,7 @@ import dashboardController from "../Views/auth/dashboard/dashboardController.js"
 import schedulesController from "../Views/auth/schedules/schedulesController.js";
 import shiftsController from "../Views/auth/shifts/shiftsController.js";
 import AssitancessController from "../Views/auth/Assitances/AssitancessController.js";
+import ReasonController from "../Views/auth/Reasons/ReasonController.js";
 // ================= RUTAS =================
 export const routes = {
 
@@ -75,6 +76,12 @@ export const routes = {
     path: "auth/Assitances/index.html",
     controller: AssitancessController,
     meta: { can: "assistances.index" }
+  },
+
+  Motivos: {
+    path: "auth/Reasons/index.html",
+    controller: ReasonController,
+    meta: { can: "reasons.index" }
   }
 
 };

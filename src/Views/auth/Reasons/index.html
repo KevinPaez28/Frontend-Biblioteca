@@ -1,0 +1,62 @@
+<div class="contenido-dashboard">
+
+    <!-- Ruta -->
+    <div class="ruta-dashboard">
+        Inicio / <span>Motivos</span>
+    </div>
+
+    <!-- Titulo + accion -->
+    <div class="titulo-accion">
+        <h1 class="titulo-dashboard">Motivos</h1>
+
+        <button class="btn btn-primario" id="btnNuevoMotivo">
+            <i class="ri-add-line"></i>
+            Nuevo Motivo
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <section class="seccion-dashboard">
+        <div class="filter-section filter-doble">
+            <div>
+                <label>Filtrar por nombre</label>
+                <input type="text" class="input-filter" id="filtroNombre">
+            </div>
+
+            <div>
+                <label>Filtrar por estado</label>
+                <select class="input-filter" id="filtroEstado">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" id="btnFiltros">
+                <i class="ri-filter-3-line"></i>
+                Filtros
+            </button>
+        </div>
+    </section>
+
+    <!-- Tabla -->
+    <section class="seccion-dashboard">
+        <section class="table-section">
+            <table class="table motivos-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <!--Backend / JS llena esto -->
+                <tbody id="tablaMotivos">
+                    <!-- filas dinámicas -->
+                </tbody>
+            </table>
+        </section>
+    </section>
+
+</div>

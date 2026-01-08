@@ -1,6 +1,6 @@
 import { post } from "../../../../Helpers/api.js";
 import * as validate from "../../../../Helpers/Modules/modules";
-import "../../../../Styles/Schedules/SchedulesModal.css";
+import"../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlCrearHorario from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
@@ -40,7 +40,7 @@ export const abrirModalCrearHorario = async () => {
                     enviando = false;
                     return;
                 }
-
+                
                 cerrarModal();
                 success(response.message || "Horario creado correctamente");
             } catch (err) {

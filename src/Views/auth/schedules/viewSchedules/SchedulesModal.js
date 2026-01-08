@@ -1,5 +1,5 @@
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
-import "../../../../Styles/Schedules/SchedulesModal.css"
+import"../../../../Components/Models/modal.css";
 import htmlContent from "./viewSchedules.html?raw";
 
 export const abrirModalHorario = (item, index) => {
