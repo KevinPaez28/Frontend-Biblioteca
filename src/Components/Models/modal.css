@@ -5,7 +5,7 @@
     padding: 0;
     border-radius: 10px;
     width: 55%;
-    height: 70%;
+    height: 75%;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -50,6 +50,7 @@
 .modal-seccion {
     margin-top: 20px;
     padding: 0px 20px;
+    margin-bottom: 10px;
 }
 
 .input {
@@ -104,15 +105,17 @@
     padding-top: 12px;
     border-top: 1px solid var(--color-verdeOscuroPrincipal);
     display: flex;
-    margin-bottom: 10px;
+    padding-bottom: 15px;
     padding-right: 20px;
     justify-content: flex-end;
     gap: 20px;
     width: 100%;
 }
-.create{
+
+.create {
     padding-bottom: 10px;
 }
+
 /* ================= BOTON ================= */
 
 .btn-cerrar {
@@ -124,6 +127,19 @@
     font-size: 14px;
     cursor: pointer;
 }
+
 .btn-cerrar:hover {
     background: #dcfce7;
 }
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.description{
+    width: 100%;
+    height: 120px;
+    /* margin-bottom: 20px; */
+
+}   

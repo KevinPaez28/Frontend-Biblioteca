@@ -1,8 +1,9 @@
 // import "../../../Styles/Motivos/Motivos.css";
 import { get } from "../../../Helpers/api.js";
-// import { abrirModalMotivo } from "./viewMotivos/MotivosModal.js";
-// import { editarModalMotivo } from "./editMotivos/editMotivos.js";
-// import { abrirModalCrearMotivo } from "./createMotivos/createMotivos.js";
+import { abrirModalCrearMotivo } from "./CreateReason/CreateReason.js";
+import { deleteShifts } from "./deleteReason/deleteReason.js";
+import { editmodalreason } from "./EditReason/EditReason.js";
+import { abrirModalReason } from "./viewReason/viewReason.js";
 
 export default async () => {
 
@@ -10,6 +11,10 @@ export default async () => {
     const btnNuevoMotivo = document.getElementById("btnNuevoMotivo");
     const inputBuscar = document.querySelector(".input-filter");
     const btnBuscar = document.querySelector(".btn-outline");
+
+    btnNuevoMotivo.addEventListener("click", () => {
+        abrirModalCrearMotivo();
+    });
 
     const cargarMotivos = async (search = "") => {
 
@@ -20,7 +25,6 @@ export default async () => {
 
             console.log(motivos);
             
-
             motivos.data.forEach((item, index) => {
 
                 const tr = document.createElement("tr");
@@ -35,7 +39,13 @@ export default async () => {
 
                 // ===== DESCRIPCIÓN =====
                 const td3 = document.createElement("td");
-                td3.textContent = item.description;
+                // Limitamos la descripción a 50 caracteres
+                const maxChars = 50;
+                td3.textContent = item.description
+                    ? (item.description.length > maxChars 
+                        ? item.description.substring(0, maxChars) + "..." 
+                        : item.description)
+                    : "";
 
                 // ===== ESTADO =====
                 const td4 = document.createElement("td");
@@ -58,20 +68,23 @@ export default async () => {
                 btnVer.classList.add("btn-ver");
                 btnVer.textContent = "Ver";
                 btnVer.addEventListener("click", () => {
-                    // abrirModalMotivo(item, index);
+                    abrirModalReason(item, index);
                 });
 
                 const btnEditar = document.createElement("button");
                 btnEditar.classList.add("btn-editar");
                 btnEditar.textContent = "Editar";
                 btnEditar.addEventListener("click", () => {
-                    // editarModalMotivo(item, index);
+                    editmodalreason(item, index);
                 });
-
+                
                 const btnEliminar = document.createElement("button");
                 btnEliminar.classList.add("btn-eliminar");
                 btnEliminar.textContent = "Eliminar";
-
+                btnEliminar.addEventListener("click", () => {
+                    deleteShifts(item)
+                });
+                
                 td5.appendChild(btnVer);
                 td5.appendChild(btnEditar);
                 td5.appendChild(btnEliminar);
@@ -96,19 +109,6 @@ export default async () => {
         }
     };
 
-    // ===== NUEVO MOTIVO =====
-    // btnNuevoMotivo.addEventListener("click", () => {
-    //     // abrirModalCrearMotivo();
-    // });
-
-    // // ===== BUSQUEDA =====
-    // btnBuscar.addEventListener("click", () => {
-    //     cargarMotivos(inputBuscar.value.trim());
-    // });
-
-    // inputBuscar.addEventListener("keyup", () => {
-    //     cargarMotivos(inputBuscar.value.trim());
-    // });
 
     await cargarMotivos();
 };

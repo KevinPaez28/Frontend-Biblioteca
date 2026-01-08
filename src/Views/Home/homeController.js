@@ -15,8 +15,8 @@ export default async () => {
 
     // ================= CARGAR DATOS DESDE API =================
     // Traemos los motivos y los eventos de hoy desde la API
-    const motivos = await get("motivos");
     const eventos = await get("eventos/today");
+    const motivos = await get("motivos");
     
     // ================= RELLENAR SELECTS =================
     // Rellenamos select de motivos

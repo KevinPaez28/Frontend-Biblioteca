@@ -38,6 +38,7 @@ export const editarmodalHorario = (horario) => {
                 if (!response || !response.success) {
                     if (response?.errors && response.errors.length > 0) {
                         response.errors.forEach(err => error(err));
+                        cerrarModal();
                     } else {
                         error(response?.message || "Error al actualizar el horario");
                     }

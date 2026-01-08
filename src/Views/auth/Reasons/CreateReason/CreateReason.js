@@ -1,39 +1,39 @@
 import { post } from "../../../../Helpers/api.js";
 import * as validate from "../../../../Helpers/Modules/modules";
-import"../../../../Components/Models/modal.css";
+import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
-import htmlCrearHorario from "./index.html?raw";
+import htmlCrearMotivo from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
+import ReasonController from "../ReasonController.js";
 
-export const abrirModalCrearHorario = async () => {
+export const abrirModalCrearMotivo = async () => {
+    mostrarModal(htmlCrearMotivo);
 
-    mostrarModal(htmlCrearHorario);
-
-    // ESPERAMOS a que el modal ya esté pintado
     requestAnimationFrame(() => {
-
         const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formHorario");
+        const form = document.querySelector("#formMotivo");
 
         btnCerrar.addEventListener("click", cerrarModal);
 
-        let enviando = false; // bandera para evitar envíos dobles
+        let enviando = false;
 
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
-
-            if (enviando) return; // si ya se está enviando, no hacemos nada
+            if (enviando) return;
 
             if (!validate.validarCampos(event)) return;
 
-            const payload = { ...validate.datos };
+            const payload = { 
+                ...validate.datos,
+                estados_id: 1
+             };
+
 
             try {
-                enviando = true; // activamos bandera
-                const response = await post("horarios/create", payload);
+                enviando = true;
+                const response = await post("motivos/create", payload);
                 console.log(response);
                 
-                // ===== Manejo de respuesta según success =====
                 if (!response || !response.success) {
                     if (response?.errors && response.errors.length > 0) {
                         response.errors.forEach(err => error(err));
@@ -44,15 +44,16 @@ export const abrirModalCrearHorario = async () => {
                     enviando = false; // desbloqueamos si hay error
                     return;
                 }
-                
+
                 cerrarModal();
-                success(response.message || "Horario creado correctamente");
+                success(response.message || "Motivo creado correctamente");
+                ReasonController()
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
             }
 
-            enviando = false; // liberamos bandera
+            enviando = false;
         });
     });
 };
