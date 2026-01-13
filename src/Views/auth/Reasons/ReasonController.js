@@ -8,7 +8,7 @@ import { abrirModalReason } from "./viewReason/viewReason.js";
 export default async () => {
 
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
-    const btnNuevoMotivo = document.getElementById("btnNuevoMotivo");
+    const btnNuevoMotivo = document.querySelector("#btnNuevoMotivo");
     const inputBuscar = document.querySelector(".input-filter");
     const btnBuscar = document.querySelector(".btn-outline");
 
@@ -24,7 +24,7 @@ export default async () => {
         if (motivos && motivos.data && motivos.data.length > 0) {
 
             console.log(motivos);
-            
+
             motivos.data.forEach((item, index) => {
 
                 const tr = document.createElement("tr");
@@ -42,22 +42,16 @@ export default async () => {
                 // Limitamos la descripción a 50 caracteres
                 const maxChars = 50;
                 td3.textContent = item.description
-                    ? (item.description.length > maxChars 
-                        ? item.description.substring(0, maxChars) + "..." 
+                    ? (item.description.length > maxChars
+                        ? item.description.substring(0, maxChars) + "..."
                         : item.description)
                     : "";
 
                 // ===== ESTADO =====
                 const td4 = document.createElement("td");
                 const spanEstado = document.createElement("span");
-
-                if (item.state_reason_id === "activo" || item.state_reason_id === 1) {
-                    spanEstado.classList.add("badge-time");
-                    spanEstado.textContent = "Activo";
-                } else {
-                    spanEstado.classList.add("badge-time");
-                    spanEstado.textContent = "Inactivo";
-                }
+                spanEstado.classList.add("badge-time");
+                spanEstado.textContent = item.state.name;
 
                 td4.appendChild(spanEstado);
 
@@ -77,14 +71,14 @@ export default async () => {
                 btnEditar.addEventListener("click", () => {
                     editmodalreason(item, index);
                 });
-                
+
                 const btnEliminar = document.createElement("button");
                 btnEliminar.classList.add("btn-eliminar");
                 btnEliminar.textContent = "Eliminar";
                 btnEliminar.addEventListener("click", () => {
                     deleteShifts(item)
                 });
-                
+
                 td5.appendChild(btnVer);
                 td5.appendChild(btnEditar);
                 td5.appendChild(btnEliminar);

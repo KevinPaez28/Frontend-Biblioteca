@@ -1,0 +1,53 @@
+<form id="formEvento" class="modal-contenido" novalidate autocomplete="off">
+
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Crear Evento</h3>
+        <p class="modal-subtitulo">
+            Registra la información para crear un nuevo evento
+        </p>
+    </div>
+
+    <!-- ================= DATOS ================= -->
+    <div class="modal-seccion">
+        <h4>Datos</h4>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label">NOMBRE *</label>
+                <input name="nombre" type="text" class="input" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">ENCARGADO *</label>
+                <input name="encargado" type="text" class="input" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">ÁREA *</label>
+                <select id="selectArea" name="sala_id" class="input" required>
+                    <option value="">Seleccione un area</option>
+                    <!-- JS llena esto -->
+                </select>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">FECHA *</label>
+                <input name="fecha" type="date" class="input" required>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" id="btnCerrarModal" class="btn-cerrar">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Crear Evento
+        </button>
+    </div>
+
+</form>

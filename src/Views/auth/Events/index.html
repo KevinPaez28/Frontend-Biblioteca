@@ -1,0 +1,82 @@
+<div class="contenido-dashboard">
+
+    <!-- Ruta -->
+    <div class="ruta-dashboard">
+        Inicio / <span>Eventos</span>
+    </div>
+
+    <!-- Titulo + accion -->
+    <div class="titulo-accion">
+        <h1 class="titulo-dashboard">Eventos</h1>
+
+        <button class="btn btn-primary" id="btnnuevoevento">
+            <i class="ri-add-line"></i>
+            Nuevo Evento
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <section class="seccion-dashboard">
+        <div class="filter-section filter-doble">
+            <div>
+                <label>Filtrar por nombre</label>
+                <input type="text" class="input-filter" id="filtroNombre">
+            </div>
+
+            <div>
+                <label>Filtrar por encargado</label>
+                <input type="text" class="input-filter" id="filtroEncargado">
+            </div>
+
+            <button class="btn btn-outline" id="btnFiltros">
+                <i class="ri-filter-3-line"></i>
+            </button>
+        </div>
+
+        <div class="filter-section filter-oculto" id="filtrosAvanzados" style="display:none; margin-top:12px;">
+            <div>
+                <label>Filtrar por área</label>
+                <select class="input-filter" id="filtroSala">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Filtrar por fecha</label>
+                <input type="date" class="input-filter" id="fecha">
+            </div>
+
+            <div>
+                <label>Filtrar por estado</label>
+                <select class="input-filter" id="filter">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Tabla -->
+    <section class="seccion-dashboard">
+        <section class="table-section">
+            <table class="table eventos-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Encargado</th>
+                        <th>Área</th>
+                        <th>Fecha y hora</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- JS manda aquí 😎 -->
+                </tbody>
+            </table>
+        </section>
+    </section>
+
+</div>

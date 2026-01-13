@@ -1,0 +1,66 @@
+<form id="formEvento" class="modal-contenido" novalidate autocomplete="off">
+
+    <!-- Títulos -->
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Editar Evento</h3>
+        <p class="modal-subtitulo">
+            Modifica la información del evento registrado
+        </p>
+    </div>
+
+    <!-- ================= DATOS ================= -->
+    <div class="modal-seccion">
+        <h4>Datos</h4>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label">Nombre *</label>
+                <input id="modalInputNombreEvento" name="nombre" type="text" class="input" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Encargado *</label>
+                <input id="modalInputEncargado" name="encargado" type="text" class="input" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Fecha *</label>
+                <input id="modalInputFecha" name="fecha" type="date" class="input" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Área *</label>
+                <select id="modalSelectArea" name="sala_id" class="input" required>
+                    <option value="">Seleccione un área</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= SISTEMA ================= -->
+    <div class="modal-seccion">
+        <h4>Información del Sistema</h4>
+
+        <div class="modal-grid">
+            <div class="form__grupo">
+                <label class="label">Estado *</label>
+                <select id="modalSelectEstado" name="estado_id" class="input">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" class="btn-cerrar" id="btnCerrarModal">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Guardar cambios
+        </button>
+    </div>
+
+</form>

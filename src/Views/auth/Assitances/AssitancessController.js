@@ -4,21 +4,21 @@ import { get } from "../../../Helpers/api.js";
 
 export default async () => {
 
-    const tabla = document.getElementById("tablaAsistencias");
+    const tabla = document.querySelector("#tablaAsistencias");
 
     // ================= FILTROS =================
     const filtros = {
-        nombre: document.getElementById("filtroNombre"),
-        apellido: document.getElementById("filtroApellido"),
-        documento: document.getElementById("filtroDocumento"),
-        ficha: document.getElementById("filtroFicha"),
-        fecha: document.getElementById("filtroFecha"),
-        motivo: document.getElementById("filtroMotivo"),
-        rol: document.getElementById("filtroRol"),
+        nombre: document.querySelector("#filtroNombre"),
+        apellido: document.querySelector("#filtroApellido"),
+        documento: document.querySelector("#filtroDocumento"),
+        ficha: document.querySelector("#filtroFicha"),
+        fecha: document.querySelector("#filtroFecha"),
+        motivo: document.querySelector("#filtroMotivo"),
+        rol: document.querySelector("#filtroRol"),
     };
 
-    const btnFiltros = document.getElementById("btnFiltros");
-    const filtrosAvanzados = document.getElementById("filtrosAvanzados");
+    const btnFiltros = document.querySelector("#btnFiltros");
+    const filtrosAvanzados = document.querySelector("#filtrosAvanzados");
 
     // ================= MOSTRAR / OCULTAR =================
     btnFiltros.addEventListener("click", () => {
@@ -63,9 +63,7 @@ export default async () => {
             }
         });
 
-        const url = query.length
-            ? `asistencia?${query.join("&")}`
-            : "asistencia";
+        const url = query.length ? `asistencia?${query.join("&")}`: "asistencia";
 
         const asistencias = await get(url);
 

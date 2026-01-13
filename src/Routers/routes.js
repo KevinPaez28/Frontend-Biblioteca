@@ -10,6 +10,10 @@ import schedulesController from "../Views/auth/schedules/schedulesController.js"
 import shiftsController from "../Views/auth/shifts/shiftsController.js";
 import AssitancessController from "../Views/auth/Assitances/AssitancessController.js";
 import ReasonController from "../Views/auth/Reasons/ReasonController.js";
+import roomsController from "../Views/auth/Rooms/roomsController.js";
+import eventsController from "../Views/auth/Events/eventsController.js";
+import UsersController from "../Views/auth/Users/UsersController.js";
+import ApprenticesController from "../Views/auth/Apprentices/ApprenticesController.js";
 // ================= RUTAS =================
 export const routes = {
 
@@ -82,6 +86,30 @@ export const routes = {
     path: "auth/Reasons/index.html",
     controller: ReasonController,
     meta: { can: "reasons.index" }
+  },
+
+  Areas: {
+    path: "auth/Rooms/index.html",
+    controller: roomsController,
+    meta: { can: "rooms.index" }
+  },
+
+  Eventos: {
+    path: "auth/Events/index.html",
+    controller: eventsController,
+    meta: { can: "events.index" }
+  },
+
+  Usuarios: {
+    path: "auth/Users/index.html",
+    controller: UsersController,
+    meta: { can: "users.index" }
+  },
+  
+  Aprendices: {
+    path: "auth/Apprentices/index.html",
+    controller: ApprenticesController,
+    meta: { can: "users.index" }
   }
 
 };

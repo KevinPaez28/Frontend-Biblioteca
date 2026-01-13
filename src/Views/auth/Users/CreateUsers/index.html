@@ -1,0 +1,69 @@
+<form id="formUsuario" class="modal-contenido" novalidate autocomplete="off">
+
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Crear Usuario</h3>
+        <p class="modal-subtitulo">
+            Registra la información para crear un nuevo usuario
+        </p>
+    </div>
+
+    <div class="modal-seccion">
+        <h4>Identificacion</h4>
+        <div class="form__grupo">
+            <label class="label">DOCUMENTO *</label>
+            <input name="documento" type="text" class="input" required maxlength="10" minlength="8">
+        </div>
+    </div>
+    <!-- ================= DATOS ================= -->
+    <div class="modal-seccion">
+        <h4>Datos</h4>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label">NOMBRE *</label>
+                <input name="nombres" type="text" class="input" maxlength="15" required > 
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">APELLIDO *</label>
+                <input name="apellidos" type="text" class="input" required maxlength="15">
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">TELÉFONO</label>
+                <input name="telefono" type="text" class="input" required maxlength="10" minlength="10">
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Correo electronico</label >
+                <input name="correo" type="text" class="input" maxlength="50" required>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-seccion">
+        <h4>Información del Sistema</h4>
+
+        <div class="form__grupo">
+            <label class="label">ROL *</label>
+            <select id="selectRol" name="rol" class="input" required>
+                <option value="">Seleccione un rol</option>
+                <!-- JS llena esto -->
+            </select>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" id="btnCerrarModal" class="btn-cerrar">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Crear Usuario
+        </button>
+    </div>
+
+</form>

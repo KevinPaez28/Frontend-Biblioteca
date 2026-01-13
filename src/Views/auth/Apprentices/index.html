@@ -1,0 +1,73 @@
+<div class="contenido-dashboard">
+
+    <!-- Ruta -->
+    <div class="ruta-dashboard">
+        Inicio / <span>Aprendices</span>
+    </div>
+
+    <!-- Titulo + acciones -->
+    <div class="titulo-accion">
+        <h1 class="titulo-dashboard">Aprendices</h1>
+
+        <div class="acciones-header">
+
+            <input type="file" id="inputImportarArchivo" class="input-file" accept=".xlsx,.xls,.csv" hidden>
+
+            <button class="btn btn-menuImport" id="btnImportar">
+                <i class="ri-upload-2-line"></i>
+                Importar Archivo
+            </button>
+
+            <button class="btn btn-primary" id="btnNuevoAprendiz">
+                <i class="ri-add-line"></i>
+                Nuevo Usuario
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Filtros -->
+    <section class="seccion-dashboard">
+        <div class="filter-section filter-doble">
+            <div>
+                <label>Filtrar por nombre</label>
+                <input type="text" class="input-filter" id="filtroNombre" placeholder="Buscar nombre">
+            </div>
+
+            <div>
+                <label>Filtrar por apellido</label>
+                <input type="text" class="input-filter" id="filtroApellido" placeholder="Buscar apellido">
+            </div>
+
+            <button class="btn btn-outline" id="btnFiltros">
+                <i class="ri-filter-3-line"></i>
+                Filtros
+            </button>
+        </div>
+    </section>
+
+    <!-- Tabla -->
+    <section class="seccion-dashboard">
+        <section class="table-section">
+            <table class="table aprendices-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Documento</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th># Ficha</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- JS manda el resto aquí 😎 -->
+                </tbody>
+            </table>
+        </section>
+    </section>
+
+</div>

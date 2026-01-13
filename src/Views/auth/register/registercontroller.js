@@ -15,9 +15,9 @@ export default async () => {
 
     // ================= CARGAR DATOS DESDE API =================
     // Traemos los roles, fichas y programas desde la API
-    const roles = await get("roles");
     const fichas = await get("ficha");
     const programas = await get("programa");
+    const roles = await get("roles");
 
     // ================= RELLENAR SELECTS =================
     // Rellenamos select de roles

@@ -2,16 +2,16 @@
 
     <!-- Ruta -->
     <div class="ruta-dashboard">
-        Inicio / <span>Motivos</span>
+        Inicio / <span>Areas</span>
     </div>
 
     <!-- Titulo + accion -->
     <div class="titulo-accion">
-        <h1 class="titulo-dashboard">Motivos</h1>
+        <h1 class="titulo-dashboard">Areas</h1>
 
-        <button class="btn btn-primary" id="btnNuevoMotivo">
+        <button class="btn btn-primary" id="btnnuevorooms">
             <i class="ri-add-line"></i>
-            Nuevo Motivo
+            Nueva Area
         </button>
     </div>
 
@@ -20,20 +20,18 @@
         <div class="filter-section filter-doble">
             <div>
                 <label>Filtrar por nombre</label>
-                <input type="text" class="input-filter" id="filtroNombre">
+                <input type="text" class="input-filter" placeholder="Buscar">
             </div>
 
             <div>
                 <label>Filtrar por estado</label>
-                <select class="input-filter" id="filtroEstado">
+                <select class="input-filter" id="filter">
                     <option value="">Todos</option>
-                   
                 </select>
             </div>
 
-            <button class="btn btn-primary" id="btnFiltros">
-                <i class="ri-filter-3-line"></i>
-                Filtros
+            <button class="btn btn-outline">
+                <i class="ri-delete-bin-6-line"></i> 
             </button>
         </div>
     </section>
@@ -46,15 +44,16 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
-                        <th>Descripción</th>
+                        <th>Descripcion</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
 
-                <!--Backend / JS llena esto -->
-                <tbody id="tablaMotivos">
-                    <!-- filas dinámicas -->
+                <tbody>
+                    <tr>
+                        
+                    </tr>
                 </tbody>
             </table>
         </section>

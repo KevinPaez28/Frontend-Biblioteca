@@ -1,0 +1,86 @@
+<form id="formUsuario" class="modal-contenido" novalidate autocomplete="off">
+
+    <!-- Títulos -->
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Editar Usuario</h3>
+        <p class="modal-subtitulo">
+            Modifica la información del usuario registrado
+        </p>
+    </div>
+
+    <!-- ================= IDENTIFICACIÓN ================= -->
+    <div class="modal-seccion">
+        <h4>Identificación</h4>
+
+        <div class="form__grupo">
+            <label class="label">Documento *</label>
+            <input id="modalInputDocumento" name="documento" type="text" class="input" required maxlength="10"
+                minlength="8">
+        </div>
+    </div>
+
+    <!-- ================= DATOS ================= -->
+    <div class="modal-seccion">
+        <h4>Datos</h4>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label">Nombre *</label>
+                <input id="modalInputNombre" name="nombres" type="text" class="input" maxlength="15" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Apellido *</label>
+                <input id="modalInputApellido" name="apellidos" type="text" class="input" maxlength="15" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Correo electrónico *</label>
+                <input id="modalInputCorreo" name="correo" type="text" class="input" maxlength="50" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Teléfono *</label>
+                <input id="modalInputTelefono" name="telefono" type="text" class="input" maxlength="10" minlength="10"
+                    required>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= SISTEMA ================= -->
+    <div class="modal-seccion">
+        <h4>Información del Sistema</h4>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label">Rol *</label>
+                <select id="modalSelectRol" name="rol" class="input" required>
+                    <option value="">Seleccione un rol</option>
+                </select>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Estado *</label>
+                <select id="modalSelectEstado" name="status_id" class="input" required>
+                    <option value="">Seleccione un estado</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" class="btn-cerrar" id="btnCerrarModal">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Guardar cambios
+        </button>
+    </div>
+
+</form>
