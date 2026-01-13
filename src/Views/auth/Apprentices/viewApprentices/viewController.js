@@ -2,7 +2,7 @@ import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.j
 import "../../../../Components/Models/modal.css";
 import htmlContent from "./index.html?raw";
 
-export const abrirModalUsuario = (item, index) => {
+export const abrirModalAprendiz = (item, index) => {
 
     mostrarModal(htmlContent);
 
@@ -10,6 +10,12 @@ export const abrirModalUsuario = (item, index) => {
 
         document.querySelector("#modalDocumentoUsuario").textContent =
             item.document || "—";
+
+        document.querySelector("#modalFichaUsuario").textContent =
+            item.ficha|| "—";
+
+        document.querySelector("#modalProgramaUsuario").textContent =
+            item.programa || "—";
 
         document.querySelector("#modalNombreUsuario").textContent =
             item.first_name || `Usuario ${index + 1}`;
@@ -34,3 +40,4 @@ export const abrirModalUsuario = (item, index) => {
             .addEventListener("click", cerrarModal);
     });
 };
+

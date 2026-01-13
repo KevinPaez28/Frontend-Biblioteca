@@ -14,6 +14,11 @@ export default async () => {
         abrirModalCrearEvento();
     });
 
+    const btnFiltros = document.querySelector("#btnFiltros");
+    
+    btnFiltros.addEventListener("click", () => {
+        filtrosAvanzados.classList.toggle("filter-visible");
+    });
     const cargarEventos = async (search = "") => {
 
         const eventos = await get(`eventos?search=${search}`);

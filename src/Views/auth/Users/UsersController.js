@@ -32,7 +32,7 @@ export default async () => {
 
     roles.data.forEach(r => {
         const option = document.createElement("option");
-        option.value = r.name; // importante: enviamos el nombre
+        option.value = r.name; 
         option.textContent = r.name;
         filtros.rol.append(option);
     });

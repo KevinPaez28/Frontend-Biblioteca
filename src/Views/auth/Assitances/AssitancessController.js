@@ -22,8 +22,7 @@ export default async () => {
 
     // ================= MOSTRAR / OCULTAR =================
     btnFiltros.addEventListener("click", () => {
-        filtrosAvanzados.style.display =
-            filtrosAvanzados.style.display === "grid" ? "none" : "grid";
+        filtrosAvanzados.classList.toggle("filter-visible");
     });
 
     // ================= CARGAR SELECTS =================

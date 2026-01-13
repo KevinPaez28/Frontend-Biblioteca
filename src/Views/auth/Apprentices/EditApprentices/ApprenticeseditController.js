@@ -4,48 +4,41 @@ import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlContent from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
-import UsersController from "../UsersController.js";
+import ApprenticesController from "../ApprenticesController.js";
 
-export const editModalUsuario = (item) => {
+export const editModalAprendiz = (item) => {
 
     mostrarModal(htmlContent);
 
     requestAnimationFrame(async () => {
 
+        const form = document.querySelector("#formAprendiz");
         const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formUsuario");
-
+        btnCerrar.addEventListener("click", cerrarModal);
+        
         const inputDocumento = document.querySelector("#modalInputDocumento");
         const inputNombre = document.querySelector("#modalInputNombre");
         const inputApellido = document.querySelector("#modalInputApellido");
         const inputTelefono = document.querySelector("#modalInputTelefono");
         const inputCorreo = document.querySelector("#modalInputCorreo");
 
-        const selectRol = document.querySelector("#modalSelectRol");
+        const inputFicha = document.querySelector("#modalInputFicha");
+        const inputPrograma = document.querySelector("#modalInputPrograma");
+
         const selectEstado = document.querySelector("#modalSelectEstado");
 
-        // ===== PRECARGAR DATOS =====
+        // ===== PRECARGA =====
         inputDocumento.value = item.document;
         inputNombre.value = item.first_name;
         inputApellido.value = item.last_name;
         inputTelefono.value = item.phone_number;
         inputCorreo.value = item.email;
 
-        // ===== RELLENAR ROLES =====
-        const roles = await get("roles");
-        roles.data.forEach(r => {
-            const op = document.createElement("option");
-            op.value = r.id;
-            op.textContent = r.name;
+        inputFicha.value = item.ficha|| "—";
+        inputPrograma.value = item.programa|| "—";
 
-            if (r.name === item.rol) {
-                op.selected = true;
-            }
-
-            selectRol.append(op);
-        });
-
-        const estados = await get("EstadoUsuarios");
+        // ===== ESTADOS =====
+        const estados = await get("EstadoAprendices");
 
         estados.data.forEach(e => {
             const op = document.createElement("option");
@@ -59,7 +52,6 @@ export const editModalUsuario = (item) => {
             selectEstado.append(op);
         });
 
-        btnCerrar.addEventListener("click", cerrarModal);
 
         let enviando = false;
 
@@ -72,7 +64,6 @@ export const editModalUsuario = (item) => {
 
             const payload = {
                 ...validate.datos,
-                rol_id: selectRol.value,
                 status_id: selectEstado.value
             };
 
@@ -86,21 +77,19 @@ export const editModalUsuario = (item) => {
                         cerrarModal();
                         response.errors.forEach(err => error(err));
                     } else {
-                        cerrarModal();
-                        error(response?.message || "Error al actualizar el usuario");
+                        error(response?.message || "Error al actualizar la sala");
                     }
                     enviando = false;
                     return;
                 }
-
                 cerrarModal();
-                success(response.message || "Usuario actualizado correctamente");
-                UsersController();
+                success("Aprendiz actualizado correctamente");
+                ApprenticesController();
                 enviando = false;
 
             } catch (err) {
                 console.error(err);
-                error("Ocurrió un error inesperado");
+                error("Error inesperado");
                 enviando = false;
             }
         });

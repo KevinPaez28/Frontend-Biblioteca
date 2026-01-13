@@ -4,16 +4,20 @@
     gap: 12px;
     align-items: flex-end;
 }
-.tamanio{
+
+.tamanio {
     width: 250px;
 }
-.tamanioRol{
+
+.tamanioRol {
     width: 200px;
 }
-.roles{
+
+.roles {
     margin-top: -20px;
 }
-.filter-doble > div {
+
+.filter-doble>div {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -42,15 +46,12 @@
     box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
 }
 
-
-
 #filtrosAvanzados {
-    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 30px;
 }
 
-#filtrosAvanzados > div {
+#filtrosAvanzados>div {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -60,4 +61,12 @@
     font-size: 12px;
     font-weight: 600;
     color: var(--color-fontJornadas);
+}
+
+.filter-oculto {
+    display: none;
+    margin-top: 12px;
+}
+.filter-visible {
+    display: grid;
 }

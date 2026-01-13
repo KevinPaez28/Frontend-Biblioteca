@@ -1,8 +1,8 @@
 import { get } from "../../../Helpers/api.js";
 // import { abrirModalCrearAprendiz } from "./CreateApprentice/createController.js";
 // import { deleteAprendiz } from "./deleteApprentice/deleteController.js";
-// import { editModalAprendiz } from "./EditApprentice/ApprenticeController.js";
-// import { abrirModalAprendiz } from "./viewApprentice/viewController.js";
+import { editModalAprendiz } from "./EditApprentices/ApprenticeseditController.js";
+import { abrirModalAprendiz } from "./viewApprentices/viewController.js";
 
 export default async () => {
 
@@ -18,10 +18,9 @@ export default async () => {
 
     // ================= EVENTOS HEADER =================
     btnFiltros.addEventListener("click", () => {
-        filtrosAvanzados.style.display =
-            filtrosAvanzados.style.display === "grid" ? "none" : "grid";
+        filtrosAvanzados.classList.toggle("filter-visible");
     });
-
+    
     btnNuevoAprendiz.addEventListener("click", () => {
         abrirModalCrearAprendiz();
     });
@@ -30,6 +29,7 @@ export default async () => {
         inputImportarArchivo.click();
     });
 
+    
     inputImportarArchivo.addEventListener("change", async (e) => {
         const archivo = e.target.files[0];
         if (!archivo) return;
@@ -58,6 +58,7 @@ export default async () => {
         documento: document.querySelector("#filtroDocumento"),
         ficha: document.querySelector("#filtroFicha"),
         rol: document.querySelector("#filtroRol"),
+        estados: document.querySelector("#filtroEstado"),
     };
 
     // ================= ROLES =================
@@ -69,6 +70,14 @@ export default async () => {
         filtros.rol.append(option);
     });
 
+    const estados = await get("EstadoUsuarios");
+    estados.data.forEach(e => {
+        const option = document.createElement("option");
+        option.value = e.name;
+        option.textContent = e.name;
+        filtros.estados.append(option); 
+    });
+        
     // ================= FUNCIÓN CENTRAL =================
     const cargarAprendices = async () => {
 
@@ -81,11 +90,14 @@ export default async () => {
         });
 
         const url = query.length
-            ? `apprentice/search?${query.join("&")}`
-            : "apprentice/search";
+            ? `user/aprendices?${query.join("&")}`
+            : "user/aprendices";
 
         const response = await get(url);
         tbody.innerHTML = "";
+
+        console.log(response);
+        
 
         if (response?.data?.length > 0) {
 

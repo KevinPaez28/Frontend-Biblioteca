@@ -1,16 +1,15 @@
 <div class="contenido-dashboard">
 
-    <!-- Ruta -->
+    <!-- Ruta / ubicación -->
     <div class="ruta-dashboard">
         Inicio / <span>Aprendices</span>
     </div>
 
-    <!-- Titulo + acciones -->
+    <!-- Título -->
     <div class="titulo-accion">
         <h1 class="titulo-dashboard">Aprendices</h1>
 
         <div class="acciones-header">
-
             <input type="file" id="inputImportarArchivo" class="input-file" accept=".xlsx,.xls,.csv" hidden>
 
             <button class="btn btn-menuImport" id="btnImportar">
@@ -22,9 +21,7 @@
                 <i class="ri-add-line"></i>
                 Nuevo Usuario
             </button>
-
         </div>
-
     </div>
 
     <!-- Filtros -->
@@ -32,12 +29,12 @@
         <div class="filter-section filter-doble">
             <div>
                 <label>Filtrar por nombre</label>
-                <input type="text" class="input-filter" id="filtroNombre" placeholder="Buscar nombre">
+                <input type="text" class="input-filter" id="filtroNombre">
             </div>
 
             <div>
                 <label>Filtrar por apellido</label>
-                <input type="text" class="input-filter" id="filtroApellido" placeholder="Buscar apellido">
+                <input type="text" class="input-filter" id="filtroApellido">
             </div>
 
             <button class="btn btn-outline" id="btnFiltros">
@@ -45,11 +42,39 @@
                 Filtros
             </button>
         </div>
+
+        <div class="filter-section filter-oculto" id="filtrosAvanzados">
+            <div>
+                <label>Filtrar por documento</label>
+                <input type="text" class="input-filter tamanio" id="filtroDocumento">
+            </div>
+
+            <div>
+                <label>Filtrar por ficha</label>
+                <input type="text" class="input-filter tamanio" id="filtroFicha">
+            </div>
+
+            <div>
+                <label class>Filtrar por rol</label>
+                <select class="input-filter tamanioRol" id="filtroRol">
+                </select>
+            </div>
+            <div>
+                <label>Filtrar por estado</label>
+                <select class="input-filter tamanioRol" id="filtroEstado">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+        </div>
     </section>
 
     <!-- Tabla -->
     <section class="seccion-dashboard">
-        <section class="table-section">
+        <div class="encabezado-seccion">
+            <span>Listado de aprendices</span>
+        </div>
+
+        <section class="table-section tabla-container">
             <table class="table aprendices-table">
                 <thead>
                     <tr>
@@ -63,8 +88,8 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    <!-- JS manda el resto aquí 😎 -->
+                <tbody class="aprendices-tbody">
+                    <!-- JS desde backend -->
                 </tbody>
             </table>
         </section>

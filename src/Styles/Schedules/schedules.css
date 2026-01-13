@@ -107,13 +107,7 @@
     align-items: center;
 }
 
-.input-filter {
-    flex: 1;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-}
+
 
 /* Tabla */
 .table-section {
