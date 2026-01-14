@@ -10,7 +10,6 @@
         <h1 class="titulo-dashboard">Aprendices</h1>
 
         <div class="acciones-header">
-            <input type="file" id="inputImportarArchivo" class="input-file" accept=".xlsx,.xls,.csv" hidden>
 
             <button class="btn btn-menuImport" id="btnImportar">
                 <i class="ri-upload-2-line"></i>
@@ -55,11 +54,6 @@
             </div>
 
             <div>
-                <label class>Filtrar por rol</label>
-                <select class="input-filter tamanioRol" id="filtroRol">
-                </select>
-            </div>
-            <div>
                 <label>Filtrar por estado</label>
                 <select class="input-filter tamanioRol" id="filtroEstado">
                     <option value="">Todos</option>
@@ -92,6 +86,11 @@
                     <!-- JS desde backend -->
                 </tbody>
             </table>
+
+            <!-- Contenedor de paginación visible -->
+            <div class="pagination-container">
+                <div class="pagination"></div>
+            </div>
         </section>
     </section>
 

@@ -38,3 +38,22 @@ export const confirm = (message) => {
         }
     })
 }
+export const loading = (message = "Registrando aprendices...") => {
+    return Swal.fire({
+        title: message,
+        text: "Por favor espera",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+        customClass: {
+            container: 'swal-over-modal'
+        }
+    });
+}
+
+/* ❌ CERRAR CUALQUIER SWEETALERT */
+export const closeAlert = () => {
+    Swal.close();
+}

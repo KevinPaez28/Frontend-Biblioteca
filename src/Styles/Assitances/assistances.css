@@ -1,72 +1,97 @@
-/* FILTROS NORMALES - TÚ DAS EL TAMAÑO */
-.filter-section.filter-doble {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-}
+    /* FILTROS NORMALES - TÚ DAS EL TAMAÑO */
+    .filter-section.filter-doble {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+    }
 
-.tamanio {
-    width: 250px;
-}
+    .tamanio {
+        width: 250px;
+    }
 
-.tamanioRol {
-    width: 200px;
-}
+    .tamanioRol {
+        width: 200px;
+    }
 
-.roles {
-    margin-top: -20px;
-}
+    .roles {
+        margin-top: -20px;
+    }
 
-.filter-doble>div {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+    .filter-doble>div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
 
-.filter-doble label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-fontJornadas);
-}
+    .filter-doble label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--color-fontJornadas);
+    }
 
-.input-filter {
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 14px;
-    background: white;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box;
-}
+    .input-filter {
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 14px;
+        background: white;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
+    }
 
-.input-filter:focus {
-    outline: none;
-    border-color: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-}
+    .input-filter:focus {
+        outline: none;
+        border-color: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    }
 
-#filtrosAvanzados {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
-}
+    #filtrosAvanzados {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+    }
 
-#filtrosAvanzados>div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+    #filtrosAvanzados>div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
 
-#filtrosAvanzados label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-fontJornadas);
-}
+    #filtrosAvanzados label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--color-fontJornadas);
+    }
 
-.filter-oculto {
-    display: none;
-    margin-top: 12px;
-}
-.filter-visible {
-    display: grid;
-}
+    .filter-oculto {
+        display: none;
+        margin-top: 12px;
+    }
+    .filter-visible {
+        display: grid;
+    }
+
+    /* ================= PAGINACIÓN ================= */
+
+    .pagination {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 15px;
+    }
+    
+    .pagination button {
+        padding: 6px 12px;
+        border: 1px solid #4f46e5;
+        background-color: #fff;
+        color: #4f46e5;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.2s, color 0.2s;
+    }
+    
+    .pagination button:hover {
+        background-color: #4f46e5;
+        color: #fff;
+    }

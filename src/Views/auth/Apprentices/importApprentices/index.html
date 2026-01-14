@@ -1,0 +1,61 @@
+<form id="formImportarAprendices" class="modal-contenido" novalidate autocomplete="off">
+
+    <!-- ================= TÍTULOS ================= -->
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Importar Archivo</h3>
+        <p class="modal-subtitulo">
+            Importación masiva de aprendices
+        </p>
+    </div>
+
+    <!-- ================= INSTRUCCIONES ================= -->
+    <div class="modal-seccion">
+        <h4>Instrucciones para importar</h4>
+
+        <div class="instrucciones-import">
+            <ul>
+                <li>Campos: Número de Documento, Nombres, Apellidos, Teléfono, Correo, Número de Ficha</li>
+                <li>Asegúrate de que todos los campos obligatorios estén llenos</li>
+                <li>El archivo debe estar en formato .xlsx o .xls</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ================= ARCHIVO ================= -->
+    <div class="modal-seccion">
+        <h4>Archivo</h4>
+
+        <div class="zona-archivo">
+            <label for="inputArchivoExcel" class="archivo-drop">
+                <div class="archivo-icono">
+                    📄
+                </div>
+                <p class="archivo-texto">
+                    Haz clic para seleccionar o arrastra el archivo aquí
+                </p>
+                <span class="archivo-formatos">
+                    Formatos aceptados: .xlsx, .xls
+                </span>
+            </label>
+
+            <input
+                type="file"
+                id="inputArchivoExcel"
+                accept=".xlsx,.xls"
+                hidden
+            >
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" class="btn-cerrar" id="btnCerrarModal">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Importar Datos
+        </button>
+    </div>
+
+</form>

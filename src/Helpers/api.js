@@ -97,6 +97,48 @@ export const post = async (endpoint, datos) => {
         return null;
     }
 };
+// POST IMPORT FILE
+export const postFile = async (endpoint, file) => {
+    try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        let response = await fetch(`${url}${endpoint}`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                'Authorization': `Bearer ${getCookie('access_token')}`
+            },
+            body: formData
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+
+            response = await fetch(`${url}${endpoint}`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    'Authorization': `Bearer ${getCookie('access_token')}`
+                },
+                body: formData
+            });
+
+            if (response.status === 401) {
+                cerrarTodos();
+                error("Sesión expirada");
+                window.location.href = "#/login";
+                return null;
+            }
+        }
+
+        return await response.json();
+
+    } catch (err) {
+        console.error("Error en POST FILE:", err);
+        return null;
+    }
+};
 
 // PATCH
 export const patch = async (endpoint, datos) => {

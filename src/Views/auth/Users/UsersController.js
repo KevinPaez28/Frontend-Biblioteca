@@ -1,4 +1,3 @@
-// import "../../../Styles/Usuarios/Usuarios.css";
 import { get } from "../../../Helpers/api.js";
 import { abrirModalCrearUsuario } from "./CreateUsers/createController.js";
 import { deleteUsuario } from "./deleteUsers/deleteController.js";
@@ -8,13 +7,16 @@ import { abrirModalUsuario } from "./viewUsers/viewController.js";
 export default async () => {
 
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
-    const btnFiltros = document.querySelector("#btnFiltros");
+    const pagination = document.querySelector(".pagination"); // igual que aprendices
+    const filtrosAvanzados = document.querySelector("#filtrosAvanzados");
 
+    // ================= BOTONES =================
+    const btnFiltros = document.querySelector("#btnFiltros");
     const btnNuevoUsuario = document.querySelector("#btnNuevoUsuario");
-    btnFiltros.addEventListener("click", () => {
-        filtrosAvanzados.style.display =
-            filtrosAvanzados.style.display === "grid" ? "none" : "grid";
-    });
+
+    btnFiltros.addEventListener("click", () => filtrosAvanzados.classList.toggle("filter-visible"));
+    btnNuevoUsuario.addEventListener("click", () => abrirModalCrearUsuario());
+
     // ================= FILTROS =================
     const filtros = {
         nombre: document.querySelector("#filtroNombre"),
@@ -24,15 +26,11 @@ export default async () => {
         estado: document.querySelector("#filtroEstado"),
     };
 
-    btnNuevoUsuario.addEventListener("click", () => {
-        abrirModalCrearUsuario();
-    });
-
+    // ================= ROLES =================
     const roles = await get("roles");
-
     roles.data.forEach(r => {
         const option = document.createElement("option");
-        option.value = r.name; 
+        option.value = r.name;
         option.textContent = r.name;
         filtros.rol.append(option);
     });
@@ -42,123 +40,125 @@ export default async () => {
         const option = document.createElement("option");
         option.value = e.name;
         option.textContent = e.name;
-        filtros.estado.append(option); 
+        filtros.estado.append(option);
     });
 
-    // ================= FUNCIÓN CENTRAL =================
-    const cargarUsuarios = async () => {
+    // ================= PAGINACIÓN =================
+    let currentPage = 1;
+    const perPage = 5;
 
-        let query = [];
+    const cargarUsuarios = async (page = 1) => {
+        currentPage = page;
 
+        // Construir filtros
+        const params = new URLSearchParams();
+        params.append("page", page);
         Object.entries(filtros).forEach(([key, input]) => {
-            if (input && input.value && input.value.trim() !== "") {
-                query.push(`${key}=${encodeURIComponent(input.value)}`);
+            if (input && input.value.trim() !== "") {
+                params.append(key, input.value.trim());
             }
         });
 
-        const url = query.length
-            ? `user/search?${query.join("&")}`
-            : "user/search";
+        const url = `user/search?${params.toString()}`;
+        const response = await get(url);
 
-        const usuarios = await get(url);
         tbody.innerHTML = "";
+        pagination.innerHTML = "";
 
-        if (usuarios && usuarios.data && usuarios.data.length > 0) {
-
-            usuarios.data.forEach((item, index) => {
-
-                const tr = document.createElement("tr");
-
-                // ===== # =====
-                const td1 = document.createElement("td");
-                td1.textContent = index + 1;
-
-                // ===== DOCUMENTO =====
-                const td2 = document.createElement("td");
-                td2.textContent = item.document || "—";
-
-                // ===== NOMBRE =====
-                const td3 = document.createElement("td");
-                td3.textContent = item.first_name || "—";
-
-                // ===== APELLIDO =====
-                const td4 = document.createElement("td");
-                td4.textContent = item.last_name || "—";
-
-                // ===== ROL =====
-                const td5 = document.createElement("td");
-                td5.textContent = item.rol || "—";
-
-                // ===== ESTADO =====
-                const td6 = document.createElement("td");
-                const spanEstado = document.createElement("span");
-                spanEstado.classList.add("badge-time");
-                spanEstado.textContent = item.estado || "—";
-                td6.appendChild(spanEstado);
-
-                // ===== ACCIONES =====
-                const td7 = document.createElement("td");
-
-                const btnVer = document.createElement("button");
-                btnVer.classList.add("btn-ver");
-                btnVer.textContent = "Ver";
-                btnVer.addEventListener("click", () => {
-                    abrirModalUsuario(item);
-                });
-
-                const btnEditar = document.createElement("button");
-                btnEditar.classList.add("btn-editar");
-                btnEditar.textContent = "Editar";
-                btnEditar.addEventListener("click", () => {
-                    editModalUsuario(item);
-                });
-
-                const btnEliminar = document.createElement("button");
-                btnEliminar.classList.add("btn-eliminar");
-                btnEliminar.textContent = "Eliminar";
-                btnEliminar.addEventListener("click", () => {
-                    deleteUsuario(item);
-                });
-
-                td7.appendChild(btnVer);
-                td7.appendChild(btnEditar);
-                td7.appendChild(btnEliminar);
-
-                // ===== APPEND FINAL =====
-                tr.appendChild(td1);
-                tr.appendChild(td2);
-                tr.appendChild(td3);
-                tr.appendChild(td4);
-                tr.appendChild(td5);
-                tr.appendChild(td6);
-                tr.appendChild(td7);
-
-                tbody.appendChild(tr);
-            });
-
-        } else {
+        if (!response?.data?.records || response.data.records.length === 0) {
             const tr = document.createElement("tr");
             const td = document.createElement("td");
             td.colSpan = 7;
-            td.textContent = "No se encontraron resultados";
             td.style.textAlign = "center";
-            td.style.color = "var(--color-gris)";
+            td.textContent = "No se encontraron usuarios";
             tr.appendChild(td);
             tbody.appendChild(tr);
+            return;
         }
+
+        const records = response.data.records;
+        const meta = response.data.meta;
+
+        // ======== LLENAR TABLA ========
+        records.forEach((item, index) => {
+            const tr = document.createElement("tr");
+
+            const td1 = document.createElement("td");
+            td1.textContent = (meta.current_page - 1) * meta.per_page + index + 1;
+
+            const td2 = document.createElement("td");
+            td2.textContent = item.document || "—";
+
+            const td3 = document.createElement("td");
+            td3.textContent = item.first_name || "—";
+
+            const td4 = document.createElement("td");
+            td4.textContent = item.last_name || "—";
+
+            const td5 = document.createElement("td");
+            td5.textContent = item.rol || "—";
+
+            const td6 = document.createElement("td");
+            const spanEstado = document.createElement("span");
+            spanEstado.classList.add("badge-time");
+            spanEstado.textContent = item.estado || "—";
+            td6.appendChild(spanEstado);
+
+            const td7 = document.createElement("td");
+
+            const btnVer = document.createElement("button");
+            btnVer.classList.add("btn-ver");
+            btnVer.textContent = "Ver";
+            btnVer.addEventListener("click", () => abrirModalUsuario(item));
+
+            const btnEditar = document.createElement("button");
+            btnEditar.classList.add("btn-editar");
+            btnEditar.textContent = "Editar";
+            btnEditar.addEventListener("click", () => editModalUsuario(item));
+
+            const btnEliminar = document.createElement("button");
+            btnEliminar.classList.add("btn-eliminar");
+            btnEliminar.textContent = "Eliminar";
+            btnEliminar.addEventListener("click", () => deleteUsuario(item));
+
+            td7.append(btnVer, btnEditar, btnEliminar);
+
+            tr.append(td1, td2, td3, td4, td5, td6, td7);
+            tbody.appendChild(tr);
+        });
+
+        // ======== BOTONES DE PAGINACIÓN ========
+        const btnPrev = document.createElement("button");
+        btnPrev.textContent = "« Anterior";
+        btnPrev.disabled = meta.current_page === 1;
+        btnPrev.addEventListener("click", () => cargarUsuarios(meta.current_page - 1));
+        pagination.appendChild(btnPrev);
+
+        for (let i = 1; i <= meta.last_page; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.classList.add("btn-pag");
+            if (i === meta.current_page) btn.disabled = true;
+            btn.addEventListener("click", () => cargarUsuarios(i));
+            pagination.appendChild(btn);
+        }
+
+        const btnNext = document.createElement("button");
+        btnNext.textContent = "Siguiente »";
+        btnNext.disabled = meta.current_page === meta.last_page;
+        btnNext.addEventListener("click", () => cargarUsuarios(meta.current_page + 1));
+        pagination.appendChild(btnNext);
     };
 
-    // ================= FILTROS EN TIEMPO REAL =================
+    // ======== FILTROS EN TIEMPO REAL ========
     Object.values(filtros).forEach(input => {
         if (!input) return;
-
-        if (input.tagName === "SELECT") {
-            input.addEventListener("change", cargarUsuarios);
-        } else {
-            input.addEventListener("input", cargarUsuarios);
-        }
+        input.addEventListener(
+            input.tagName === "SELECT" ? "change" : "input",
+            () => cargarUsuarios(1)
+        );
     });
 
-    // ================= INIT =================
+    // ======== INIT ========
     await cargarUsuarios();
 };
