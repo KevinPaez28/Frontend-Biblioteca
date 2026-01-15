@@ -2,16 +2,16 @@
 
     <!-- Ruta / ubicación -->
     <div class="ruta-dashboard">
-        Inicio / <span>Horarios</span>
+        Inicio / <span>Programas</span>
     </div>
 
     <!-- Título + botón -->
     <div class="titulo-accion">
-        <h1 class="titulo-dashboard">Horarios</h1>
+        <h1 class="titulo-dashboard">Programas</h1>
 
-        <button class="btn btn-primary" id="btnNuevoHorario">
+        <button class="btn btn-primary" id="btnNuevoPrograma">
             <i class="ri-add-line"></i>
-            Nuevo horario
+            Nuevo programa
         </button>
     </div>
 
@@ -19,9 +19,10 @@
     <section class="seccion-dashboard">
         <div class="filter-section filter-doble">
             <div>
-                <label>Filtrar por nombre</label>
+                <label>Filtrar por programa</label>
                 <input type="text" class="input-filter" placeholder="Buscar">
-            </div> <button class="btn btn-outline">
+            </div>
+            <button class="btn btn-outline">
                 <i class="ri-search-line"></i>
             </button>
         </div>
@@ -30,7 +31,7 @@
     <!-- Tabla -->
     <section class="seccion-dashboard">
         <div class="encabezado-seccion">
-            <span>Lista de horarios</span>
+            <span>Lista de programas</span>
         </div>
 
         <section class="table-section">
@@ -38,14 +39,11 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nombre</th>
-                        <th>Hora Inicio</th>
-                        <th>Hora Fin</th>
-                        <th>Jornada Asignada</th>
+                        <th>Programa</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="programas-tbody">
                     <!-- Aquí pinta el JS -->
                 </tbody>
             </table>
@@ -55,4 +53,4 @@
 </div>
 
 <!-- Controlador -->
-<script type="module" src="schedulesController.js"></script>
+<script type="module" src="programasController.js"></script>

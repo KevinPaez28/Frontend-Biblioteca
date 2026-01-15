@@ -86,7 +86,11 @@
 .btn-editar {
     background-color: var(--color-principal);
     color: var(--color-blanco);
-    width: 22%;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    width: auto;
+    cursor: pointer;
 }
 
 .btn-eliminar {

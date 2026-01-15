@@ -1,0 +1,40 @@
+<form id="formFicha" class="modal-contenido" novalidate autocomplete="off">
+
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Crear ficha</h3>
+        <p class="modal-subtitulo">
+            Registra la información de la nueva ficha
+        </p>
+    </div>
+
+    <!-- ================= DATOS ================= -->
+    <div class="modal-seccion">
+        <h4>Datos de la ficha</h4>
+
+        <div class="modal-grid">
+            <div class="form__grupo">
+                <label class="label">FICHA *</label>
+                <input id="inputFicha" name="ficha" type="text" class="input" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">PROGRAMA *</label>
+                <select id="inputPrograma" name="programa" class="input" required>
+                    <option value="">Seleccione un programa</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" id="btnCerrarModal" class="btn-cerrar">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Crear Ficha
+        </button>
+    </div>
+
+</form>

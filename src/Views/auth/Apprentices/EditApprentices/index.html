@@ -1,6 +1,6 @@
 <form id="formAprendiz" class="modal-contenido" novalidate autocomplete="off">
 
-    <!-- Títulos -->
+    <!-- ================= TÍTULOS ================= -->
     <div class="modal__titulos">
         <h3 class="modal-titulo">Editar Aprendiz</h3>
         <p class="modal-subtitulo">
@@ -13,12 +13,10 @@
         <h4>Identificación</h4>
 
         <div class="modal-grid">
-
             <div class="form__grupo">
                 <label class="label">Documento *</label>
-                <input id="modalInputDocumento" type="text" class="input" required>
+                <input id="modalInputDocumento" type="text" class="input" name="documento"  maxlength="10" minlength="8" required>
             </div>
-
         </div>
     </div>
 
@@ -27,45 +25,49 @@
         <h4>Datos</h4>
 
         <div class="modal-grid">
-
             <div class="form__grupo">
                 <label class="label">Nombre *</label>
-                <input id="modalInputNombre" type="text" class="input" required>
+                <input id="modalInputNombre" type="text"  name="nombres" class="input" name="nombres"  maxlength="5"  required>
             </div>
 
             <div class="form__grupo">
                 <label class="label">Apellido *</label>
-                <input id="modalInputApellido" type="text" class="input" required>
+                <input id="modalInputApellido" type="text" name="apellidos" class="input" maxlength="15" required>
             </div>
 
             <div class="form__grupo">
                 <label class="label">Correo *</label>
-                <input id="modalInputCorreo" type="text" class="input" required>
+                <input id="modalInputCorreo" type="text" name="correo"  class="input"  maxlength="50" required>
             </div>
 
             <div class="form__grupo">
                 <label class="label">Teléfono *</label>
-                <input id="modalInputTelefono" type="text" class="input" required>
+                <input id="modalInputTelefono" type="text" name="telefono" class="input"  maxlength="10" minlength="10" required>
             </div>
-
         </div>
     </div>
 
+    <!-- ================= INFORMACIÓN ACADÉMICA ================= -->
     <div class="modal-seccion vertical">
-        <h4>Informacion Academica</h4>
+        <h4>Información Académica</h4>
 
         <div class="modal-grid">
             <div class="form__grupo">
-                <label class="label">Ficha</label>
-                <input id="modalInputFicha" type="text" class="input" disabled>
+                <label class="label">Ficha *</label>
+                <select id="modalSelectFicha" name="ficha" class="input" required>
+                    <option value="">Seleccione una ficha</option>
+                </select>
             </div>
 
             <div class="form__grupo">
-                <label class="label">Programa</label>
-                <input id="modalInputPrograma" type="text" class="input" disabled>
+                <label class="label">Programa *</label>
+                <select id="modalSelectPrograma" name="programa_id" class="input" disabled required>
+                    <option value="">Seleccione un programa</option>
+                </select>
             </div>
         </div>
     </div>
+
     <!-- ================= SISTEMA ================= -->
     <div class="modal-seccion">
         <h4>Estado</h4>
@@ -73,7 +75,7 @@
         <div class="modal-grid">
             <div class="form__grupo">
                 <label class="label">Estado *</label>
-                <select id="modalSelectEstado" class="input" required>
+                <select id="modalSelectEstado" class="input"  name="status_id" required>
                     <option value="">Seleccione un estado</option>
                 </select>
             </div>

@@ -7,20 +7,26 @@ import { abrirModalUsuario } from "./viewUsers/viewController.js";
 export default async () => {
 
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
-    const pagination = document.querySelector(".pagination"); // igual que aprendices
-    const filtrosAvanzados = document.querySelector("#filtrosAvanzados");
+    const pagination = document.querySelector(".pagination");
 
     // ================= BOTONES =================
     const btnFiltros = document.querySelector("#btnFiltros");
+    const filtrosAvanzados = document.querySelector("#filtrosAvanzados");
     const btnNuevoUsuario = document.querySelector("#btnNuevoUsuario");
 
-    btnFiltros.addEventListener("click", () => filtrosAvanzados.classList.toggle("filter-visible"));
-    btnNuevoUsuario.addEventListener("click", () => abrirModalCrearUsuario());
+    btnFiltros.addEventListener("click", () => {
+        filtrosAvanzados.style.display =
+            filtrosAvanzados.style.display === "none" ? "grid" : "none";
+    });
+
+    btnNuevoUsuario.addEventListener("click", () => {
+        abrirModalCrearUsuario();
+    });
 
     // ================= FILTROS =================
     const filtros = {
         nombre: document.querySelector("#filtroNombre"),
-        apellido: document.querySelector("#filtroApellido"),
+        encargado: document.querySelector("#filtroEncargado"),
         documento: document.querySelector("#filtroDocumento"),
         rol: document.querySelector("#filtroRol"),
         estado: document.querySelector("#filtroEstado"),
@@ -35,6 +41,7 @@ export default async () => {
         filtros.rol.append(option);
     });
 
+    // ================= ESTADOS =================
     const estados = await get("EstadoUsuarios");
     estados.data.forEach(e => {
         const option = document.createElement("option");
@@ -45,22 +52,20 @@ export default async () => {
 
     // ================= PAGINACIÓN =================
     let currentPage = 1;
-    const perPage = 5;
 
     const cargarUsuarios = async (page = 1) => {
         currentPage = page;
 
-        // Construir filtros
         const params = new URLSearchParams();
         params.append("page", page);
+
         Object.entries(filtros).forEach(([key, input]) => {
             if (input && input.value.trim() !== "") {
                 params.append(key, input.value.trim());
             }
         });
 
-        const url = `user/search?${params.toString()}`;
-        const response = await get(url);
+        const response = await get(`user/search?${params.toString()}`);
 
         tbody.innerHTML = "";
         pagination.innerHTML = "";
@@ -69,8 +74,8 @@ export default async () => {
             const tr = document.createElement("tr");
             const td = document.createElement("td");
             td.colSpan = 7;
-            td.style.textAlign = "center";
             td.textContent = "No se encontraron usuarios";
+            td.style.textAlign = "center";
             tr.appendChild(td);
             tbody.appendChild(tr);
             return;
@@ -79,12 +84,13 @@ export default async () => {
         const records = response.data.records;
         const meta = response.data.meta;
 
-        // ======== LLENAR TABLA ========
+        // ===== TABLA =====
         records.forEach((item, index) => {
             const tr = document.createElement("tr");
 
             const td1 = document.createElement("td");
-            td1.textContent = (meta.current_page - 1) * meta.per_page + index + 1;
+            td1.textContent =
+                (meta.current_page - 1) * meta.per_page + index + 1;
 
             const td2 = document.createElement("td");
             td2.textContent = item.document || "—";
@@ -109,29 +115,36 @@ export default async () => {
             const btnVer = document.createElement("button");
             btnVer.classList.add("btn-ver");
             btnVer.textContent = "Ver";
-            btnVer.addEventListener("click", () => abrirModalUsuario(item));
+            btnVer.addEventListener("click", () =>
+                abrirModalUsuario(item)
+            );
 
             const btnEditar = document.createElement("button");
             btnEditar.classList.add("btn-editar");
             btnEditar.textContent = "Editar";
-            btnEditar.addEventListener("click", () => editModalUsuario(item));
+            btnEditar.addEventListener("click", () =>
+                editModalUsuario(item)
+            );
 
             const btnEliminar = document.createElement("button");
             btnEliminar.classList.add("btn-eliminar");
             btnEliminar.textContent = "Eliminar";
-            btnEliminar.addEventListener("click", () => deleteUsuario(item));
+            btnEliminar.addEventListener("click", () =>
+                deleteUsuario(item)
+            );
 
             td7.append(btnVer, btnEditar, btnEliminar);
-
             tr.append(td1, td2, td3, td4, td5, td6, td7);
             tbody.appendChild(tr);
         });
 
-        // ======== BOTONES DE PAGINACIÓN ========
+        // ===== PAGINADOR =====
         const btnPrev = document.createElement("button");
         btnPrev.textContent = "« Anterior";
         btnPrev.disabled = meta.current_page === 1;
-        btnPrev.addEventListener("click", () => cargarUsuarios(meta.current_page - 1));
+        btnPrev.addEventListener("click", () =>
+            cargarUsuarios(meta.current_page - 1)
+        );
         pagination.appendChild(btnPrev);
 
         for (let i = 1; i <= meta.last_page; i++) {
@@ -139,18 +152,22 @@ export default async () => {
             btn.textContent = i;
             btn.classList.add("btn-pag");
             if (i === meta.current_page) btn.disabled = true;
-            btn.addEventListener("click", () => cargarUsuarios(i));
+            btn.addEventListener("click", () =>
+                cargarUsuarios(i)
+            );
             pagination.appendChild(btn);
         }
 
         const btnNext = document.createElement("button");
         btnNext.textContent = "Siguiente »";
         btnNext.disabled = meta.current_page === meta.last_page;
-        btnNext.addEventListener("click", () => cargarUsuarios(meta.current_page + 1));
+        btnNext.addEventListener("click", () =>
+            cargarUsuarios(meta.current_page + 1)
+        );
         pagination.appendChild(btnNext);
     };
 
-    // ======== FILTROS EN TIEMPO REAL ========
+    // ================= FILTROS EN TIEMPO REAL =================
     Object.values(filtros).forEach(input => {
         if (!input) return;
         input.addEventListener(
@@ -159,6 +176,6 @@ export default async () => {
         );
     });
 
-    // ======== INIT ========
+    // ================= INIT =================
     await cargarUsuarios();
 };

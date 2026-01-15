@@ -7,22 +7,23 @@
         </p>
     </div>
 
+    <!-- ================= IDENTIFICACIÓN ================= -->
     <div class="modal-seccion">
-        <h4>Identificacion</h4>
+        <h4>Identificación</h4>
         <div class="form__grupo">
             <label class="label">DOCUMENTO *</label>
             <input name="documento" type="text" class="input" required maxlength="10" minlength="8">
         </div>
     </div>
-    <!-- ================= DATOS ================= -->
+
+    <!-- ================= DATOS PERSONALES ================= -->
     <div class="modal-seccion">
         <h4>Datos</h4>
 
         <div class="modal-grid">
-
             <div class="form__grupo">
                 <label class="label">NOMBRE *</label>
-                <input name="nombres" type="text" class="input" maxlength="15" required > 
+                <input name="nombres" type="text" class="input" maxlength="15" required>
             </div>
 
             <div class="form__grupo">
@@ -31,27 +32,56 @@
             </div>
 
             <div class="form__grupo">
-                <label class="label">TELÉFONO</label>
+                <label class="label">TELÉFONO *</label>
                 <input name="telefono" type="text" class="input" required maxlength="10" minlength="10">
             </div>
 
             <div class="form__grupo">
-                <label class="label">Correo electronico</label >
-                <input name="correo" type="text" class="input" maxlength="50" required>
+                <label class="label">CORREO ELECTRÓNICO *</label>
+                <input name="correo" type="email" class="input" maxlength="50" required>
             </div>
-
         </div>
     </div>
 
+    <!-- ================= INFO SISTEMA ================= -->
     <div class="modal-seccion">
         <h4>Información del Sistema</h4>
 
-        <div class="form__grupo">
-            <label class="label">ROL *</label>
-            <select id="selectRol" name="rol" class="input" required>
-                <option value="">Seleccione un rol</option>
-                <!-- JS llena esto -->
-            </select>
+        <div class="modal-grid">
+            <div class="form__grupo">
+                <label class="label">ROL *</label>
+                <select id="selectRol" name="rol" class="input" required>
+                    <option value="">Seleccione un rol</option>
+                </select>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">ESTADO *</label>
+                <select id="selectEstado" name="estado" class="input" required>
+                    <option value="">Seleccione un estado</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SOLO APRENDICES ================= -->
+    <div class="modal-seccion" id="seccionAprendiz">
+        <h4>Información del Aprendiz</h4>
+
+        <div class="modal-grid">
+            <div class="form__grupo">
+                <label class="label">FICHA *</label>
+                <select id="selectFicha" name="ficha" class="input">
+                    <option value="">Seleccione una ficha</option>
+                </select>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">PROGRAMA *</label>
+                <select id="selectPrograma" name="programa" class="input" disabled>
+                    <option value="">Seleccione un programa</option>
+                </select>
+            </div>
         </div>
     </div>
 

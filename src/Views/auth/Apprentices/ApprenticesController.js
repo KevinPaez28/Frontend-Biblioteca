@@ -1,5 +1,5 @@
 import { get } from "../../../Helpers/api.js";
-// import { abrirModalCrearAprendiz } from "./CreateApprentice/createController.js";
+import { abrirModalCrearAprendiz } from "./CreateApprentices/createController.js";
 // import { deleteAprendiz } from "./deleteApprentice/deleteController.js";
 import { editModalAprendiz } from "./EditApprentices/ApprenticeseditController.js";
 import { importApprenties } from "./importApprentices/imporApprentices.js";
@@ -119,7 +119,7 @@ export default async () => {
             const btnEliminar = document.createElement("button");
             btnEliminar.classList.add("btn-eliminar");
             btnEliminar.textContent = "Eliminar";
-            btnEliminar.addEventListener("click", () => deleteAprendiz(item)); // ojo: importa deleteAprendiz
+            btnEliminar.addEventListener("click", () => deleteAprendiz(item)); 
 
             td7.append(btnVer, btnEditar, btnEliminar);
             tr.append(td1, td2, td3, td4, td5, td6, td7);
