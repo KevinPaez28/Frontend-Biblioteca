@@ -104,7 +104,9 @@ export const editModalAprendiz = (item) => {
 
             
             const payload = {
-                ...validate.datos,
+                ...validate.datos,  
+                ficha_id: selectFicha.value || null,
+                programa_id: selectPrograma.value || null,
                 rol_id: 2
             };
             

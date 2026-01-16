@@ -16,6 +16,7 @@ import UsersController from "../Views/auth/Users/UsersController.js";
 import ApprenticesController from "../Views/auth/Apprentices/ApprenticesController.js";
 import FichasController from "../Views/auth/Fichas/FichasController.js";
 import ProgramsController from "../Views/auth/Programs/ProgramsController.js";
+import AssitanceController from "../Views/auth/EventAssistance/AssitanceController.js";
 // ================= RUTAS =================
 export const routes = {
 
@@ -124,6 +125,12 @@ export const routes = {
     path: "auth/Fichas/index.html",
     controller: FichasController,
     meta: { can: "fichas.index" }
+  },
+
+  Asistencia_Eventos: {
+    path: "auth/EventAssistance/index.html",
+    controller: AssitanceController,
+    meta: { can: "assistances.index" }
   }
 
 };

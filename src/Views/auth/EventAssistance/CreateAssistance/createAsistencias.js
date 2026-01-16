@@ -1,0 +1,87 @@
+import { post, get } from "../../../../Helpers/api.js";
+import * as validate from "../../../../Helpers/Modules/modules.js";
+import "../../../../Components/Models/modal.css";
+import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
+import htmlCrearAsistencia from "./index.html?raw";
+import { success, error } from "../../../../Helpers/alertas.js";
+import asistenciasController from "../AssitanceController.js";
+
+export const abrirModalCrearAsistenciaEvento = async () => {
+
+    mostrarModal(htmlCrearAsistencia);
+
+    requestAnimationFrame(async () => {
+        const btnCerrar = document.querySelector("#btnCerrarModal");
+        const form = document.querySelector("#formAsistenciaEvento");
+
+        const selectEvento = document.querySelector("#selectEvento");
+        const selectFicha = document.querySelector("#selectFicha");
+
+        btnCerrar.addEventListener("click", cerrarModal);
+
+        /* ================= OBTENER DATOS ================= */
+
+        const eventos = await get("eventos");
+        const fichas = await get("ficha");
+
+        // ===== RELLENAR SELECT EVENTOS =====
+        eventos.data.forEach(e => {
+            const op = document.createElement("option");
+            op.value = e.id;
+            op.textContent = e.name;
+            selectEvento.append(op);
+        });
+
+        // ===== RELLENAR SELECT FICHAS =====
+        fichas.data.forEach(f => {
+            const op = document.createElement("option");
+            op.value = f.id;
+            op.textContent = f.ficha;
+            selectFicha.append(op);
+        });
+
+
+
+        /* ================= SUBMIT ================= */
+        let enviando = false;
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            if (enviando) return;
+
+            if (!validate.validarCampos(event)) return;
+
+            const payload = { ...validate.datos };
+
+            try {
+                enviando = true;
+
+                const response = await post(
+                    "assistances/event/create",
+                    payload
+                );
+
+                if (!response || !response.success) {
+                    if (response?.errors?.length) {
+                        response.errors.forEach(err => error(err));
+                    } else {
+                        error(response?.message || "Error al registrar la asistencia");
+                    }
+                    enviando = false;
+                    return;
+                }
+
+                cerrarModal();
+                success(response.message || "Asistencia registrada correctamente");
+                form.reset();
+                asistenciasController();
+                enviando = false;
+
+            } catch (err) {
+                console.error(err);
+                error("Ocurrió un error inesperado");
+                enviando = false;
+            }
+        });
+    });
+};

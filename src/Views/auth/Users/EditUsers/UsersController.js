@@ -50,7 +50,7 @@ export const editModalUsuario = (item) => {
         estados.data.forEach(e => {
             const op = document.createElement("option");
             op.value = e.id;
-            op.textContent = e.name;
+            op.textContent = e.status;
 
             if (e.name === item.estado) {
                 op.selected = true;

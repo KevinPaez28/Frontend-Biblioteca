@@ -1,4 +1,3 @@
-/* ================= CONTENEDOR LISTA =================
 .horarios-list {
     display: flex;
     flex-direction: column;
@@ -68,4 +67,4 @@
 
 .horarios-list::-webkit-scrollbar-track {
     background: #f3f4f6;
-} */
+}

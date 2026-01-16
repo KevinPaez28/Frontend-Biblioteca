@@ -32,19 +32,18 @@ export const abrirModalCrearMotivo = async () => {
             try {
                 enviando = true;
                 const response = await post("motivos/create", payload);
-                console.log(response);
                 
                 if (!response || !response.success) {
+                    cerrarModal();
                     if (response?.errors && response.errors.length > 0) {
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
                     } else {
                         error(response?.message || "Error al crear el motivo");
                     }
                     enviando = false; // desbloqueamos si hay error
                     return;
                 }
-
+                form.reset();
                 cerrarModal();
                 success(response.message || "Motivo creado correctamente");
                 ReasonController()
