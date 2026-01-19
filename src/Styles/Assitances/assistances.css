@@ -67,6 +67,7 @@
         display: none;
         margin-top: 12px;
     }
+
     .filter-visible {
         display: grid;
     }
@@ -79,7 +80,7 @@
         justify-content: center;
         margin-top: 15px;
     }
-    
+
     .pagination button {
         padding: 6px 12px;
         border: 1px solid #4f46e5;
@@ -90,7 +91,7 @@
         font-weight: 600;
         transition: background-color 0.2s, color 0.2s;
     }
-    
+
     .pagination button:hover {
         background-color: #4f46e5;
         color: #fff;

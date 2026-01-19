@@ -150,6 +150,16 @@
     flex-direction: column;
 }
 
+
+.permission {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; /* Esto permite que los elementos se vayan a la siguiente línea */
+    gap: 10px; /* opcional, espacio entre elementos */
+    justify-content: center;
+}
+
+
 .description {
     width: 100%;
     height: 120px;

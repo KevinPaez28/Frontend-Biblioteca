@@ -7,7 +7,7 @@ import { success, error } from "../../../Helpers/alertas";
 export default async () => {
     // ================= OBTENER ELEMENTOS DEL DOM =================
     // Obtenemos el formulario principal
-    const form = document.querySelector("#formulario_register");  
+    const form = document.querySelector("#formulario_register");
     // Obtenemos los selects por clase
     const selectRol = document.querySelector(".rol");
     const selectFicha = document.querySelector(".ficha");
@@ -47,38 +47,43 @@ export default async () => {
     // ================= EVENTO CAMBIO DE ROL =================
     // Escuchamos cuando cambia el select de rol
     selectRol.addEventListener("change", () => {
-        // Buscamos el rol aprendiz y admin en la lista de roles
         const aprendiz = roles.data.find(r => r.name.toLowerCase() === "aprendiz");
-        const admin = roles.data.find(r => r.name.toLowerCase() === "administrador");
 
-        // Seleccionamos los grupos del formulario que tengan la clase activo
-        const clase = document.querySelectorAll(".form__grupo.activo");
-        const passwordGroup = document.querySelector(".form__grupo.password");
+        // Roles que deben mostrar correo y contraseña
+        const adminOrHelpers = roles.data.filter(r => {
+            const nombre = r.name.toLowerCase();
+            return nombre === "administrador" || nombre === "ayudante";
+        });
 
-        // Si el rol seleccionado es aprendiz
-        if (selectRol.value == aprendiz.id) {
-            // Mostrar los campos de ficha y programa
+        const clase = document.querySelectorAll(".form__grupo.activo"); // ficha y programa
+        const passwordGroup = document.querySelector(".form__grupo.password"); // correo y contraseña
+
+        const selectedId = parseInt(selectRol.value); // asegúrate de comparar números
+
+        if (selectedId === aprendiz.id) {
+            // Aprendiz: mostrar ficha y programa
             clase.forEach(g => g.classList.remove("oculto"));
-            passwordGroup.classList.add("oculto");  // Ocultar contraseña
-            // Limpiar el campo de contraseña
+            passwordGroup.classList.add("oculto");
             passwordGroup.querySelector("input").value = "";
-        } else if (selectRol.value == admin.id) {
-            // Si el rol seleccionado es administrador, mostrar el campo de contraseña
+        }
+        else if (adminOrHelpers.some(r => r.id === selectedId)) {
+            // Administrador o Ayudante: mostrar correo y contraseña
             passwordGroup.classList.remove("oculto");
-            clase.forEach(g => g.classList.add("oculto"));  // Ocultar ficha y programa
-            // Limpiar los selects dependientes
+            clase.forEach(g => g.classList.add("oculto"));
             selectFicha.value = "";
             selectPrograma.value = "";
-        } else {
-            // Si no es ni aprendiz ni administrador, ocultamos todo
+        }
+        else {
+            // Otros roles: ocultar todo
             clase.forEach(g => g.classList.add("oculto"));
             passwordGroup.classList.add("oculto");
-            // Limpiar los campos
             selectFicha.value = "";
             selectPrograma.value = "";
             passwordGroup.querySelector("input").value = "";
         }
     });
+
+
 
 
     // ================= VALIDACIONES DE CAMPOS =================

@@ -56,21 +56,41 @@ export const abrirModalCrearAsistenciaEvento = async () => {
             try {
                 enviando = true;
 
-                const response = await post( "asistencia/events/create",payload);
+                const response = await post("asistencia/events/create", payload);
 
                 if (!response || !response.success) {
                     cerrarModal();
+
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {
-                        error(response?.message || "Error al registrar la asistencia");
+                        // Si message es un objeto con created/skipped
+                        if (response?.message && typeof response.message === "object") {
+                            const created = response.message.created?.join(', ') || 'Ninguno';
+                            const skipped = response.message.skipped?.join(', ') || 'Ninguno';
+
+                            error(`No se pudo crear algunas asistencias.\nIntentadas: ${created}\nOmitidas: ${skipped}`);
+                        } else {
+                            error(response?.message || "Error al registrar la asistencia");
+                        }
                     }
+
                     enviando = false;
                     return;
                 }
 
                 cerrarModal();
-                success(response.message || "Asistencia registrada correctamente");
+
+                // Manejo correcto del success si message es objeto
+                if (response?.message && typeof response.message === "object") {
+                    const created = response.message.created?.join(', ') || 'Ninguno';
+                    const skipped = response.message.skipped?.join(', ') || 'Ninguno';
+
+                    success(`Asistencias creadas correctamente.\nUsuarios añadidos: ${created}\nUsuarios omitidos: ${skipped}`);
+                } else {
+                    success(response.message || "Asistencia registrada correctamente");
+                }
+
                 form.reset();
                 asistenciasController();
                 enviando = false;
@@ -81,5 +101,6 @@ export const abrirModalCrearAsistenciaEvento = async () => {
                 enviando = false;
             }
         });
+
     });
 };

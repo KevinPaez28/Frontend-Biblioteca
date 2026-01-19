@@ -2,6 +2,7 @@ import "../../../Styles/Schedules/Schedules.css";
 import { get } from "../../../Helpers/api.js";
 import { abrirModalAsistencia } from "./viewAssistance/AssitancesModal.js";
 import { abrirModalCrearAsistenciaEvento } from "./CreateAssistance/createAsistencias.js";
+import { deleteAsistenciasFicha } from "./DeleteAssistance/AssitancesDelete.js";
 
 
 export default async () => {
@@ -49,10 +50,13 @@ export default async () => {
                 btnVer.addEventListener("click", () => {
                     abrirModalAsistencia(item, index);
                 });
-
+                
                 const btnEliminar = document.createElement("button");
                 btnEliminar.classList.add("btn-eliminar");
                 btnEliminar.textContent = "Eliminar";
+                btnEliminar.addEventListener("click", () => {
+                    deleteAsistenciasFicha(item, index);
+                });
 
                 td5.appendChild(btnVer);
                 td5.appendChild(btnEliminar);

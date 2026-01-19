@@ -185,3 +185,19 @@
     gap: 10px;
     white-space: nowrap;
 }
+
+.badge-permissions {
+    display: inline-block;
+    width: 170px;
+    padding: 0px 10px;
+    height: 40px;
+    text-align: center;
+    align-content: center;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 400;
+}
+.badge-permissions {
+    background-color: #E8F5E9;
+    color: #1A4D0A;
+}
