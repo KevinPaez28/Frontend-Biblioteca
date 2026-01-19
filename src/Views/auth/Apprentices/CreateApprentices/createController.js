@@ -41,7 +41,7 @@ export const abrirModalCrearAprendiz = async () => {
         });
 
         // ================= FICHAS =================
-        
+
         const fichas = await get("ficha");
         fichas.data.forEach(f => {
             const op = document.createElement("option");
@@ -106,31 +106,26 @@ export const abrirModalCrearAprendiz = async () => {
                 payload.programa_id = selectPrograma.value;
             }
 
-            try {
-                enviando = true;
-                const response = await post("user/create", payload);
+            enviando = true;
+            const response = await post("user/create", payload);
 
-                if (!response || !response.success) {
-                    if (response?.errors?.length) {
-                        cerrarModal();
-                        response.errors.forEach(err => error(err));
-                    } else {
-                        cerrarModal();
-                        error(response?.message || "Error al crear aprendiz");
-                    }
-                    enviando = false;
-                    return;
+            if (!response || !response.success) {
+                if (response?.errors && response.errors.length > 0) {
+                    cerrarModal();
+                    response.errors.forEach(err => error(err));
+                } else {
+                    cerrarModal();
+                    error(response?.message || "Error al crear el usuario");
                 }
-                
-                form.reset();
-                cerrarModal();
-                success(response.message || "Aprendiz creado correctamente");
-                ApprenticesController();
-
-            } catch (err) {
-                console.error(err);
-                error("Error inesperado");
+                enviando = false;
+                return;
             }
+
+            form.reset();
+            cerrarModal();
+            success(response.message || "Aprendiz creado correctamente");
+            ApprenticesController();
+
 
             enviando = false;
         });

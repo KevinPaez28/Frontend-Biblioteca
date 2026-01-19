@@ -56,12 +56,10 @@ export const abrirModalCrearAsistenciaEvento = async () => {
             try {
                 enviando = true;
 
-                const response = await post(
-                    "assistances/event/create",
-                    payload
-                );
+                const response = await post( "asistencia/events/create",payload);
 
                 if (!response || !response.success) {
+                    cerrarModal();
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {

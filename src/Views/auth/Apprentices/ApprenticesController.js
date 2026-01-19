@@ -79,7 +79,8 @@ export default async () => {
 
         const records = response.data.records;
         const meta = response.data.meta;
-
+        console.log(response);
+        
         // ======== LLENAR TABLA ========
         records.forEach((item, index) => {
             const tr = document.createElement("tr");
