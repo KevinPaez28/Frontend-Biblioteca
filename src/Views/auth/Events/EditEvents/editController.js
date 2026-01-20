@@ -16,6 +16,7 @@ export const editModalEvento = (item) => {
         const inputNombre = document.querySelector("#modalInputNombreEvento");
         const inputEncargado = document.querySelector("#modalInputEncargado");
         const inputFecha = document.querySelector("#modalInputFecha");
+        const inputHora = document.querySelector("#modalInputHora"); // 👈 NUEVO
         const selectArea = document.querySelector("#modalSelectArea");
         const selectEstado = document.querySelector("#modalSelectEstado");
 
@@ -23,6 +24,7 @@ export const editModalEvento = (item) => {
         inputNombre.value = item.name;
         inputEncargado.value = item.mandated;
         inputFecha.value = item.date;
+        inputHora.value = item.time; // 👈 HORA (formato HH:mm)
 
         // ===== RELLENAR ÁREAS =====
         const areas = await get("salas");
@@ -31,7 +33,7 @@ export const editModalEvento = (item) => {
             op.value = a.id;
             op.textContent = a.name;
 
-            if (a.id === item.room_id) {
+            if (a.id === item.room?.id) {
                 op.selected = true;
             }
 
@@ -45,7 +47,7 @@ export const editModalEvento = (item) => {
             op.value = e.id;
             op.textContent = e.name;
 
-            if (e.id === item.state_event_id) {
+            if (e.id === item.state?.id) {
                 op.selected = true;
             }
 
@@ -65,35 +67,36 @@ export const editModalEvento = (item) => {
 
             const payload = {
                 ...validate.datos,
-                room_id: selectArea.value,
-                state_event_id: selectEstado.value
+                sala_id: selectArea.value,
+                estado_id: selectEstado.value
             };
 
             try {
                 enviando = true;
 
                 const response = await patch(`eventos/${item.id}`, payload);
+
                 if (!response || !response.success) {
-                    if (response?.errors && response.errors.length > 0) {
+                    if (response?.errors?.length) {
                         cerrarModal();
                         response.errors.forEach(err => error(err));
                     } else {
-                        error(response?.message || "Error al actualizar la sala");
+                        error(response?.message || "Error al actualizar el evento");
                     }
-                    enviando = false; 
+                    enviando = false;
                     return;
                 }
 
                 cerrarModal();
                 success(response.message || "Evento actualizado correctamente");
                 EventsController();
-                enviando = false;
 
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
-                enviando = false;
             }
+
+            enviando = false;
         });
     });
 };

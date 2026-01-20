@@ -1,15 +1,26 @@
 import "../../../Styles/shifts/shifts.css";
 import { get } from "../../../Helpers/api.js";
 import { editarmodalHorario } from "./EditShifts/editShiftsController.js";
-import { deleteShifts } from "./deleteShifts/deleteShifts.js";
+import { deleteShifts } from "./deleteShifts/deleteShecdules.js";
+import { abrirModalCrearJornada } from "./createShifts/createShifts.js";
+import { deleteJornada } from "./deleteShifts/deleteShift.js";
 
-export default async (params = null) => {
+export default async () => {
+
     const jornadas = await get("jornadas/complete");
     const cardsContainer = document.querySelector(".cards");
     cardsContainer.innerHTML = "";
 
+    const btnNuevoHorario = document.getElementById("btnNuevoHorario");
+
+    btnNuevoHorario.addEventListener("click", () => {
+        abrirModalCrearJornada();
+    });
+
     if (jornadas && jornadas.data && jornadas.data.length > 0) {
+
         jornadas.data.forEach((item, index) => {
+
             // ===== CARD =====
             const card = document.createElement("div");
             card.classList.add("card");
@@ -46,7 +57,7 @@ export default async (params = null) => {
             const horariosDiv = document.createElement("div");
             horariosDiv.classList.add("horarios");
 
-            // ===== CREACIÓN DE ELEMENTOS PARA HORARIOS =====
+            // ===== HORARIO ASIGNADO =====
             if (item.horario) {
                 horariosDiv.classList.add("datos");
 
@@ -58,50 +69,63 @@ export default async (params = null) => {
                 horarioHoras.classList.add("horario-horas");
                 horarioHoras.textContent = `${item.start_time} - ${item.end_time}`;
 
-                // ===== BOTÓN ELIMINAR =====
-                const btnEliminar = document.createElement("span");
-                btnEliminar.classList.add("horario-eliminar");
-                btnEliminar.textContent = "✖";
-                btnEliminar.title = "Eliminar horario";
+                const btnEliminarHorario = document.createElement("span");
+                btnEliminarHorario.classList.add("horario-eliminar");
+                btnEliminarHorario.textContent = "✖";
+                btnEliminarHorario.title = "Eliminar horario";
 
-                btnEliminar.addEventListener("click", () => {
-                    deleteShifts(item, horariosDiv);
+                btnEliminarHorario.addEventListener("click", () => {
+                    deleteShifts(item, horariosDiv); // ← SOLO horario
                 });
 
                 horariosDiv.appendChild(horarioNombre);
                 horariosDiv.appendChild(horarioHoras);
-                horariosDiv.appendChild(btnEliminar);
+                horariosDiv.appendChild(btnEliminarHorario);
+
             } else {
                 horariosDiv.textContent = "No hay horarios asignados";
-                horariosDiv.classList.remove("datos");
             }
 
-            const btn = document.createElement("button");
-            btn.classList.add("btn-cerrar");
-            btn.textContent = "Gestionar horarios";
+            // ===== ACCIONES =====
+            const acciones = document.createElement("div");
+            acciones.classList.add("acciones-jornada");
 
-            btn.addEventListener("click", () => {
+            // Gestionar
+            const btnGestionar = document.createElement("button");
+            btnGestionar.classList.add("btn-cerrar");
+            btnGestionar.textContent = "Gestionar horarios";
+
+            btnGestionar.addEventListener("click", () => {
                 editarmodalHorario(item, index);
             });
+
+            // 🗑️ Eliminar jornada
+            const btnEliminarJornada = document.createElement("button");
+            btnEliminarJornada.classList.add("btn-delete");
+            btnEliminarJornada.textContent = "Eliminar jornada";
+
+            btnEliminarJornada.addEventListener("click", () => {
+                deleteJornada(item);
+            });
+
+            acciones.appendChild(btnGestionar);
+            acciones.appendChild(btnEliminarJornada);
 
             // ===== APPEND =====
             body.appendChild(small);
             body.appendChild(horariosDiv);
-            body.appendChild(btn);
+            body.appendChild(acciones);
 
             card.appendChild(header);
             card.appendChild(body);
             cardsContainer.appendChild(card);
 
-            // ===== CHECKLIST PARA OPACIDAD Y BLOQUEO =====
+            // ===== SWITCH =====
             input.addEventListener("change", () => {
-                if (!input.checked) {
-                    card.classList.add("deshabilitado");
-                } else {
-                    card.classList.remove("deshabilitado");
-                }
+                card.classList.toggle("deshabilitado", !input.checked);
             });
         });
+
     } else {
         cardsContainer.innerHTML = `
             <p style="color:var(--color-gris);font-size:13px">

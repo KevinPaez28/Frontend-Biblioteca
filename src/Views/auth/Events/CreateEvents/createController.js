@@ -18,16 +18,21 @@ export const abrirModalCrearEvento = async () => {
 
         btnCerrar.addEventListener("click", cerrarModal);
 
-        const areas = await get("salas");
-        console.log(areas);
+        // ================= OBTENER ÁREAS =================
+        try {
+            const areas = await get("salas");
 
-        // ================= RELLENAR SELECT DE ÁREAS =================
-        areas.data.forEach(a => {
-            const op = document.createElement("option");
-            op.value = a.id;
-            op.textContent = a.name;
-            selectArea.append(op);
-        });
+            areas.data.forEach(area => {
+                const option = document.createElement("option");
+                option.value = area.id;
+                option.textContent = area.name;
+                selectArea.append(option);
+            });
+
+        } catch (err) {
+            console.error(err);
+            error("No se pudieron cargar las áreas");
+        }
 
         let enviando = false;
 
@@ -37,28 +42,34 @@ export const abrirModalCrearEvento = async () => {
 
             if (!validate.validarCampos(event)) return;
 
-            const payload = {
-                ...validate.datos,
-                estado_id: 1 
-            };
+            const { fecha, hora, ...resto } = validate.datos;
 
+            // 👉 Unimos fecha + hora (formato datetime)
+            const payload = {
+                ...resto,
+                fecha: `${fecha}`,
+                hora: `${hora}`,
+                estado_id: 1
+            };
+            console.log(payload);
+            
             try {
                 enviando = true;
 
                 const response = await post("eventos/create", payload);
-                console.log(response);
 
                 if (!response || !response.success) {
-                    if (response?.errors && response.errors.length > 0) {
-                        cerrarModal();
-                        response.errors.forEach(err => error(err));
+                    cerrarModal();
+                    if (response?.errors?.length) {
+                        response.errors.forEach(e => error(e));
                     } else {
-                        error(response?.message || "Error al crear el usuario");
+                        cerrarModal();
+                        error(response?.message || "Error al crear el evento");
                     }
-                    enviando = false; // desbloqueamos si hay error
+                    enviando = false;
                     return;
                 }
-        
+
                 cerrarModal();
                 success(response.message || "Evento creado correctamente");
                 EventsController();

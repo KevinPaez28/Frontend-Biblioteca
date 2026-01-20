@@ -1,0 +1,46 @@
+<form id="formJornada" class="modal-contenido" novalidate autocomplete="off">
+
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Crear jornada</h3>
+        <p class="modal-subtitulo">
+            Registra la información para crear una nueva jornada
+        </p>
+    </div>
+
+    <!-- ================= DATOS ================= -->
+    <div class="modal-seccion">
+        <h4>Datos</h4>
+
+        <div class="modal-grid">
+            <div class="form__grupo">
+                <label class="label">NOMBRE *</label>
+                <input id="inputNombre" name="nombre" type="text" class="input" required>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= CONFIGURACIÓN ================= -->
+    <div class="modal-seccion">
+        <h4>Configuración</h4>
+
+        <div class="modal-grid">
+            <div class="form__grupo">
+                <label class="label">HORARIO *</label>
+                <select id="selectHorario" name="horario_id" class="input">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" id="btnCerrarModal" class="btn-cerrar">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Crear Jornada
+        </button>
+    </div>
+
+</form>

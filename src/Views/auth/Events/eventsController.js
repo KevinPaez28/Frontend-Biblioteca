@@ -9,24 +9,28 @@ export default async () => {
 
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
     const btnNuevoEvento = document.querySelector("#btnnuevoevento");
+    const btnFiltros = document.querySelector("#btnFiltros");
+    const filtrosAvanzados = document.querySelector("#filtrosAvanzados");
 
+    // ================= NUEVO EVENTO =================
     btnNuevoEvento.addEventListener("click", () => {
         abrirModalCrearEvento();
     });
 
-    const btnFiltros = document.querySelector("#btnFiltros");
-    
-    btnFiltros.addEventListener("click", () => {
-        filtrosAvanzados.classList.toggle("filter-visible");
-    });
+    // ================= FILTROS =================
+    if (btnFiltros && filtrosAvanzados) {
+        btnFiltros.addEventListener("click", () => {
+            filtrosAvanzados.classList.toggle("filter-visible");
+        });
+    }
+
+    // ================= CARGAR EVENTOS =================
     const cargarEventos = async (search = "") => {
 
         const eventos = await get(`eventos?search=${search}`);
         tbody.innerHTML = "";
 
         if (eventos && eventos.data && eventos.data.length > 0) {
-
-            console.log(eventos);
 
             eventos.data.forEach((item, index) => {
 
@@ -48,11 +52,16 @@ export default async () => {
                 const td4 = document.createElement("td");
                 td4.textContent = item.room?.name || "—";
 
-                // ===== FECHA =====
+                // ===== FECHA + HORA =====
                 const td5 = document.createElement("td");
                 const spanFecha = document.createElement("span");
                 spanFecha.classList.add("badge-time");
-                spanFecha.textContent = item.date || "—";
+
+                spanFecha.innerHTML = `
+                    ${item.date || "—"}
+                    ${item.time || ""}
+                `;
+
                 td5.appendChild(spanFecha);
 
                 // ===== ESTADO =====
@@ -90,7 +99,7 @@ export default async () => {
                 td7.appendChild(btnEditar);
                 td7.appendChild(btnEliminar);
 
-                // ===== APPEND FINAL =====
+                // ===== APPEND =====
                 tr.appendChild(td1);
                 tr.appendChild(td2);
                 tr.appendChild(td3);

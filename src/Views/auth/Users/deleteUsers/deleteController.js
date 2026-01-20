@@ -12,7 +12,8 @@ export const deleteUsuario = async (item) => {
 
     try {
         const response = await delet(`user/delete/${item.id}`);
-
+        console.log(response);
+        
         if (!response || !response.success) {
             if (response?.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));

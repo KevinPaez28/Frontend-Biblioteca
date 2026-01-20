@@ -2,6 +2,7 @@ import "../../../Styles/Schedules/Schedules.css";
 import { get } from "../../../Helpers/api.js";
 import { abrirModalRol } from "./viewRoles/RolesModal.js";
 import { editarModalRol } from "./editsRoles/editRoles.js";
+import { abrirModalCrearRol } from "./createRoles/createrolesController.js";
 // import { editarModalRol } from "./editRoles/editRoles.js";
 // import { abrirModalCrearRol } from "./createRoles/createRoles.js";
 
@@ -113,6 +114,7 @@ export default async () => {
     const btnNuevoRol = document.getElementById("btnNuevoRol");
     const inputBuscar = document.querySelector(".input-filter");
     const btnBuscar = document.querySelector(".btn-outline");
+    btnNuevoRol.addEventListener("click", () => abrirModalCrearRol());
 
     const cargarRoles = async (search = "") => {
         const roles = await get(`roles?search=${search}`);
@@ -125,7 +127,7 @@ export default async () => {
                 // ===== # =====
                 const td1 = document.createElement("td");
                 td1.textContent = index + 1;
-
+                
                 // ===== NOMBRE ROL =====
                 const td2 = document.createElement("td");
                 td2.textContent = item.name;
@@ -200,7 +202,6 @@ export default async () => {
         }
     };
 
-    btnNuevoRol.addEventListener("click", () => abrirModalCrearRol());
     btnBuscar.addEventListener("click", () => cargarRoles(inputBuscar.value.trim()));
     inputBuscar.addEventListener("keyup", () => cargarRoles(inputBuscar.value.trim()));
 

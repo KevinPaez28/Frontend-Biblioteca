@@ -3,7 +3,7 @@ import { get, patch } from "../../../../Helpers/api.js";
 import html from "./editShifts.html?raw";
 import "../../../../Styles/shifts/shiftsModal.css";
 import { error, success } from "../../../../Helpers/alertas.js";
-import shiftsController from "../../shifts/shiftsController.js"
+import shiftsController from "../shiftsController.js";
 
 export const editarmodalHorario = async (jornada) => {
     console.log(jornada);

@@ -69,7 +69,7 @@ export default async () => {
             footer.classList.add("evento-footer");
 
             const hora = document.createElement("span");
-            hora.textContent = "10:00 a.m"; // si luego viene del backend, se cambia
+            hora.textContent = evento.time; 
 
             const fecha = document.createElement("span");
             fecha.textContent = evento.date;

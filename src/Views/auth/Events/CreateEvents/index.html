@@ -26,7 +26,7 @@
             <div class="form__grupo">
                 <label class="label">ÁREA *</label>
                 <select id="selectArea" name="sala_id" class="input" required>
-                    <option value="">Seleccione un area</option>
+                    <option value="">Seleccione un área</option>
                     <!-- JS llena esto -->
                 </select>
             </div>
@@ -36,11 +36,17 @@
                 <input name="fecha" type="date" class="input" required>
             </div>
 
+            <div class="form__grupo">
+                <label class="label">HORA *</label>
+                <input name="hora" type="time" class="input" required>
+            </div>
+
         </div>
     </div>
 
     <!-- ================= FOOTER ================= -->
     <div class="modal-footer create">
+
         <button type="button" id="btnCerrarModal" class="btn-cerrar">
             Cerrar
         </button>
@@ -48,6 +54,7 @@
         <button type="submit" class="btn-editar">
             Crear Evento
         </button>
+
     </div>
 
 </form>
