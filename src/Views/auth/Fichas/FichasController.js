@@ -1,11 +1,9 @@
 import "../../../Styles/Schedules/Schedules.css"; 
 import { get } from "../../../Helpers/api.js";
 import { abrirModalFicha } from "./viewFichas/FichasModal.js";
-// import { abrirModalFicha } from "./viewFichas/FichasModal.js";
 import { editarmodalFicha } from "./editsFichas/editsfichas.js";
-import { abrirModalCrearFicha } from "./createFichas/createFichas.js";
+import { abrirModalCrearFicha } from "./CreateFichas/createFichas.js";
 import { deleteFicha } from "./deleteFichas/deleteFichas.js";
-// import { abrirModalCrearFicha } from "./createFichas/createFichas.js";
 
 export default async () => {
 

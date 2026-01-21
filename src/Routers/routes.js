@@ -18,17 +18,23 @@ import FichasController from "../Views/auth/Fichas/FichasController.js";
 import ProgramsController from "../Views/auth/Programs/ProgramsController.js";
 import AssitanceController from "../Views/auth/EventAssistance/AssitanceController.js";
 import RolesController from "../Views/auth/Roles/RolesController.js";
+import HistoriesController from "../Views/auth/Histories/HistoriesController.js";
+import asistenciaController from "../Views/Asistencia/asistenciaController.js";
 // ================= RUTAS =================
 export const routes = {
 
-  // ==== HOME ====
   Home: {
     path: "home/index.html",
     controller: homeController,
     meta: { public: true }
   },
 
-  // ==== AUTH ====
+  Asistencia:{
+    path: "Asistencia/index.html",
+    controller: asistenciaController,
+    meta: { public: true }
+  },
+
   Login: {
     path: "auth/login/index.html",
     controller: logincontroller,
@@ -59,21 +65,18 @@ export const routes = {
     meta: { public: true, noLayout: true }
   },
 
-  // ==== DASHBOARD ====
   Dashboard: {
     path: "auth/dashboard/index.html",
     controller: dashboardController,
     meta: { can: "auth.login" }
   },
 
-  // ==== HORARIOS ====
   Horarios: {
     path: "auth/schedules/index.html",
     controller: schedulesController,
     meta: { can: "schedules.index" }
   },
 
-  // ==== JORNADAS ====
   Jornadas: {
     path: "auth/shifts/index.html",
     controller: shiftsController,
@@ -138,6 +141,11 @@ export const routes = {
     path: "auth/Roles/index.html",
     controller: RolesController,
     meta: { can: "roles.index" }
+  },
+  Historial: {
+    path: "auth/Histories/index.html",
+    controller: HistoriesController,
+    meta: { can: "history.index" }
   }
 
 };

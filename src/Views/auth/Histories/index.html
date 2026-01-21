@@ -1,0 +1,55 @@
+<div class="contenido-dashboard">
+
+    <!-- Ruta / ubicación -->
+    <div class="ruta-dashboard">
+        Inicio / <span>Historial</span>
+    </div>
+
+    <!-- Título -->
+    <div class="titulo-accion">
+        <h1 class="titulo-dashboard">Historial de Acciones</h1>
+    </div>
+
+    <!-- Filtros -->
+    <section class="seccion-dashboard">
+        <div class="filter-section filter-doble">
+
+            <div>
+                <label>Filtrar por acción</label>
+                <input type="text" class="input-filter" placeholder="Crear, eliminar...">
+            </div>
+
+            <div>
+                <label>Filtrar por usuario</label>
+                <input type="text" class="input-filter" placeholder="Nombre del usuario">
+            </div>
+
+            <div>
+                <label>Filtrar por módulo</label>
+                <input type="text" class="input-filter" placeholder="Fichas, eventos...">
+            </div>
+
+            <button class="btn btn-outline btn-icon">
+                <i class="ri-filter-3-line"></i>
+            </button>
+
+        </div>
+    </section>
+
+    <!-- Listado historial -->
+    <section class="seccion-dashboard">
+
+        <div class="encabezado-seccion">
+            <span>Registro de acciones</span>
+        </div>
+
+        <div class="historial-lista" id="historial-lista">
+            <!-- JS pinta los items -->
+        </div>
+
+    </section>
+
+</div>
+
+<!-- Controlador -->
+<script type="module" src="historialController.js"></script>
