@@ -20,11 +20,17 @@ export const renderSidebar = (elemento) => {
     }
   });
 
+  const usuarioSpan = elemento.querySelector('.name');
+  if (usuarioSpan) {
+    const nombres = localStorage.getItem("nombres") || "";
+    const apellido = localStorage.getItem("apellido") || "";
+    usuarioSpan.textContent = `${nombres} ${apellido}`;
+  }
 
   // ================= BOTÓN CERRAR SESIÓN =================
   const btnLogout = elemento.querySelector('.sidebar__logout');
   if (btnLogout) {
-    btnLogout.addEventListener('click', async () => { // <- async
+    btnLogout.addEventListener('click', async () => { 
       const result = await confirm("¿Desea cerrar sesión?");
       if (!result.isConfirmed) return;
 

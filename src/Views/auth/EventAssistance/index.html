@@ -1,56 +1,71 @@
 <div class="contenido-dashboard">
 
-    <!-- Ruta / ubicación -->
-    <div class="ruta-dashboard">
-        Inicio / <span>Asistencias Eventos</span>
+  <!-- Ruta / ubicación -->
+  <div class="ruta-dashboard">
+    Inicio / <span>Asistencias Eventos</span>
+  </div>
+
+  <!-- Título + botón -->
+  <div class="titulo-accion">
+    <h1 class="titulo-dashboard">Asistencias Eventos</h1>
+
+    <div class="acciones-header">
+      <button class="btn btn-primary" id="btnAsistenciaMasiva">
+        <i class="ri-add-line"></i>
+        Asistencia Masiva
+      </button>
+
+      <button class="btn btn-menuImport" id="btnExportarAsistencias">
+        <i class="ri-add-line"></i>
+        Exportar Asistencias
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtro -->
+  <section class="seccion-dashboard">
+    <div class="filter-section filter-doble">
+      <div>
+        <label>Filtrar por nombre</label>
+        <input type="text" class="input-filter" placeholder="Buscar">
+      </div>
+      <button class="btn btn-outline">
+        <i class="ri-search-line"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- Tabla -->
+  <section class="seccion-dashboard">
+    <div class="encabezado-seccion">
+      <span>Lista de asistencias</span>
     </div>
 
-    <!-- Título + botón -->
-    <div class="titulo-accion">
-        <h1 class="titulo-dashboard">Asistencias Eventos</h1>
+    <!-- CONTENEDOR con spinner dentro (igual que historial) -->
+    <div id="asistencias-eventos-contenedor">
+      <section class="table-section">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Evento</th>
+              <th># Ficha</th>
+              <th>Fecha y Hora</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="asistencias-tbody">
+            <!-- Aquí se pintarán las asistencias con JS -->
+          </tbody>
+        </table>
+      </section>
 
-        <button class="btn btn-primary" id="btnAsistenciaMasiva">
-            <i class="ri-add-line"></i>
-            Asistencia Masiva
-        </button>
+      <!-- Spinner (igual que historial) -->
+      <div class="spinner-overlay hidden" id="spinner-asistencias-eventos">
+        <div class="spinner"></div>
+      </div>
     </div>
-
-    <!-- Filtro -->
-    <section class="seccion-dashboard">
-        <div class="filter-section filter-doble">
-            <div>
-                <label>Filtrar por nombre</label>
-                <input type="text" class="input-filter" placeholder="Buscar">
-            </div>
-            <button class="btn btn-outline">
-                <i class="ri-search-line"></i>
-            </button>
-        </div>
-    </section>
-
-    <!-- Tabla -->
-    <section class="seccion-dashboard">
-        <div class="encabezado-seccion">
-            <span>Lista de asistencias</span>
-        </div>
-
-        <section class="table-section">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Evento</th>
-                        <th># Ficha</th>
-                        <th>Fecha y Hora</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="asistencias-tbody">
-                    <!-- Aquí se pintarán las asistencias con JS -->
-                </tbody>
-            </table>
-        </section>
-    </section>
+  </section>
 
 </div>
 

@@ -46,7 +46,7 @@ export const get = async (endpoint) => {
             if (response.status === 401) {
                 cerrarTodos();
                 error("Sesión expirada");
-                window.location.href = '#/Login';
+                window.location.href = '#/Home';
                 return null;
             }
         }
@@ -86,7 +86,7 @@ export const post = async (endpoint, datos) => {
             if (response.status === 401) {
                 cerrarTodos();
                 error("Sesión expirada");
-                window.location.href = '#/Login';
+                window.location.href = '#/Home';
                 return null;
             }
         }
@@ -127,7 +127,7 @@ export const postFile = async (endpoint, file) => {
             if (response.status === 401) {
                 cerrarTodos();
                 error("Sesión expirada");
-                window.location.href = "#/Login";
+                window.location.href = "#/Home";
                 return null;
             }
         }
@@ -168,7 +168,7 @@ export const patch = async (endpoint, datos) => {
             if (response.status === 401) {
                 cerrarTodos();
                 error("Sesión expirada");
-                window.location.href = '#/Login';
+                window.location.href = '#/Home';
                 return null;
             }
         }
@@ -206,7 +206,7 @@ export const delet = async (endpoint) => {
             if (response.status === 401) {
                 cerrarTodos();
                 error("Sesión expirada");
-                window.location.href = '#/Login';
+                window.location.href = '#/Home';
                 return null;
             }
         }

@@ -29,7 +29,7 @@
                 <input type="text" class="input-filter" placeholder="Fichas, eventos...">
             </div>
 
-            <button class="btn btn-outline btn-icon">
+            <button class="btn btn-outline">
                 <i class="ri-filter-3-line"></i>
             </button>
 
@@ -37,14 +37,17 @@
     </section>
 
     <!-- Listado historial -->
-    <section class="seccion-dashboard">
+    <section class="seccion-dashboard" id="historial-section">
 
         <div class="encabezado-seccion">
             <span>Registro de acciones</span>
         </div>
 
+        <div class="spinner-overlay hidden" id="spinner-historial">
+            <div class="spinner"></div>
+        </div>
+
         <div class="historial-lista" id="historial-lista">
-            <!-- JS pinta los items -->
         </div>
 
     </section>

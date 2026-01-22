@@ -2,96 +2,98 @@
 
     <!-- Ruta / ubicación -->
     <div class="ruta-dashboard">
-        Inicio / <span>Aprendices</span>
+      Inicio / <span>Aprendices</span>
     </div>
-
+  
     <!-- Título -->
     <div class="titulo-accion">
-        <h1 class="titulo-dashboard">Aprendices</h1>
-
-        <div class="acciones-header">
-
-            <button class="btn btn-menuImport" id="btnImportar">
-                <i class="ri-upload-2-line"></i>
-                Importar Archivo
-            </button>
-
-            <button class="btn btn-primary" id="btnNuevoAprendiz">
-                <i class="ri-add-line"></i>
-                Nuevo Usuario
-            </button>
-        </div>
+      <h1 class="titulo-dashboard">Aprendices</h1>
+  
+      <div class="acciones-header">
+        <button class="btn btn-menuImport" id="btnImportar">
+          <i class="ri-upload-2-line"></i>
+          Importar Archivo
+        </button>
+        <button class="btn btn-primary" id="btnNuevoAprendiz">
+          <i class="ri-add-line"></i>
+          Nuevo Usuario
+        </button>
+      </div>
     </div>
-
+  
     <!-- Filtros -->
     <section class="seccion-dashboard">
-        <div class="filter-section filter-doble">
-            <div>
-                <label>Filtrar por nombre</label>
-                <input type="text" class="input-filter" id="filtroNombre">
-            </div>
-
-            <div>
-                <label>Filtrar por apellido</label>
-                <input type="text" class="input-filter" id="filtroApellido">
-            </div>
-
-            <button class="btn btn-outline" id="btnFiltros">
-                <i class="ri-filter-3-line"></i>
-                Filtros
-            </button>
+      <div class="filter-section filter-doble">
+        <div>
+          <label>Filtrar por nombre</label>
+          <input type="text" class="input-filter" id="filtroNombre">
         </div>
-
-        <div class="filter-section filter-oculto" id="filtrosAvanzados">
-            <div>
-                <label>Filtrar por documento</label>
-                <input type="text" class="input-filter tamanio" id="filtroDocumento">
-            </div>
-
-            <div>
-                <label>Filtrar por ficha</label>
-                <input type="text" class="input-filter tamanio" id="filtroFicha">
-            </div>
-
-            <div>
-                <label>Filtrar por estado</label>
-                <select class="input-filter tamanioRol" id="filtroEstado">
-                    <option value="">Todos</option>
-                </select>
-            </div>
+  
+        <div>
+          <label>Filtrar por apellido</label>
+          <input type="text" class="input-filter" id="filtroApellido">
         </div>
+  
+        <button class="btn btn-outline" id="btnFiltros">
+          <i class="ri-filter-3-line"></i>
+          Filtros
+        </button>
+      </div>
+  
+      <div class="filter-section filter-oculto" id="filtrosAvanzados">
+        <div>
+          <label>Filtrar por documento</label>
+          <input type="text" class="input-filter tamanio" id="filtroDocumento">
+        </div>
+  
+        <div>
+          <label>Filtrar por ficha</label>
+          <input type="text" class="input-filter tamanio" id="filtroFicha">
+        </div>
+  
+        <div>
+          <label>Filtrar por estado</label>
+          <select class="input-filter tamanioRol" id="filtroEstado">
+            <option value="">Todos</option>
+          </select>
+        </div>
+      </div>
     </section>
-
+  
     <!-- Tabla -->
     <section class="seccion-dashboard">
-        <div class="encabezado-seccion">
-            <span>Listado de aprendices</span>
-        </div>
-
+      <div class="encabezado-seccion">
+        <span>Listado de aprendices</span>
+      </div>
+  
+      <!-- CONTENEDOR con spinner dentro (igual que historial) -->
+      <div id="aprendices-contenedor">
         <section class="table-section tabla-container">
-            <table class="table aprendices-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Documento</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th># Ficha</th>
-                        <th>Rol</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-
-                <tbody class="aprendices-tbody">
-                    <!-- JS desde backend -->
-                </tbody>
-            </table>
-
-            <!-- Contenedor de paginación visible -->
-            <div class="pagination-container">
-                <div class="pagination"></div>
-            </div>
+          <table class="table aprendices-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Documento</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th># Ficha</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="aprendices-tbody"></tbody>
+          </table>
+  
+          <div class="pagination-container">
+            <div class="pagination"></div>
+          </div>
         </section>
+  
+        <!-- Spinner (igual que historial) -->
+        <div class="spinner-overlay hidden" id="spinner-aprendices">
+          <div class="spinner"></div>
+        </div>
+      </div>
     </section>
-
-</div>
+  </div>
+  

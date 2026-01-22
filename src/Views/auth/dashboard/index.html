@@ -2,93 +2,98 @@
 
     <!-- Ruta / ubicación -->
     <div class="ruta-dashboard">
-        Inicio / <span>Panel de control</span>
+      Inicio / <span>Panel de control</span>
     </div>
-
+  
     <!-- Título principal -->
     <h1 class="titulo-dashboard">Dashboard</h1>
-
+  
     <!-- ===== SECCIÓN ASISTENCIAS ===== -->
     <section class="seccion-dashboard">
-        <div class="encabezado-seccion">
-            <span>Asistencias</span>
-        </div>
-
+      <div class="encabezado-seccion">
+        <span>Asistencias</span>
+      </div>
+  
+      <!-- CONTENEDOR con spinner dentro (igual que historial) -->
+      <div id="dashboard-contenedor">
         <div class="tarjetas-dashboard">
-
-            <!-- Asistencias hoy -->
-            <div class="tarjeta-dashboard">
-                <p class="tarjeta-titulo">Total día</p>
-                <hr class="tarjeta-linea">
-                <div class="tarjeta-contenido">
-                    <i class="ri-user-line"></i>
-                    <span id="totalDia">0</span>
-                </div>
+          <!-- Asistencias hoy -->
+          <div class="tarjeta-dashboard">
+            <p class="tarjeta-titulo">Total día</p>
+            <hr class="tarjeta-linea">
+            <div class="tarjeta-contenido">
+              <i class="ri-user-line"></i>
+              <span id="totalDia">0</span>
             </div>
-
-            <!-- Asistencias semana -->
-            <div class="tarjeta-dashboard">
-                <p class="tarjeta-titulo">Total semana</p>
-                <hr class="tarjeta-linea">
-                <div class="tarjeta-contenido">
-                    <i class="ri-user-line"></i>
-                    <span id="totalSemana">0</span>
-                </div>
+          </div>
+  
+          <!-- Asistencias semana -->
+          <div class="tarjeta-dashboard">
+            <p class="tarjeta-titulo">Total semana</p>
+            <hr class="tarjeta-linea">
+            <div class="tarjeta-contenido">
+              <i class="ri-user-line"></i>
+              <span id="totalSemana">0</span>
             </div>
-
-            <!-- Asistencias mes -->
-            <div class="tarjeta-dashboard">
-                <p class="tarjeta-titulo">Total mes</p>
-                <hr class="tarjeta-linea">
-                <div class="tarjeta-contenido">
-                    <i class="ri-user-line"></i>
-                    <span id="totalMes">0</span>
-                </div>
+          </div>
+  
+          <!-- Asistencias mes -->
+          <div class="tarjeta-dashboard">
+            <p class="tarjeta-titulo">Total mes</p>
+            <hr class="tarjeta-linea">
+            <div class="tarjeta-contenido">
+              <i class="ri-user-line"></i>
+              <span id="totalMes">0</span>
             </div>
-
-            <!-- Egresados -->
-            <div class="tarjeta-dashboard">
-                <p class="tarjeta-titulo">Total egresados mes</p>
-                <hr class="tarjeta-linea">
-                <div class="tarjeta-contenido">
-                    <i class="ri-user-line"></i>
-                    <span id="totalEgresados">0</span>
-                </div>
+          </div>
+  
+          <!-- Egresados -->
+          <div class="tarjeta-dashboard">
+            <p class="tarjeta-titulo">Total egresados mes</p>
+            <hr class="tarjeta-linea">
+            <div class="tarjeta-contenido">
+              <i class="ri-user-line"></i>
+              <span id="totalEgresados">0</span>
             </div>
-
+          </div>
         </div>
+  
+        <!-- Spinner (igual que historial) -->
+        <div class="spinner-overlay hidden" id="spinner-dashboard">
+          <div class="spinner"></div>
+        </div>
+      </div>
     </section>
-
+  
     <!-- ===== SECCIÓN EVENTOS ===== -->
     <section class="seccion-dashboard">
-        <div class="encabezado-seccion">
-            <span>Eventos</span>
-        </div>
-
-        <div class="eventos-lista">
-            <!-- aquí luego puedes listar eventos si quieres -->
-        </div>
+      <div class="encabezado-seccion">
+        <span>Eventos</span>
+      </div>
+  
+      <div class="eventos-lista">
+        <!-- aquí luego puedes listar eventos si quieres -->
+      </div>
     </section>
-
+  
     <!-- ===== SECCIÓN ESTADÍSTICAS ===== -->
     <section class="seccion-dashboard">
-        <div class="encabezado-seccion">
-            <span>Estadísticas</span>
+      <div class="encabezado-seccion">
+        <span>Estadísticas</span>
+      </div>
+  
+      <div class="estadisticas-dashboard graficas">
+        <!-- Gráfica de líneas -->
+        <div class="grafica-lineas">
+          <canvas id="graficaLineas"></canvas>
         </div>
-
-        <div class="estadisticas-dashboard graficas">
-
-            <!-- Gráfica de líneas -->
-            <div class="grafica-lineas">
-                <canvas id="graficaLineas"></canvas>
-            </div>
-
-            <!-- Gráfica circular -->
-            <div class="grafica-circular">
-                <canvas id="graficaCircular"></canvas>
-            </div>
-
+  
+        <!-- Gráfica circular -->
+        <div class="grafica-circular">
+          <canvas id="graficaCircular"></canvas>
         </div>
+      </div>
     </section>
-
-</div>
+  
+  </div>
+  

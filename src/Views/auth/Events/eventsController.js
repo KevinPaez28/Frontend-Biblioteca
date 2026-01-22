@@ -29,7 +29,8 @@ export default async () => {
 
         const eventos = await get(`eventos?search=${search}`);
         tbody.innerHTML = "";
-
+        console.log(eventos);
+        
         if (eventos && eventos.data && eventos.data.length > 0) {
 
             eventos.data.forEach((item, index) => {
@@ -52,14 +53,20 @@ export default async () => {
                 const td4 = document.createElement("td");
                 td4.textContent = item.room?.name || "—";
 
-                // ===== FECHA + HORA =====
+                // ===== FECHA + HORA (ORDENADA COMO PERSONA DECENTE) =====
                 const td5 = document.createElement("td");
                 const spanFecha = document.createElement("span");
                 spanFecha.classList.add("badge-time");
 
+                const horaInicio =
+                    item.time.start || "--:--";
+
+                const horaFin =
+                    item.time.end || "--:--";
+
                 spanFecha.innerHTML = `
-                    ${item.date || "—"}
-                    ${item.time || ""}
+                    <strong>${item.date || "—"}</strong><br>
+                    <small>${horaInicio} - ${horaFin}</small>
                 `;
 
                 td5.appendChild(spanFecha);

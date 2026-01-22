@@ -1,26 +1,34 @@
-<section class="contenido-dashboard">   
+<section class="contenido-dashboard">  
 
     <!-- Ruta -->
     <div class="ruta">
-        <span>Inicio</span> / <span>Jornadas</span>
+      <span>Inicio</span> / <span>Jornadas</span>
     </div>
-
+  
     <!-- Header con botón -->
     <div class="titulo-accion">
-        <h1 class="titulo-dashboard">Jornadas</h1>
-
-        <button class="btn btn-primary" id="btnNuevoHorario">
-            <i class="ri-add-line"></i>
-            Nuevo horario
-        </button>
+      <h1 class="titulo-dashboard">Jornadas</h1>
+  
+      <button class="btn btn-primary" id="btnNuevoHorario">
+        <i class="ri-add-line"></i>
+        Nuevo horario
+      </button>
     </div>
-
+  
     <section class="seccion-dashboard">
+      <!-- CONTENEDOR con spinner dentro (igual que historial) -->
+      <div id="jornadas-contenedor">
         <!-- Cards -->
         <div class="cards">
-            <!-- aquí se renderizan las jornadas -->
+          <!-- aquí se renderizan las jornadas -->
         </div>
-
+  
+        <!-- Spinner (igual que historial) -->
+        <div class="spinner-overlay hidden" id="spinner-jornadas">
+          <div class="spinner"></div>
+        </div>
+      </div>
     </section>
-
-</section>
+  
+  </section>
+  

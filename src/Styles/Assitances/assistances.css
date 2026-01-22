@@ -8,6 +8,10 @@
     .tamanio {
         width: 250px;
     }
+    .filter-oculto {
+        display: none;
+        margin-top: 12px;
+    }
 
     .tamanioRol {
         width: 200px;
@@ -63,10 +67,7 @@
         color: var(--color-fontJornadas);
     }
 
-    .filter-oculto {
-        display: none;
-        margin-top: 12px;
-    }
+   
 
     .filter-visible {
         display: grid;

@@ -23,7 +23,7 @@
       sidebar.innerHTML = "";
       app.innerHTML = "";
       sidebarCargado = false;
-      location.hash = '#/Login';
+      location.hash = '#/Home';
       return;
     }
 

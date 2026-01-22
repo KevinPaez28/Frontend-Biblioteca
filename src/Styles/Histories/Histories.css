@@ -90,13 +90,7 @@
     font-size: 14px;
 }
 
-/* ===== FILTROS ===== */
-.filter-section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr) auto;
-    gap: 12px;
-    align-items: end;
-}
+
 
 .input-filter {
     width: 100%;

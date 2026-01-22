@@ -36,7 +36,6 @@ export default async () => {
             return;
         }
 
-
         // Obtenemos los datos validados
         const data = {
             document: String(validate.datos.document),
@@ -47,8 +46,6 @@ export default async () => {
         const response = await login(data);
         console.log(response);
         
-
-
         // ===== Manejo de errores =====
         if (!response.ok || (response.errors && response.errors.length > 0)) {
             if (response.errors && response.errors.length > 0) {
@@ -56,15 +53,14 @@ export default async () => {
             } else {
                 error(response.message || "Error al iniciar sesión");
             }
-            return; // Salimos para no mostrar ok
+            return; 
         }
         // ===== Login exitoso =====
         success(response.message || "Inicio de sesión exitoso");
         localStorage.setItem("role_id", response.data.role_id);
-        localStorage.setItem(
-            "permissions",
-            JSON.stringify(response.data.permissions)
-        );
+        localStorage.setItem("permissions",JSON.stringify(response.data.permissions));
+        localStorage.setItem("nombres",response.data.names)
+        localStorage.setItem("apellido",response.data.last_name)
         window.location.hash = "#/Dashboard";
         form.reset();
     });

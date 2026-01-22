@@ -19,6 +19,12 @@ export const abrirModalEvento = (item, index) => {
         document.querySelector("#modalFechaEvento").textContent =
             item.date || "—";
 
+        document.querySelector("#modalHoraInicioEvento").textContent =
+            item.time.start || "—";
+
+        document.querySelector("#modalHoraFinEvento").textContent =
+            item.time.end || "—";
+
         document.querySelector("#modalEstadoEvento").textContent =
             "Estado: " + (item.state?.name || "—");
 

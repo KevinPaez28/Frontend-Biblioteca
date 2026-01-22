@@ -16,7 +16,8 @@ export const editModalEvento = (item) => {
         const inputNombre = document.querySelector("#modalInputNombreEvento");
         const inputEncargado = document.querySelector("#modalInputEncargado");
         const inputFecha = document.querySelector("#modalInputFecha");
-        const inputHora = document.querySelector("#modalInputHora"); // 👈 NUEVO
+        const inputHoraInicio = document.querySelector("#modalInputHoraInicio");
+        const inputHoraFin = document.querySelector("#modalInputHoraFin");
         const selectArea = document.querySelector("#modalSelectArea");
         const selectEstado = document.querySelector("#modalSelectEstado");
 
@@ -24,7 +25,8 @@ export const editModalEvento = (item) => {
         inputNombre.value = item.name;
         inputEncargado.value = item.mandated;
         inputFecha.value = item.date;
-        inputHora.value = item.time; // 👈 HORA (formato HH:mm)
+        inputHoraInicio.value = item.start_time;
+        inputHoraFin.value = item.end_time;
 
         // ===== RELLENAR ÁREAS =====
         const areas = await get("salas");
@@ -33,10 +35,7 @@ export const editModalEvento = (item) => {
             op.value = a.id;
             op.textContent = a.name;
 
-            if (a.id === item.room?.id) {
-                op.selected = true;
-            }
-
+            if (a.id === item.room?.id) op.selected = true;
             selectArea.append(op);
         });
 
@@ -47,10 +46,7 @@ export const editModalEvento = (item) => {
             op.value = e.id;
             op.textContent = e.name;
 
-            if (e.id === item.state?.id) {
-                op.selected = true;
-            }
-
+            if (e.id === item.state?.id) op.selected = true;
             selectEstado.append(op);
         });
 
@@ -62,11 +58,12 @@ export const editModalEvento = (item) => {
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
-
             if (!validate.validarCampos(e)) return;
 
             const payload = {
                 ...validate.datos,
+                hora_inicio: inputHoraInicio.value,
+                hora_fin: inputHoraFin.value,
                 sala_id: selectArea.value,
                 estado_id: selectEstado.value
             };
@@ -76,13 +73,8 @@ export const editModalEvento = (item) => {
 
                 const response = await patch(`eventos/${item.id}`, payload);
 
-                if (!response || !response.success) {
-                    if (response?.errors?.length) {
-                        cerrarModal();
-                        response.errors.forEach(err => error(err));
-                    } else {
-                        error(response?.message || "Error al actualizar el evento");
-                    }
+                if (!response || response.error) {
+                    error(response?.message || "Error al actualizar el evento");
                     enviando = false;
                     return;
                 }

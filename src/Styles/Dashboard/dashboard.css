@@ -60,6 +60,48 @@
   opacity: 0.35;
 }
 
+
+#historial-section {
+  position: relative;       /* importante para que el overlay se posicione dentro */
+  min-height: 300px;        /* asegura altura mínima para que se vea centrado */
+  display: flex;            /* permite centrar contenido opcionalmente */
+  flex-direction: column;
+}
+
+.spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;             /* cubre toda la sección */
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: center;  /* horizontal */
+  align-items: center;      /* vertical */
+  z-index: 10;
+}
+
+
+.spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* ocupa toda la sección */
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* esto centra vertical y horizontal */
+  z-index: 10;
+}
+  
+.hidden {
+  display: none;
+}
+
+
 .tarjetas-dashboard {
   display: flex;
   justify-content: space-between;
@@ -189,20 +231,19 @@
 }
 
 
-.graficas{
+.graficas {
   display: flex;
-  justify-content: space-around ;
- }
+  justify-content: space-around;
+}
 
 
 .grafica-lineas,
 .grafica-circular {
-    height: 100%;
+  height: 100%;
 }
 
 .grafica-lineas canvas,
 .grafica-circular canvas {
-    width: 100% !important;
-    height: 100% !important;
+  width: 100% !important;
+  height: 100% !important;
 }
-

@@ -2,57 +2,66 @@
 
     <!-- Ruta / ubicación -->
     <div class="ruta-dashboard">
-        Inicio / <span>Horarios</span>
+      Inicio / <span>Horarios</span>
     </div>
-
+  
     <!-- Título + botón -->
     <div class="titulo-accion">
-        <h1 class="titulo-dashboard">Horarios</h1>
-
-        <button class="btn btn-primary" id="btnNuevoHorario">
-            <i class="ri-add-line"></i>
-            Nuevo horario
-        </button>
+      <h1 class="titulo-dashboard">Horarios</h1>
+  
+      <button class="btn btn-primary" id="btnNuevoHorario">
+        <i class="ri-add-line"></i>
+        Nuevo horario
+      </button>
     </div>
-
+  
     <!-- Filtro -->
     <section class="seccion-dashboard">
-        <div class="filter-section filter-doble">
-            <div>
-                <label>Filtrar por nombre</label>
-                <input type="text" class="input-filter" placeholder="Buscar">
-            </div> <button class="btn btn-outline">
-                <i class="ri-search-line"></i>
-            </button>
-        </div>
+      <div class="filter-section filter-doble">
+        <div>
+          <label>Filtrar por nombre</label>
+          <input type="text" class="input-filter" placeholder="Buscar">
+        </div> 
+        <button class="btn btn-outline">
+          <i class="ri-search-line"></i>
+        </button>
+      </div>
     </section>
-
+  
     <!-- Tabla -->
     <section class="seccion-dashboard">
-        <div class="encabezado-seccion">
-            <span>Lista de horarios</span>
-        </div>
-
+      <div class="encabezado-seccion">
+        <span>Lista de horarios</span>
+      </div>
+  
+      <!-- CONTENEDOR con spinner dentro (igual que historial) -->
+      <div id="horarios-contenedor">
         <section class="table-section">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Hora Inicio</th>
-                        <th>Hora Fin</th>
-                        <th>Jornada Asignada</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Aquí pinta el JS -->
-                </tbody>
-            </table>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Hora Inicio</th>
+                <th>Hora Fin</th>
+                <th>Jornada Asignada</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Aquí pinta el JS -->
+            </tbody>
+          </table>
         </section>
+  
+        <!-- Spinner (igual que historial) -->
+        <div class="spinner-overlay hidden" id="spinner-horarios">
+          <div class="spinner"></div>
+        </div>
+      </div>
     </section>
-
-</div>
-
-<!-- Controlador -->
-<script type="module" src="schedulesController.js"></script>
+  </div>
+  
+  <!-- Controlador -->
+  <script type="module" src="schedulesController.js"></script>
+  

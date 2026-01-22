@@ -45,9 +45,9 @@ export const abrirModalCrearFicha = async () => {
                 const response = await post("ficha/create", payload);
 
                 if (!response || !response.success) {
+                    cerrarModal();
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
                     } else {
                         error(response?.message || "Error al crear la ficha");
                     }
