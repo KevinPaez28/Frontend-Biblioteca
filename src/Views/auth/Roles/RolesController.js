@@ -3,16 +3,19 @@ import { get } from "../../../Helpers/api.js";
 import { abrirModalRol } from "./viewRoles/RolesModal.js";
 import { editarModalRol } from "./editsRoles/editRoles.js";
 import { abrirModalCrearRol } from "./createRoles/createrolesController.js";
-// import { editarModalRol } from "./editRoles/editRoles.js";
-// import { abrirModalCrearRol } from "./createRoles/createRoles.js";
 
-// Mapa de permisos amigables
 const permisoLabels = {
     // AUTH
     "auth.login": "Iniciar sesión",
     "auth.reset-password": "Solicitar recuperación",
     "auth.reset-password.change": "Cambiar contraseña",
     "auth.validate-token": "Validar token",
+
+    // ESTADOS USUARIO (NUEVOS)
+    "user-status.index": "Ver estados usuario",
+    "user-status.store": "Crear estado usuario",
+    "user-status.update": "Actualizar estado usuario",
+    "user-status.destroy": "Eliminar estado usuario",
 
     // USUARIOS
     "users.index": "Ver usuarios",
@@ -101,13 +104,18 @@ const permisoLabels = {
     "rooms.destroy": "Eliminar sala",
 };
 
-// Lista de permisos que NO queremos mostrar en la tabla
+// Lista de permisos OCULTOS en tabla (AGREGADOS ESTADOS + AUTH)
 const permisosOcultos = [
-    "users.search",
-    "history.destroy",
-    "actions.destroy",
-    "documents.destroy",
+    "auth.login",
+    "auth.reset-password", 
+    "auth.reset-password.change",
+    "auth.validate-token",
+    "user-status.index",
+    "user-status.store",
+    "user-status.update",
+    "user-status.destroy",
 ];
+
 
 export default async () => {
     const tbody = document.getElementById("roles-tbody");
@@ -127,7 +135,7 @@ export default async () => {
                 // ===== # =====
                 const td1 = document.createElement("td");
                 td1.textContent = index + 1;
-                
+
                 // ===== NOMBRE ROL =====
                 const td2 = document.createElement("td");
                 td2.textContent = item.name;

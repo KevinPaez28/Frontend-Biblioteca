@@ -4,25 +4,24 @@ import { abrirModalHorario } from "./viewSchedules/SchedulesModal.js";
 import { editarmodalHorario } from "./editschedules/editschedules.js";
 import { abrirModalCrearHorario } from "./Createschedules/createSchedules.js";
 import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { tienePermiso } from "../../../helpers/auth.js";
 
 export default async () => {
   const tbody = document.querySelector(".seccion-dashboard .table tbody");
-  const contenedor = document.getElementById("horarios-contenedor"); // 👈 CONTENEDOR igual que historial
+  const contenedor = document.getElementById("horarios-contenedor");
   const btnNuevoHorario = document.getElementById("btnNuevoHorario");
   const inputBuscar = document.querySelector(".input-filter");
   const btnBuscar = document.querySelector(".btn-outline");
 
+  if (!tienePermiso("schedules.store")) {
+    btnNuevoHorario.style.display = 'none';
+  }
+
   const cargarHorarios = async (search = "") => {
     try {
-      // Mostrar spinner (igual que historial)
-      if (contenedor) {
-        showSpinner(contenedor);
-      }
-
-      console.log("🔄 Cargando horarios con search:", search); // Debug
+      showSpinner(contenedor);
 
       const jornadas = await get(`horarios/jornadas?search=${search}`);
-      console.log("✅ Response horarios:", jornadas); // Debug
 
       tbody.innerHTML = "";
 
@@ -71,30 +70,35 @@ export default async () => {
 
           td5.appendChild(spanJornada);
 
-          // ===== ACCIONES =====
           const td6 = document.createElement("td");
-
+          
           const btnVer = document.createElement("button");
           btnVer.classList.add("btn-ver");
           btnVer.textContent = "Ver";
           btnVer.addEventListener("click", () => {
             abrirModalHorario(item, index);
           });
-
-          const btnEditar = document.createElement("button");
-          btnEditar.classList.add("btn-editar");
-          btnEditar.textContent = "Editar";
-          btnEditar.addEventListener("click", () => {
-            editarmodalHorario(item, index);
-          });
-
-          const btnEliminar = document.createElement("button");
-          btnEliminar.classList.add("btn-eliminar");
-          btnEliminar.textContent = "Eliminar";
-
           td6.appendChild(btnVer);
-          td6.appendChild(btnEditar);
-          td6.appendChild(btnEliminar);
+
+          if (tienePermiso("schedules.update")) {
+            const btnEditar = document.createElement("button");
+            btnEditar.classList.add("btn-editar");
+            btnEditar.textContent = "Editar";
+            btnEditar.addEventListener("click", () => {
+              editarmodalHorario(item, index);
+            });
+            td6.appendChild(btnEditar);
+          }
+
+          if (tienePermiso("schedules.destroy")) {
+            const btnEliminar = document.createElement("button");
+            btnEliminar.classList.add("btn-eliminar");
+            btnEliminar.textContent = "Eliminar";
+            btnEliminar.addEventListener("click", () => {
+              
+            });
+            td6.appendChild(btnEliminar);
+          }
 
           // ===== APPEND FINAL =====
           tr.appendChild(td1);
@@ -115,7 +119,6 @@ export default async () => {
         tbody.appendChild(tr);
       }
     } catch (error) {
-      console.error("❌ Error cargando horarios:", error);
       tbody.innerHTML = "";
       const tr = document.createElement("tr");
       const td = document.createElement("td");
@@ -126,7 +129,6 @@ export default async () => {
       tr.appendChild(td);
       tbody.appendChild(tr);
     } finally {
-      // SIEMPRE ocultar spinner
       try {
         if (contenedor) {
           hideSpinner(contenedor);
@@ -137,18 +139,25 @@ export default async () => {
     }
   };
 
-  btnNuevoHorario.addEventListener("click", () => {
-    abrirModalCrearHorario();
-  });
+  // Eventos
+  if (btnNuevoHorario) {
+    btnNuevoHorario.addEventListener("click", () => {
+      abrirModalCrearHorario();
+    });
+  }
 
-  btnBuscar.addEventListener("click", () => {
-    cargarHorarios(inputBuscar.value.trim());
-  });
+  if (btnBuscar && inputBuscar) {
+    btnBuscar.addEventListener("click", () => {
+      cargarHorarios(inputBuscar.value.trim());
+    });
 
-  inputBuscar.addEventListener("keyup", () => {
-    cargarHorarios(inputBuscar.value.trim());
-  });
+    inputBuscar.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        cargarHorarios(inputBuscar.value.trim());
+      }
+    });
+  }
 
-  // ================= INIT =================
+  // INIT
   await cargarHorarios();
 };

@@ -8,7 +8,7 @@ export const renderSidebar = (elemento) => {
   const items = elemento.querySelectorAll(".sidebar__menu li");
 
   items.forEach(li => {
-    const permiso = li.dataset.permiso; // permiso real
+    const permiso = li.dataset.permiso; 
 
     // Clase universal
     const clase = 'permiso-' + permiso.replace(/\./g, '_');

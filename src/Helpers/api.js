@@ -58,6 +58,50 @@ export const get = async (endpoint) => {
     }
 };
 
+export const exportFile = async (endpoint) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Authorization': `Bearer ${getCookie('access_token')}`
+            }
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
+                }
+            });
+
+            if (response.status === 401) {
+                cerrarTodos();
+                error("Sesión expirada");
+                window.location.href = '#/Home';
+                return null;
+            }
+        }
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        return await response.blob();
+
+    } catch (err) {
+        console.error('Error en exportFile:', err);
+        throw err;
+    }
+};
+
+
 // POST
 export const post = async (endpoint, datos) => {
     try {

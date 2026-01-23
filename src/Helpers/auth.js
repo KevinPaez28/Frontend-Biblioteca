@@ -29,3 +29,39 @@ export function isAuthorize(permissionEntry) {
 
     return permissions.includes(permissionEntry);
 }
+
+export const tienePermiso = (permiso) => {
+    const permisosGuardados = localStorage.getItem('permissions');
+    if (!permisosGuardados) return false;
+  
+    try {
+      const permisosArray = JSON.parse(permisosGuardados);
+      const permisos = Array.isArray(permisosArray) ? permisosArray : [];
+      console.log('Permisos:', permisos, '| Tiene', permiso, ':', permisos.includes(permiso));
+      
+      return permisos.includes(permiso);
+    } catch (e) {
+      console.error("Error parseando:", e);
+      return false;
+    }
+  };
+  
+
+
+export const convertirPermisosArray = (permisos) => {
+    // Convierte la cadena de permisos en un array de caracteres
+    permisos = permisos.split("");
+    // Variable auxiliar para construir la cadena limpia
+    let aux = "";
+    // Recorre cada carácter de la cadena de permisos
+    for (let n = 0; n < permisos.length; n++) {
+        // Si es el primer carácter, el último o un espacio, lo omite
+        if (n == 0 || n == permisos.length - 1 || permisos[n] == " ") continue
+        // Agrega el carácter a la variable auxiliar
+        aux += permisos[n];
+    }
+    // Divide la cadena auxiliar por comas para obtener el array de permisos
+    permisos = aux.split(",");
+    // Retorna el array de permisos
+    return permisos;
+}

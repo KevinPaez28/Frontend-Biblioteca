@@ -39,7 +39,6 @@ export default async () => {
         if (enviando) return; // si ya se está enviando, no hacemos nada
 
         if (!validate.validarCampos(e, "email-verify")) {
-            console.log("Campos inválidos");
             return;
         }
 

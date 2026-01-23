@@ -1,10 +1,10 @@
-import { get } from "../../../../Helpers/api.js";
+import { exportFile, get } from "../../../../Helpers/api.js";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlExportAsistencias from "./index.html?raw";
+import { error, loading, success } from "../../../../Helpers/alertas.js";
 
 export const abrirModalExportAsistencias = async () => {
-
     mostrarModal(htmlExportAsistencias);
 
     requestAnimationFrame(() => {
@@ -20,21 +20,45 @@ export const abrirModalExportAsistencias = async () => {
             const fechaFin = document.querySelector("#filtroFechaFin").value;
 
             if (!fechaInicio || !fechaFin) {
-                alert("Debes seleccionar ambas fechas");
+                error("Debes seleccionar ambas fechas");
                 return;
             }
+            loading("Registrando aprendices...");
 
             const params = new URLSearchParams({
                 fecha_inicio: fechaInicio,
                 fecha_fin: fechaFin
             });
 
-            // Abre nueva ventana para descargar Excel
-            const url = `/api/asistencia/export?${params.toString()}`;
-            window.open(url, "_blank");
+            const endpoint = `asistencia/export?${params.toString()}`;
 
-            cerrarModal();
+            try {
+                // 🔑 Manejo completo como crearAsistencia
+                const blob = await exportFile(endpoint);
+
+                // Descarga
+                const blobUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = `Asistencias_${fechaInicio}_a_${fechaFin}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
+
+                cerrarModal();
+                success('Excel descargado correctamente');
+                
+            } catch (err) {
+                cerrarModal();
+                
+                // ✅ Manejo de errores como crearAsistencia
+                if (err.message.includes('No se encontraron asistencias')) {
+                    error('No se encontraron asistencias en el rango de fechas seleccionado');
+                } else {
+                    error(err.message || "Error al descargar el Excel");
+                }
+            }
         });
-
     });
 };

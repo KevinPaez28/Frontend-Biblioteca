@@ -5,7 +5,7 @@ import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
 
 export default async () => {
     const tabla = document.querySelector("#tablaAsistencias");
-    const contenedor = document.getElementById("asistencias-contenedor"); // 👈 CONTENEDOR igual que historial
+    const contenedor = document.getElementById("asistencias-contenedor"); 
     showSpinner(contenedor);
 
   // ================= FILTROS =================

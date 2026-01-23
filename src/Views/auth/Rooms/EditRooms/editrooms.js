@@ -49,14 +49,12 @@ export const editmodalreason = (item) => {
                 ...validate.datos,
                 estado_sala: selectEstado.value
             };
-            console.log(payload);
 
 
             try {
                 enviando = true;
 
                 const response = await patch(`salas/${item.id}`, payload);
-                console.log(response);
 
                 if (!response || !response.success) {
                     if (response?.errors && response.errors.length > 0) {

@@ -5,27 +5,31 @@ import { deleteShifts } from "./deleteShifts/deleteShecdules.js";
 import { abrirModalCrearJornada } from "./createShifts/createShifts.js";
 import { deleteJornada } from "./deleteShifts/deleteShift.js";
 import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { tienePermiso } from "../../../helpers/auth.js"; 
 
 export default async () => {
-  const contenedor = document.getElementById("jornadas-contenedor"); // 👈 CONTENEDOR igual que historial
+  const contenedor = document.getElementById("jornadas-contenedor");
   const cardsContainer = document.querySelector(".cards");
   const btnNuevoHorario = document.getElementById("btnNuevoHorario");
 
-  btnNuevoHorario.addEventListener("click", () => {
-    abrirModalCrearJornada();
-  });
+  if (btnNuevoHorario) {
+    if (tienePermiso("shifts.store")) {
+      btnNuevoHorario.addEventListener("click", () => {
+        abrirModalCrearJornada();
+      });
+    } else {
+      btnNuevoHorario.style.display = "none";
+    }
+  }
 
   const cargarJornadas = async () => {
     try {
-      // Mostrar spinner (igual que historial)
       if (contenedor) {
         showSpinner(contenedor);
       }
 
-      console.log("🔄 Cargando jornadas"); // Debug
-
       const jornadas = await get("jornadas/complete");
-      console.log("✅ Response jornadas:", jornadas); // Debug
+      console.log("✅ Response jornadas:", jornadas);
 
       cardsContainer.innerHTML = "";
 
@@ -67,7 +71,6 @@ export default async () => {
           const horariosDiv = document.createElement("div");
           horariosDiv.classList.add("horarios");
 
-          // ===== HORARIO ASIGNADO =====
           if (item.horario) {
             horariosDiv.classList.add("datos");
 
@@ -79,19 +82,21 @@ export default async () => {
             horarioHoras.classList.add("horario-horas");
             horarioHoras.textContent = `${item.start_time} - ${item.end_time}`;
 
-            const btnEliminarHorario = document.createElement("span");
-            btnEliminarHorario.classList.add("horario-eliminar");
-            btnEliminarHorario.textContent = "✖";
-            btnEliminarHorario.title = "Eliminar horario";
+            if (tienePermiso("shifts.update")) {
+              const btnEliminarHorario = document.createElement("span");
+              btnEliminarHorario.classList.add("horario-eliminar");
+              btnEliminarHorario.textContent = "✖";
+              btnEliminarHorario.title = "Eliminar horario";
 
-            btnEliminarHorario.addEventListener("click", () => {
-              deleteShifts(item, horariosDiv); // ← SOLO horario
-            });
+              btnEliminarHorario.addEventListener("click", () => {
+                deleteShifts(item, horariosDiv);
+              });
+
+              horariosDiv.appendChild(btnEliminarHorario);
+            }
 
             horariosDiv.appendChild(horarioNombre);
             horariosDiv.appendChild(horarioHoras);
-            horariosDiv.appendChild(btnEliminarHorario);
-
           } else {
             horariosDiv.textContent = "No hay horarios asignados";
           }
@@ -100,26 +105,29 @@ export default async () => {
           const acciones = document.createElement("div");
           acciones.classList.add("acciones-jornada");
 
-          // Gestionar
-          const btnGestionar = document.createElement("button");
-          btnGestionar.classList.add("btn-cerrar");
-          btnGestionar.textContent = "Gestionar horarios";
+          if (tienePermiso("shifts.update")) {
+            const btnGestionar = document.createElement("button");
+            btnGestionar.classList.add("btn-cerrar");
+            btnGestionar.textContent = "Gestionar horarios";
 
-          btnGestionar.addEventListener("click", () => {
-            editarmodalHorario(item, index);
-          });
+            btnGestionar.addEventListener("click", () => {
+              editarmodalHorario(item, index);
+            });
 
-          // 🗑️ Eliminar jornada
-          const btnEliminarJornada = document.createElement("button");
-          btnEliminarJornada.classList.add("btn-delete");
-          btnEliminarJornada.textContent = "Eliminar jornada";
+            acciones.appendChild(btnGestionar);
+          }
 
-          btnEliminarJornada.addEventListener("click", () => {
-            deleteJornada(item);
-          });
+          if (tienePermiso("shifts.destroy")) {
+            const btnEliminarJornada = document.createElement("button");
+            btnEliminarJornada.classList.add("btn-delete");
+            btnEliminarJornada.textContent = "Eliminar jornada";
 
-          acciones.appendChild(btnGestionar);
-          acciones.appendChild(btnEliminarJornada);
+            btnEliminarJornada.addEventListener("click", () => {
+              deleteJornada(item);
+            });
+
+            acciones.appendChild(btnEliminarJornada);
+          }
 
           // ===== APPEND =====
           body.appendChild(small);
@@ -143,14 +151,8 @@ export default async () => {
         `;
       }
     } catch (error) {
-      console.error("❌ Error cargando jornadas:", error);
-      cardsContainer.innerHTML = `
-        <p style="color:red;font-size:13px">
-          Error al cargar jornadas. Revisa la consola.
-        </p>
-      `;
+      console.error("Error cargando jornadas:", error);
     } finally {
-      // SIEMPRE ocultar spinner
       try {
         if (contenedor) {
           hideSpinner(contenedor);

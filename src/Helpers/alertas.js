@@ -53,7 +53,6 @@ export const loading = (message = "Registrando aprendices...") => {
     });
 }
 
-/* ❌ CERRAR CUALQUIER SWEETALERT */
 export const closeAlert = () => {
     Swal.close();
 }
