@@ -3,77 +3,63 @@ import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlCrearEvento from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 import EventsController from "../eventsController.js";
 
 export const abrirModalCrearEvento = async () => {
 
-    mostrarModal(htmlCrearEvento);
+    // ================== MOSTRAR MODAL ==================
+    const modal = mostrarModal(htmlCrearEvento);
 
     requestAnimationFrame(async () => {
 
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formEvento");
-        const selectArea = document.querySelector("#selectArea");
+        // ================== CONSTANTES DEL MODAL ==================
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formEvento");
+        const selectArea = modal.querySelector("#selectArea");
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        // ================== BOTÓN CERRAR ==================
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        // ================= OBTENER ÁREAS =================
-        try {
-            const areas = await get("salas");
-
-            areas.data.forEach(area => {
-                const option = document.createElement("option");
-                option.value = area.id;
-                option.textContent = area.name;
-                selectArea.append(option);
-            });
-
-        } catch (err) {
-            console.error(err);
-            error("No se pudieron cargar las áreas");
-        }
-
+        // ================== BANDERA DE ENVÍO ==================
         let enviando = false;
 
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
+        // ================== EVENTO SUBMIT ==================
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
             if (enviando) return;
+            if (!validate.validarCampos(e)) return;
 
-            if (!validate.validarCampos(event)) return;
+            loading("Creando evento");
 
             const { fecha, hora, ...resto } = validate.datos;
 
-            // 👉 Unimos fecha + hora (formato datetime)
             const payload = {
                 ...resto,
                 fecha: `${fecha}`,
                 hora: `${hora}`,
                 estado_id: 1
             };
-            console.log(payload);
-            
+
             try {
                 enviando = true;
-
                 const response = await post("eventos/create", payload);
 
                 if (!response || !response.success) {
-                    cerrarModal();
+                    cerrarModal(modal);
                     if (response?.errors?.length) {
-                        response.errors.forEach(e => error(e));
+                        response.errors.forEach(err => error(err));
                     } else {
-                        cerrarModal();
                         error(response?.message || "Error al crear el evento");
                     }
                     enviando = false;
                     return;
                 }
 
-                cerrarModal();
+                form.reset();
+                cerrarModal(modal);
                 success(response.message || "Evento creado correctamente");
                 EventsController();
-
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
@@ -81,5 +67,20 @@ export const abrirModalCrearEvento = async () => {
 
             enviando = false;
         });
+
+        // ================== CARGA DE DATOS DINÁMICOS ==================
+        try {
+            const areas = await get("salas");
+            areas.data.forEach(area => {
+                const option = document.createElement("option");
+                option.value = area.id;
+                option.textContent = area.name;
+                selectArea.append(option);
+            });
+        } catch (err) {
+            console.error(err);
+            error("No se pudieron cargar las áreas");
+        }
+
     });
 };

@@ -1,62 +1,83 @@
 import { patch } from "../../../../Helpers/api.js";
 import * as validate from "../../../../Helpers/Modules/modules";
-import"../../../../Components/Models/modal.css";
+import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlEditarHorario from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
 import schedulesController from "../schedulesController.js";
 
 export const editarmodalHorario = (horario) => {
-    mostrarModal(htmlEditarHorario);
+    // Evitar abrir múltiples modales
+    if (document.querySelector("#formHorario")) return;
+
+    const modal = mostrarModal(htmlEditarHorario);
 
     requestAnimationFrame(() => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formHorario");
+        // ================== ELEMENTOS DEL MODAL ==================
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formHorario");
+        const inputNombre = modal.querySelector("#inputNombre");
+        const inputInicio = modal.querySelector("#inputInicio");
+        const inputFin = modal.querySelector("#inputFin");
+        const inputJornada = modal.querySelector("#inputJornada");
 
-        // ===== PRECARGAR DATOS =====
-        document.querySelector("#inputNombre").value = horario.horario;
-        document.querySelector("#inputInicio").value = horario.start_time_24 ?? horario.start_time;
-        document.querySelector("#inputFin").value = horario.end_time_24 ?? horario.end_time;
-        document.querySelector("#inputJornada").value = horario.jornada;
+        if (!btnCerrar || !form || !inputNombre || !inputInicio || !inputFin || !inputJornada) {
+            console.error("No se encontraron todos los elementos del modal");
+            cerrarModal(modal);
+            return;
+        }
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        // ================== PRECARGAR DATOS ==================
+        inputNombre.value = horario.horario;
+        inputInicio.value = horario.start_time_24 ?? horario.start_time;
+        inputFin.value = horario.end_time_24 ?? horario.end_time;
+        inputJornada.value = horario.jornada;
 
-        let enviando = false; // bandera para evitar envíos dobles
+        // ================== CERRAR MODAL ==================
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        form.addEventListener("submit", async (e) => {
+        // ================== SUBMIT ==================
+        let enviando = false;
+
+        const handleSubmit = async (e) => {
             e.preventDefault();
-            if (enviando) return; 
-
+            e.stopPropagation();
+            if (enviando) return;
             if (!validate.validarCampos(e)) return;
+
+            enviando = true;
 
             const payload = { ...validate.datos };
 
             try {
-                enviando = true; // activamos bandera
                 const response = await patch(`horarios/${horario.id}`, payload);
 
                 if (!response || !response.success) {
-                    if (response?.errors && response.errors.length > 0) {
+                    cerrarModal(modal);
+                    if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
                     } else {
                         error(response?.message || "Error al actualizar el horario");
                     }
-                    enviando = false; // desbloqueamos si hay error
+                    enviando = false;
                     return;
                 }
+                
 
-                cerrarModal();
-                success(response.message || "Horario actualizado correctamente");
                 form.reset();
+                cerrarModal(modal);
+                success(response.message || "Horario actualizado correctamente");
                 schedulesController();
-                enviando = false; // desbloqueamos al terminar
 
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
-                enviando = false; // desbloqueamos en caso de fallo
             }
-        });
+
+            enviando = false;
+        };
+
+        form.removeEventListener("submit", handleSubmit); // limpieza por seguridad
+        form.addEventListener("submit", handleSubmit);
     });
 };

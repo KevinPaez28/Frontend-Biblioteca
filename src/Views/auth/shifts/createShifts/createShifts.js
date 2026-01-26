@@ -3,54 +3,54 @@ import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlCrearJornada from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 import shiftsController from "../shiftsController.js";
 
 export const abrirModalCrearJornada = async () => {
+    // Evitar abrir más de un modal
+    if (document.querySelector("#formJornada")) return;
 
-    mostrarModal(htmlCrearJornada);
+    const modal = mostrarModal(htmlCrearJornada);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formJornada");
-        const inputNombre = document.querySelector("#inputNombre");
-        const selectHorario = document.querySelector("#selectHorario");
 
-        // ===== CARGAR HORARIOS DINÁMICAMENTE =====
-        const horarios = await get("horarios");
-        console.log(horarios);
-        
-        selectHorario.innerHTML = `<option value="">Seleccione un horario</option>`;
+        // ================== CONSTANTES DEL DOM ==================
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formJornada");
+        const inputNombre = modal.querySelector("#inputNombre");
+        const selectHorario = modal.querySelector("#selectHorario");
 
-        if (horarios?.data?.length) {
-            horarios.data.forEach(h => {
-                const op = document.createElement("option");
-                op.value = h.id;
-                op.textContent = `${h.start_time} - ${h.end_time}`;
-                selectHorario.append(op);
-            });
+        if (!btnCerrar || !form || !inputNombre || !selectHorario) {
+            console.error("No se encontraron los elementos necesarios en el modal");
+            cerrarModal(modal);
+            return;
         }
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        // ================== BOTÓN CERRAR MODAL ==================
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
+        // Bandera para evitar múltiples envíos
         let enviando = false;
 
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
+        // ================== EVENTO SUBMIT ==================
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             if (enviando) return;
-
-            if (!validate.validarCampos(event)) return;
+            if (!validate.validarCampos(e)) return;
+            
+            loading("Creando jornada");
+            cerrarModal(modal);
+            enviando = true;
 
             const payload = { ...validate.datos };
 
             try {
-                enviando = true;
                 const response = await post("jornadas/create", payload);
 
                 if (!response || !response.success) {
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
                     } else {
                         error(response?.message || "Error al crear la jornada");
                     }
@@ -58,17 +58,53 @@ export const abrirModalCrearJornada = async () => {
                     return;
                 }
 
-                cerrarModal();
-                success(response.message || "Jornada creada correctamente");
                 form.reset();
+                cerrarModal(modal);
+                success(response.message || "Jornada creada correctamente");
                 shiftsController();
-                enviando = false;
 
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
-                enviando = false;
+            }
+
+            enviando = false;
+        };
+
+        form.removeEventListener("submit", handleSubmit); // limpieza
+        form.addEventListener("submit", handleSubmit);
+
+        // ================== CARGA DE DATOS DINÁMICOS ==================
+        try {
+            const horarios = await get("horarios");
+            selectHorario.innerHTML = `<option value="">Seleccione un horario</option>`;
+            if (horarios?.data?.length) {
+                horarios.data.forEach(h => {
+                    const op = document.createElement("option");
+                    op.value = h.id;
+                    op.textContent = `${h.start_time} - ${h.end_time}`;
+                    selectHorario.append(op);
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            error("No se pudieron cargar los horarios");
+        }
+
+        // ================== VALIDACIONES POR CAMPO ==================
+        const campos = form.querySelectorAll("input, select");
+        campos.forEach(campo => {
+            if (campo.type === "text") {
+                campo.addEventListener("keydown", e => {
+                    validate.validarTexto(e);
+                    validate.validarMaximo(e, campo.maxLength || 50);
+                });
+                campo.addEventListener("blur", e => {
+                    validate.validarMinimo(e, campo.minLength || 3);
+                    validate.validarCampo(e);
+                });
             }
         });
+
     });
 };

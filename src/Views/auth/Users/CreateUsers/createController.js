@@ -8,30 +8,24 @@ import UsersController from "../UsersController.js";
 
 export const abrirModalCrearUsuario = async () => {
 
+    // ================== MOSTRAR MODAL ==================
     mostrarModal(htmlCrearUsuario);
 
     requestAnimationFrame(async () => {
 
+        // ================== CONSTANTES DEL DOM ==================
         const btnCerrar = document.querySelector("#btnCerrarModal");
         const form = document.querySelector("#formUsuario");
         const selectRol = document.querySelector("#selectRol");
         const selectEstado = document.querySelector("#selectEstado");
 
+        // ================== BOTÓN CERRAR ==================
         btnCerrar.addEventListener("click", cerrarModal);
 
-        // ================= CARGAR ROLES =================
-        const roles = await get("roles");
-        roles.data.forEach(r => {
-            const op = document.createElement("option");
-            op.value = r.id;
-            op.textContent = r.name;
-            selectRol.append(op);
-        });
-
-        // ================= CARGAR ESTADOS =================
-        
+        // ================== BANDERA DE ENVÍO ==================
         let enviando = false;
 
+        // ================== EVENTO SUBMIT ==================
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
             if (enviando) return;
@@ -42,19 +36,17 @@ export const abrirModalCrearUsuario = async () => {
                 ...validate.datos,
                 contrasena: Math.random().toString(36).slice(-10)
             };
-            console.log(payload);
-            
+
             try {
                 enviando = true;
 
                 const response = await post("user/create", payload);
 
                 if (!response || !response.success) {
+                    cerrarModal();
                     if (response?.errors && response.errors.length > 0) {
-                        cerrarModal();
                         response.errors.forEach(err => error(err));
                     } else {
-                        cerrarModal();
                         error(response?.message || "Error al crear el usuario");
                     }
                     enviando = false;
@@ -72,5 +64,20 @@ export const abrirModalCrearUsuario = async () => {
 
             enviando = false;
         });
+
+        // ================== CARGA DE DATOS DINÁMICOS ==================
+        try {
+            const roles = await get("roles");
+            roles.data.forEach(r => {
+                const op = document.createElement("option");
+                op.value = r.id;
+                op.textContent = r.name;
+                selectRol.append(op);
+            });
+        } catch (err) {
+            console.error(err);
+            error("No se pudieron cargar roles");
+        }
+
     });
 };

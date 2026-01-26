@@ -1,18 +1,14 @@
 export const getCookie = (name) => {
-
-    let stringCookies = document.cookie;
-
-    let arrayCookies = stringCookies.split("; ");
-
+    const stringCookies = document.cookie; // obtiene todas las cookies
+    const arrayCookies = stringCookies.split("; ");
     let cookie = null;
 
     arrayCookies.forEach((elemento) => {
-
-        let [key, value] = elemento.split('=');
-
-        if (key == name) cookie = value;
-
+        const [key, value] = elemento.split('=');
+        if (key === name) cookie = value;
     });
 
+    if (!cookie || cookie === "undefined" || cookie === "") return null;
+
     return decodeURIComponent(cookie);
-}
+};

@@ -3,27 +3,55 @@ import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlCrearUsuario from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 import ApprenticesController from "../ApprenticesController.js";
 
 export const abrirModalCrearAprendiz = async () => {
+    // Evitar abrir más de un modal de crear usuario
+    if (document.querySelector("#formUsuario")) return;
 
-    mostrarModal(htmlCrearUsuario);
+    const modal = mostrarModal(htmlCrearUsuario);
 
-    requestAnimationFrame(async () => {
+    // ====== REFERENCIAS LOCALES AL MODAL ======
+    const btnCerrar = modal.querySelector("#btnCerrarModal");
+    const form = modal.querySelector("#formUsuario");
+    const selectRol = modal.querySelector("#selectRol");
+    const selectEstado = modal.querySelector("#selectEstado");
+    const selectFicha = modal.querySelector("#selectFicha");
+    const selectPrograma = modal.querySelector("#selectPrograma");
+    const seccionAprendiz = modal.querySelector("#seccionAprendiz");
 
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formUsuario");
-        const selectRol = document.querySelector("#selectRol");
-        const selectEstado = document.querySelector("#selectEstado");
-        const selectFicha = document.querySelector("#selectFicha");
-        const selectPrograma = document.querySelector("#selectPrograma");
-        const seccionAprendiz = document.querySelector("#seccionAprendiz");
+    // ====== BOTÓN CERRAR ======
+    btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        btnCerrar.addEventListener("click", cerrarModal);
+    // ====== EVENTOS DINÁMICOS ======
+    selectFicha.addEventListener("change", () => {
+        selectPrograma.innerHTML = `<option value="">Seleccione un programa</option>`;
+        selectPrograma.disabled = true;
+        if (!selectFicha.value) return;
 
-        // ================= ROLES =================
-        const roles = await get("roles");
+        const selected = selectFicha.selectedOptions[0];
+        const op = document.createElement("option");
+        op.value = selected.dataset.programaId;
+        op.textContent = selected.dataset.programaNombre;
+        selectPrograma.append(op);
+        selectPrograma.value = selected.dataset.programaId;
+        selectPrograma.disabled = false;
+    });
+
+    selectRol.addEventListener("change", () => {
+        const esAprendiz = selectRol.selectedOptions[0]?.textContent === "Aprendiz";
+        seccionAprendiz.style.display = esAprendiz ? "block" : "none";
+    });
+
+    // ====== CARGA DE DATOS DINÁMICOS ======
+    try {
+        const [roles, estados, fichas] = await Promise.all([
+            get("roles"),
+            get("EstadoUsuarios"),
+            get("ficha")
+        ]);
+
         roles.data.forEach(r => {
             const op = document.createElement("option");
             op.value = r.id;
@@ -31,8 +59,6 @@ export const abrirModalCrearAprendiz = async () => {
             selectRol.append(op);
         });
 
-        // ================= ESTADOS =================
-        const estados = await get("EstadoUsuarios");
         estados.data.forEach(e => {
             const op = document.createElement("option");
             op.value = e.id;
@@ -40,9 +66,6 @@ export const abrirModalCrearAprendiz = async () => {
             selectEstado.append(op);
         });
 
-        // ================= FICHAS =================
-
-        const fichas = await get("ficha");
         fichas.data.forEach(f => {
             const op = document.createElement("option");
             op.value = f.id;
@@ -51,70 +74,54 @@ export const abrirModalCrearAprendiz = async () => {
             op.dataset.programaNombre = f.programa.training_program;
             selectFicha.append(op);
         });
-        console.log(fichas);
 
-        // ================= FICHA → PROGRAMA =================
-        selectFicha.addEventListener("change", () => {
-            selectPrograma.innerHTML = `<option value="">Seleccione un programa</option>`;
-            selectPrograma.disabled = true;
+    } catch (err) {
+        console.error(err);
+        error("No se pudieron cargar roles, estados o fichas");
+    }
 
-            if (!selectFicha.value) return;
+    // ====== SUBMIT ======
+    let enviando = false;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (enviando) return;
+        if (!validate.validarCampos(e)) return;
 
-            const selected = selectFicha.selectedOptions[0];
+        const esAprendiz = selectRol.selectedOptions[0]?.textContent === "Aprendiz";
+        if (esAprendiz && (!selectFicha.value || !selectPrograma.value)) {
+            error("Ficha y programa son obligatorios para Aprendices");
+            return;
+        }
 
-            const op = document.createElement("option");
-            op.value = selected.dataset.programaId;
-            op.textContent = selected.dataset.programaNombre;
-            selectPrograma.append(op);
-            selectPrograma.value = selected.dataset.programaId;
-        });
+        loading("Creando aprendiz");
+        cerrarModal(modal);
+        enviando = true;
 
-        // ================= MOSTRAR SOLO SI ES APRENDIZ =================
-        selectRol.addEventListener("change", () => {
-            const esAprendiz = selectRol.selectedOptions[0]?.textContent === "Aprendiz";
-            seccionAprendiz.style.display = esAprendiz ? "block" : "none";
-        });
+        const payload = {
+            documento: validate.datos.documento,
+            nombres: validate.datos.nombres,
+            apellidos: validate.datos.apellidos,
+            telefono: validate.datos.telefono,
+            correo: validate.datos.correo,
+            rol: validate.datos.rol,
+            estado_id: validate.datos.estado,
+            contrasena: Math.random().toString(36).slice(-10)
+        };
 
-        let enviando = false;
+        if (esAprendiz) {
+            payload.ficha_id = selectFicha.value;
+            payload.programa_id = selectPrograma.value;
+        }
 
-        // ================= SUBMIT =================
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
-            if (enviando) return;
-            if (!validate.validarCampos(event)) return;
-
-            const esAprendiz = selectRol.selectedOptions[0]?.textContent === "Aprendiz";
-
-            if (esAprendiz && (!selectFicha.value || !selectPrograma.value)) {
-                error("Ficha y programa son obligatorios para Aprendices");
-                return;
-            }
-
-            const payload = {
-                documento: validate.datos.documento,
-                nombres: validate.datos.nombres,
-                apellidos: validate.datos.apellidos,
-                telefono: validate.datos.telefono,
-                correo: validate.datos.correo,
-                rol: validate.datos.rol,
-                estado_id: validate.datos.estado,
-                contrasena: Math.random().toString(36).slice(-10)
-            };
-
-            if (esAprendiz) {
-                payload.ficha_id = selectFicha.value;
-                payload.programa_id = selectPrograma.value;
-            }
-
-            enviando = true;
+        try {
             const response = await post("user/create", payload);
 
             if (!response || !response.success) {
-                if (response?.errors && response.errors.length > 0) {
-                    cerrarModal();
+                cerrarModal(modal);
+                if (response?.errors?.length) {
                     response.errors.forEach(err => error(err));
                 } else {
-                    cerrarModal();
                     error(response?.message || "Error al crear el usuario");
                 }
                 enviando = false;
@@ -122,12 +129,18 @@ export const abrirModalCrearAprendiz = async () => {
             }
 
             form.reset();
-            cerrarModal();
+            cerrarModal(modal);
             success(response.message || "Aprendiz creado correctamente");
             ApprenticesController();
 
+        } catch (err) {
+            console.error(err);
+            error("Ocurrió un error inesperado");
+        }
 
-            enviando = false;
-        });
-    });
+        enviando = false;
+    };
+
+    form.removeEventListener("submit", handleSubmit); // limpieza por seguridad
+    form.addEventListener("submit", handleSubmit);
 };

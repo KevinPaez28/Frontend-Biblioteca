@@ -7,19 +7,20 @@ import { success, error } from "../../../../Helpers/alertas.js";
 import EventsController from "../eventsController.js";
 
 export const editModalEvento = (item) => {
-    mostrarModal(htmlContent);
+
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formEvento");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formEvento");
 
-        const inputNombre = document.querySelector("#modalInputNombreEvento");
-        const inputEncargado = document.querySelector("#modalInputEncargado");
-        const inputFecha = document.querySelector("#modalInputFecha");
-        const inputHoraInicio = document.querySelector("#modalInputHoraInicio");
-        const inputHoraFin = document.querySelector("#modalInputHoraFin");
-        const selectArea = document.querySelector("#modalSelectArea");
-        const selectEstado = document.querySelector("#modalSelectEstado");
+        const inputNombre = modal.querySelector("#modalInputNombreEvento");
+        const inputEncargado = modal.querySelector("#modalInputEncargado");
+        const inputFecha = modal.querySelector("#modalInputFecha");
+        const inputHoraInicio = modal.querySelector("#modalInputHoraInicio");
+        const inputHoraFin = modal.querySelector("#modalInputHoraFin");
+        const selectArea = modal.querySelector("#modalSelectArea");
+        const selectEstado = modal.querySelector("#modalSelectEstado");
 
         // ===== PRECARGAR DATOS =====
         inputNombre.value = item.name;
@@ -34,7 +35,6 @@ export const editModalEvento = (item) => {
             const op = document.createElement("option");
             op.value = a.id;
             op.textContent = a.name;
-
             if (a.id === item.room?.id) op.selected = true;
             selectArea.append(op);
         });
@@ -45,12 +45,12 @@ export const editModalEvento = (item) => {
             const op = document.createElement("option");
             op.value = e.id;
             op.textContent = e.name;
-
             if (e.id === item.state?.id) op.selected = true;
             selectEstado.append(op);
         });
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        // ===== CERRAR MODAL =====
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         let enviando = false;
 
@@ -70,7 +70,6 @@ export const editModalEvento = (item) => {
 
             try {
                 enviando = true;
-
                 const response = await patch(`eventos/${item.id}`, payload);
 
                 if (!response || response.error) {
@@ -79,7 +78,7 @@ export const editModalEvento = (item) => {
                     return;
                 }
 
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Evento actualizado correctamente");
                 EventsController();
 

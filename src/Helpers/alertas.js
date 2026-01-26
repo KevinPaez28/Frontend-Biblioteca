@@ -38,7 +38,7 @@ export const confirm = (message) => {
         }
     })
 }
-export const loading = (message = "Registrando aprendices...") => {
+export const loading = (message) => {
     return Swal.fire({
         title: message,
         text: "Por favor espera",

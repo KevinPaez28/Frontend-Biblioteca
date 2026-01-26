@@ -8,15 +8,15 @@ import "../../../../Styles/importDates/import.css";
 
 export const importApprenties = () => {
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
 
-        const form = document.querySelector("#formImportarAprendices");
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const inputArchivo = document.querySelector("#inputArchivoExcel");
+        const form = modal.querySelector("#formImportarAprendices");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const inputArchivo = modal.querySelector("#inputArchivoExcel");
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         let enviando = false;
 
@@ -34,7 +34,7 @@ export const importApprenties = () => {
             try {
                 enviando = true;
 
-                cerrarModal();
+                cerrarModal(modal);
                 loading("Registrando aprendices...");
 
                 const response = await postFile("user/import", archivo);
@@ -46,13 +46,13 @@ export const importApprenties = () => {
                 if (!response || !response.success) {
 
                     if (response?.errors && response.errors.length > 0) {
-                        cerrarModal();
+                        cerrarModal(modal);
 
                         // Separar duplicados y otros errores
                         const duplicados = response.errors
                             .filter(err => err.error.includes("Duplicate entry"))
                             .map(err => {
-                                const match = err.error.match(/Duplicate entry '([^']+)'/); // <-- solo captura el documento
+                                const match = err.error.match(/Duplicate entry '([^']+)'/); 
                                 return match ? match[1] : "desconocido";
                             });
 
@@ -66,7 +66,7 @@ export const importApprenties = () => {
                             .forEach(err => error(err.error));
 
                     } else {
-                        cerrarModal();
+                        cerrarModal(modal);
                         error(response?.message || "Error al importar aprendices");
                     }
 
@@ -75,7 +75,7 @@ export const importApprenties = () => {
                 }
 
                 // ===== Importación exitosa =====
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Importación exitosa");
                 await ApprenticesController();
                 enviando = false;

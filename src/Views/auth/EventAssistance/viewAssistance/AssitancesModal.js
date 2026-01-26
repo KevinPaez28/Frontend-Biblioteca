@@ -4,25 +4,25 @@ import htmlContent from "./index.html?raw";
 
 export const abrirModalAsistencia = (item, index) => {
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
-        document.querySelector("#modalNombre").textContent = `#${index + 1}`;
+        modal.querySelector("#modalNombre").textContent = `#${index + 1}`;
 
-        document.querySelector("#modalEvento").textContent =
+        modal.querySelector("#modalEvento").textContent =
             item.Event || "—";
 
-        document.querySelector("#modalFicha").textContent =
+        modal.querySelector("#modalFicha").textContent =
             item.Ficha || "—";
 
-        document.querySelector("#modalEncargado").textContent =
+        modal.querySelector("#modalEncargado").textContent =
             `${item.FirstName || ""} ${item.LastName || ""}`.trim() || "—";
 
-        document.querySelector("#modalFechaHora").textContent = item.DateTime ? new Date(item.DateTime).toLocaleString()
+        modal.querySelector("#modalFechaHora").textContent = item.DateTime 
+            ? new Date(item.DateTime).toLocaleString()
             : "—";
 
-        document
-            .querySelector("#btnCerrarModal")
-            .addEventListener("click", cerrarModal);
+        modal.querySelector("#btnCerrarModal")
+            .addEventListener("click", () => cerrarModal(modal));
     });
 };

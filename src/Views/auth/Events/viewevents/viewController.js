@@ -4,32 +4,31 @@ import htmlContent from "./index.html?raw";
 
 export const abrirModalEvento = (item, index) => {
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
-        document.querySelector("#modalNombreEvento").textContent =
+        modal.querySelector("#modalNombreEvento").textContent =
             item.name || `Evento ${index + 1}`;
 
-        document.querySelector("#modalEncargadoEvento").textContent =
+        modal.querySelector("#modalEncargadoEvento").textContent =
             item.mandated || "—";
 
-        document.querySelector("#modalAreaEvento").textContent =
+        modal.querySelector("#modalAreaEvento").textContent =
             item.room?.name || "—";
 
-        document.querySelector("#modalFechaEvento").textContent =
+        modal.querySelector("#modalFechaEvento").textContent =
             item.date || "—";
 
-        document.querySelector("#modalHoraInicioEvento").textContent =
+        modal.querySelector("#modalHoraInicioEvento").textContent =
             item.time.start || "—";
 
-        document.querySelector("#modalHoraFinEvento").textContent =
+        modal.querySelector("#modalHoraFinEvento").textContent =
             item.time.end || "—";
 
-        document.querySelector("#modalEstadoEvento").textContent =
+        modal.querySelector("#modalEstadoEvento").textContent =
             "Estado: " + (item.state?.name || "—");
 
-        document
-            .querySelector("#btnCerrarModal")
-            .addEventListener("click", cerrarModal);
+        modal.querySelector("#btnCerrarModal")
+            .addEventListener("click", () => cerrarModal(modal));
     });
 };

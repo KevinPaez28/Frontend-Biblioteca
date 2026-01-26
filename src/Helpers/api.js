@@ -1,4 +1,4 @@
-import { getCookie } from './getCookies.js';
+import { getCookie } from '../Helpers/getCookies.js'; // desde auth.js
 import { cerrarTodos } from './modalManagement.js';
 import { error } from './alertas.js';
 

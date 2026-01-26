@@ -8,16 +8,16 @@ import asistenciasController from "../AssitanceController.js";
 
 export const abrirModalCrearAsistenciaEvento = async () => {
 
-    mostrarModal(htmlCrearAsistencia);
+    const modal = mostrarModal(htmlCrearAsistencia);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formAsistenciaEvento");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formAsistenciaEvento");
 
-        const selectEvento = document.querySelector("#selectEvento");
-        const selectFicha = document.querySelector("#selectFicha");
+        const selectEvento = modal.querySelector("#selectEvento");
+        const selectFicha = modal.querySelector("#selectFicha");
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         /* ================= OBTENER DATOS ================= */
 
@@ -40,8 +40,6 @@ export const abrirModalCrearAsistenciaEvento = async () => {
             selectFicha.append(op);
         });
 
-
-
         /* ================= SUBMIT ================= */
         let enviando = false;
 
@@ -59,7 +57,7 @@ export const abrirModalCrearAsistenciaEvento = async () => {
                 const response = await post("asistencia/events/create", payload);
 
                 if (!response || !response.success) {
-                    cerrarModal();
+                    cerrarModal(modal);
 
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
@@ -79,7 +77,7 @@ export const abrirModalCrearAsistenciaEvento = async () => {
                     return;
                 }
 
-                cerrarModal();
+                cerrarModal(modal);
 
                 // Manejo correcto del success si message es objeto
                 if (response?.message && typeof response.message === "object") {

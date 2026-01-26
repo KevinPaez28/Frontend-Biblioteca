@@ -1,58 +1,71 @@
-import { post } from "../../../../Helpers/api.js";
+import { get, post } from "../../../../Helpers/api.js";
 import * as validate from "../../../../Helpers/Modules/modules";
-import"../../../../Components/Models/modal.css";
+import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlCrearHorario from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 
 export const abrirModalCrearHorario = async () => {
+    // Evitar abrir más de un modal de crear horario
+    if (document.querySelector("#formHorario")) return;
 
-    mostrarModal(htmlCrearHorario);
+    const modal = mostrarModal(htmlCrearHorario);
 
-    // ESPERAMOS a que el modal ya esté pintado
-    requestAnimationFrame(() => {
+    // ====== REFERENCIAS LOCALES AL MODAL ======
+    const btnCerrar = modal.querySelector("#btnCerrarModal");
+    const form = modal.querySelector("#formHorario");
+    const selectDia = modal.querySelector("#selectDia");
+    const selectTurno = modal.querySelector("#selectTurno");
+    const seccionOpcional = modal.querySelector("#seccionOpcional"); // sección dinámica opcional
 
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formHorario");
+    // ====== BOTÓN CERRAR ======
+    btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        btnCerrar.addEventListener("click", cerrarModal);
+    // ====== EVENTOS DINÁMICOS ======
+    selectTurno?.addEventListener("change", () => {
+        if (seccionOpcional) {
+            seccionOpcional.style.display = selectTurno.value === "Especial" ? "block" : "none";
+        }
+    });
+    // ====== SUBMIT ======
+    let enviando = false;
 
-        let enviando = false; // bandera para evitar envíos dobles
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (enviando) return;
+        if (!validate.validarCampos(e)) return;
 
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
+        enviando = true;
 
-            if (enviando) return; // si ya se está enviando, no hacemos nada
+        const payload = { ...validate.datos };
 
-            if (!validate.validarCampos(event)) return;
 
-            const payload = { ...validate.datos };
+        try {
+            const response = await post("horarios/create", payload);
 
-            try {
-                enviando = true; // activamos bandera
-                const response = await post("horarios/create", payload);
-                console.log(response);
-                
-                // ===== Manejo de respuesta según success =====
-                if (!response || !response.success) {
-                    if (response?.errors && response.errors.length > 0) {
-                        response.errors.forEach(err => error(err));
-                        cerrarModal();
-                    } else {
-                        error(response?.message || "Error al crear el motivo");
-                    }
-                    enviando = false; // desbloqueamos si hay error
-                    return;
+            if (!response || !response.success) {
+                if (response?.errors?.length) {
+                    response.errors.forEach(err => error(err));
+                } else {
+                    error(response?.message || "Error al crear el horario");
                 }
-                
-                cerrarModal();
-                success(response.message || "Horario creado correctamente");
-            } catch (err) {
-                console.error(err);
-                error("Ocurrió un error inesperado");
+                enviando = false;
+                return;
             }
 
-            enviando = false; // liberamos bandera
-        });
-    });
+            form.reset();
+            cerrarModal(modal);
+            success(response.message || "Horario creado correctamente");
+
+        } catch (err) {
+            console.error(err);
+            error("Ocurrió un error inesperado");
+        }
+
+        enviando = false;
+    };
+
+    form.removeEventListener("submit", handleSubmit); // limpieza por seguridad
+    form.addEventListener("submit", handleSubmit);
 };

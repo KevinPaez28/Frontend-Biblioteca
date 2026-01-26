@@ -8,25 +8,25 @@ import ApprenticesController from "../ApprenticesController.js";
 
 export const editModalAprendiz = (item) => {
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(async () => {
 
-        const form = document.querySelector("#formAprendiz");
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        btnCerrar.addEventListener("click", cerrarModal);
+        const form = modal.querySelector("#formAprendiz");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         // ===== INPUTS =====
-        const inputDocumento = document.querySelector("#modalInputDocumento");
-        const inputNombre = document.querySelector("#modalInputNombre");
-        const inputApellido = document.querySelector("#modalInputApellido");
-        const inputTelefono = document.querySelector("#modalInputTelefono");
-        const inputCorreo = document.querySelector("#modalInputCorreo");
+        const inputDocumento = modal.querySelector("#modalInputDocumento");
+        const inputNombre = modal.querySelector("#modalInputNombre");
+        const inputApellido = modal.querySelector("#modalInputApellido");
+        const inputTelefono = modal.querySelector("#modalInputTelefono");
+        const inputCorreo = modal.querySelector("#modalInputCorreo");
 
         // ===== SELECTS =====
-        const selectFicha = document.querySelector("#modalSelectFicha");
-        const selectPrograma = document.querySelector("#modalSelectPrograma");
-        const selectEstado = document.querySelector("#modalSelectEstado");
+        const selectFicha = modal.querySelector("#modalSelectFicha");
+        const selectPrograma = modal.querySelector("#modalSelectPrograma");
+        const selectEstado = modal.querySelector("#modalSelectEstado");
 
         // ===== PRECARGA =====
         inputDocumento.value = item.document;
@@ -48,7 +48,6 @@ export const editModalAprendiz = (item) => {
 
         // ===== FICHAS =====
         const fichas = await get("ficha");
-
         selectFicha.innerHTML = `<option value="">Seleccione una ficha</option>`;
         selectPrograma.innerHTML = `<option value="">Seleccione un programa</option>`;
         selectPrograma.disabled = true;
@@ -60,7 +59,6 @@ export const editModalAprendiz = (item) => {
             op.dataset.programaId = f.programa.id;
             op.dataset.programaNombre = f.programa.training_program;
 
-            // precarga ficha actual
             if (f.ficha == item.ficha) {
                 op.selected = true;
 
@@ -84,14 +82,13 @@ export const editModalAprendiz = (item) => {
             if (!selectFicha.value) return;
 
             const selected = selectFicha.selectedOptions[0];
-
             const op = document.createElement("option");
             op.value = selected.dataset.programaId;
             op.textContent = selected.dataset.programaNombre;
 
             selectPrograma.append(op);
             selectPrograma.value = selected.dataset.programaId;
-            // selectPrograma.disabled = false;
+            selectPrograma.disabled = false;
         });
 
         let enviando = false;
@@ -102,33 +99,29 @@ export const editModalAprendiz = (item) => {
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
 
-            
             const payload = {
-                ...validate.datos,  
+                ...validate.datos,
                 ficha_id: selectFicha.value || null,
                 programa_id: selectPrograma.value || null,
                 rol_id: 2
             };
-            
+
             try {
                 enviando = true;
-
                 const response = await patch(`user/${item.id}`, payload);
-                
-                console.log(response);
+
                 if (!response || !response.success) {
+                    cerrarModal(modal);
                     if (response?.errors?.length) {
-                        cerrarModal();
                         response.errors.forEach(err => error(err));
                     } else {
-                        cerrarModal();
-                        error(response?.message || "Error al crear aprendiz");
+                        error(response?.message || "Error al actualizar aprendiz");
                     }
                     enviando = false;
                     return;
-                }   
+                }
 
-                cerrarModal();
+                cerrarModal(modal);
                 success("Aprendiz actualizado correctamente");
                 ApprenticesController();
 
@@ -141,3 +134,4 @@ export const editModalAprendiz = (item) => {
         });
     });
 };
+

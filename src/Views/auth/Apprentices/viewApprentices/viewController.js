@@ -4,40 +4,38 @@ import htmlContent from "./index.html?raw";
 
 export const abrirModalAprendiz = (item, index) => {
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
 
-        document.querySelector("#modalDocumentoUsuario").textContent =
+        modal.querySelector("#modalDocumentoUsuario").textContent =
             item.document || "—";
 
-        document.querySelector("#modalFichaUsuario").textContent =
-            item.ficha|| "—";
+        modal.querySelector("#modalFichaUsuario").textContent =
+            item.ficha || "—";
 
-        document.querySelector("#modalProgramaUsuario").textContent =
+        modal.querySelector("#modalProgramaUsuario").textContent =
             item.programa || "—";
 
-        document.querySelector("#modalNombreUsuario").textContent =
+        modal.querySelector("#modalNombreUsuario").textContent =
             item.first_name || `Usuario ${index + 1}`;
 
-        document.querySelector("#modalApellidoUsuario").textContent =
+        modal.querySelector("#modalApellidoUsuario").textContent =
             item.last_name || "—";
 
-        document.querySelector("#modalTelefonoUsuario").textContent =
+        modal.querySelector("#modalTelefonoUsuario").textContent =
             item.phone_number || "—";
 
-        document.querySelector("#modalCorreoUsuario").textContent =
+        modal.querySelector("#modalCorreoUsuario").textContent =
             item.email || "—";
 
-        document.querySelector("#modalRolUsuario").textContent =
+        modal.querySelector("#modalRolUsuario").textContent =
             item.rol || "—";
 
-        document.querySelector("#modalEstadoUsuario").textContent =
+        modal.querySelector("#modalEstadoUsuario").textContent =
             "Estado: " + (item.estado || "—");
 
-        document
-            .querySelector("#btnCerrarModal")
-            .addEventListener("click", cerrarModal);
+        modal.querySelector("#btnCerrarModal")
+            .addEventListener("click", () => cerrarModal(modal));
     });
 };
-

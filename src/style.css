@@ -2,7 +2,7 @@
 @import url("./Helpers/Customs/CustomsPropeties.css");
 
 * {
-  margin: 0px;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-weight: 600;
@@ -15,35 +15,40 @@ body {
   margin: 0;
 }
 
-/* Fondo cuando NO hay sesión */
+/* 🔹 Fondo cuando NO hay sesión */
 body.no-role {
   display: block;
   background-image: url('../public/fondo.png');
-  /* tu imagen */
   background-size: cover;
   background-position: center;
 }
 
-/* Layout cuando hay sesión */
+/* 🔹 Layout cuando hay sesión */
 body.with-role {
   display: flex;
   flex-direction: row;
   height: 100vh;
   background-color: #fff;
-  /* fondo blanco */
 }
 
-
+/* 🔹 Sidebar */
 .sidebar {
   width: 230px;
   height: 100vh;
   background-color: var(--color-principal);
   color: #fff;
-  display: flex;
+  display: flex; /* por defecto lo mostramos */
   flex-direction: column;
   overflow-y: auto;
+  transition: all 0.3s ease;
 }
 
+/* 🔹 Ocultar sidebar si no hay sesión */
+body.no-role .sidebar {
+  display: none !important; /* forzamos ocultarlo */
+}
+
+/* 🔹 Contenedor principal */
 #app {
   flex: 1;
   height: 100vh;

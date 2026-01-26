@@ -1,23 +1,22 @@
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
-import"../../../../Components/Models/modal.css";
+import "../../../../Components/Models/modal.css";
 import htmlContent from "./index.html?raw";
 
 export const abrirModalAsistencia = (item, index) => {
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
 
-        document.querySelector("#modalDocumento").textContent = item.Documento || "—";
-        document.querySelector("#modalNombres").textContent = item.FirstName || "—";
-        document.querySelector("#modalApellidos").textContent = item.LastName || "—";
-        document.querySelector("#modalFecha").textContent = item.DateTime || "—";
-        document.querySelector("#modalMotivo").textContent = item.Reason || "—";
-        document.querySelector("#modalRol").textContent = item.Role || "—";
-        document.querySelector("#modalFicha").textContent = item.Ficha || "—";
+        modal.querySelector("#modalDocumento").textContent = item.Documento || "—";
+        modal.querySelector("#modalNombres").textContent = item.FirstName || "—";
+        modal.querySelector("#modalApellidos").textContent = item.LastName || "—";
+        modal.querySelector("#modalFecha").textContent = item.DateTime || "—";
+        modal.querySelector("#modalMotivo").textContent = item.Reason || "—";
+        modal.querySelector("#modalRol").textContent = item.Role || "—";
+        modal.querySelector("#modalFicha").textContent = item.Ficha || "—";
 
-        document
-            .querySelector("#btnCerrarModal")
-            .addEventListener("click", cerrarModal);
+        modal.querySelector("#btnCerrarModal")
+            .addEventListener("click", () => cerrarModal(modal));
     });
 };

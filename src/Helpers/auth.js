@@ -31,21 +31,21 @@ export function isAuthorize(permissionEntry) {
 }
 
 export const tienePermiso = (permiso) => {
-    const permisosGuardados = localStorage.getItem('permissions');
-    if (!permisosGuardados) return false;
-  
-    try {
-      const permisosArray = JSON.parse(permisosGuardados);
-      const permisos = Array.isArray(permisosArray) ? permisosArray : [];
-      console.log('Permisos:', permisos, '| Tiene', permiso, ':', permisos.includes(permiso));
-      
-      return permisos.includes(permiso);
-    } catch (e) {
-      console.error("Error parseando:", e);
-      return false;
-    }
-  };
-  
+  const permisosGuardados = localStorage.getItem('permissions');
+  if (!permisosGuardados) return false;
+
+  try {
+    const permisosArray = JSON.parse(permisosGuardados);
+    const permisos = Array.isArray(permisosArray) ? permisosArray : [];
+    console.log('Permisos:', permisos, '| Tiene', permiso, ':', permisos.includes(permiso));
+    
+    return permisos.includes(permiso);
+  } catch (e) {
+    console.error("Error parseando:", e);
+    return false;
+  }
+};
+
 
 
 export const convertirPermisosArray = (permisos) => {
