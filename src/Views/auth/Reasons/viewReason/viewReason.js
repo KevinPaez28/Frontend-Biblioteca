@@ -5,13 +5,20 @@ import htmlContent from "./index.html?raw";
 export const abrirModalReason = (item, index) => {
     console.log(item);
     
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
-        document.querySelector('#modalNombreMotivo').textContent = item.name || `Motivo ${index + 1}`;
-        document.querySelector('#modalUsoSala').textContent = item.description || '';
-        document.querySelector('#modalActivo').textContent = "Estado: " + (item.state.name);
+        modal.querySelector('#modalNombreMotivo').textContent =
+            item.name || `Motivo ${index + 1}`;
 
-        document.querySelector("#btnCerrarModal").addEventListener("click", cerrarModal);
+        modal.querySelector('#modalUsoSala').textContent =
+            item.description || '';
+
+        modal.querySelector('#modalActivo').textContent =
+            "Estado: " + (item.state?.name || "—");
+
+        modal
+            .querySelector("#btnCerrarModal")
+            .addEventListener("click", () => cerrarModal(modal));
     });
 };

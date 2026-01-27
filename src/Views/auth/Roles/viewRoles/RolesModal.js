@@ -116,40 +116,48 @@ const permisosOcultos = [
 ];
 
 export const abrirModalRol = (item, index) => {
-    mostrarModal(htmlContent);
+
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
-        document.querySelector("#modalNombre").textContent = `Rol ${index + 1}`;
-        document.querySelector("#modalRol").textContent = item.name || "—";
 
-        const permisosContainer = document.querySelector("#modalPermisos");
+        const nombre = modal.querySelector("#modalNombre");
+        const rolNombre = modal.querySelector("#modalRol");
+        const permisosContainer = modal.querySelector("#modalPermisos");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+
+        if (!permisosContainer) return;
+
+        nombre.textContent = `Rol ${index + 1}`;
+        rolNombre.textContent = item.name || "—";
+
         permisosContainer.innerHTML = "";
 
-        if (item.permissions && item.permissions.length > 0) {
-            // ✅ FILTRAR permisos ocultos ANTES de mostrar en modal
-            const permisosFiltrados = item.permissions.filter(p => !permisosOcultos.includes(p.name));
-            
-            if (permisosFiltrados.length > 0) {
+        if (item.permissions?.length) {
+
+            const permisosFiltrados = item.permissions.filter(p =>
+                !permisosOcultos.includes(p.name)
+            );
+
+            if (permisosFiltrados.length) {
                 permisosFiltrados.forEach(perm => {
                     const span = document.createElement("span");
                     span.classList.add("badge-permissions");
-                    span.textContent = permisoLabels[perm.name] || perm.name; 
+                    span.textContent = permisoLabels[perm.name] || perm.name;
                     span.style.marginRight = "3px";
                     permisosContainer.appendChild(span);
                 });
             } else {
-                const span = document.createElement("span");
-                span.classList.add("badge", "badge-secondary");
-                span.textContent = "Sin permisos visibles";
-                permisosContainer.appendChild(span);
+                permisosContainer.innerHTML =
+                    `<span class="badge badge-secondary">Sin permisos visibles</span>`;
             }
+
         } else {
-            const span = document.createElement("span");
-            span.classList.add("badge", "badge-secondary");
-            span.textContent = "Sin permisos";
-            permisosContainer.appendChild(span);
+            permisosContainer.innerHTML =
+                `<span class="badge badge-secondary">Sin permisos</span>`;
         }
 
-        document.querySelector("#btnCerrarModal").addEventListener("click", cerrarModal);
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
     });
 };
+

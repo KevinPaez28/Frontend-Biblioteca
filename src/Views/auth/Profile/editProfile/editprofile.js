@@ -1,67 +1,51 @@
 import { patch, get } from "../../../../Helpers/api.js";
-import * as validate from "../../../../Helpers/Modules/modules";
+import * as validate from "../../../../Helpers/Modules/modules.js";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
-import htmlContent from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
-import UsersController from "../UsersController.js";
+import htmlUserModal from "./index.html?raw";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 
-export const editModalUsuario = (item) => {
-
-    const modal = mostrarModal(htmlContent);
+export const editUserModal = (user) => {
+    const modal = mostrarModal(htmlUserModal);
 
     requestAnimationFrame(async () => {
-
         const btnCerrar = modal.querySelector("#btnCerrarModal");
-        const form = modal.querySelector("#formUsuario");
+        const form = modal.querySelector("#formUser");
 
-        const inputDocumento = modal.querySelector("#modalInputDocumento");
-        const inputNombre = modal.querySelector("#modalInputNombre");
-        const inputApellido = modal.querySelector("#modalInputApellido");
-        const inputTelefono = modal.querySelector("#modalInputTelefono");
+        const inputNombres = modal.querySelector("#modalInputNombres");
+        const inputApellidos = modal.querySelector("#modalInputApellidos");
         const inputCorreo = modal.querySelector("#modalInputCorreo");
-
+        const inputTelefono = modal.querySelector("#modalInputTelefono");
         const selectRol = modal.querySelector("#modalSelectRol");
         const selectEstado = modal.querySelector("#modalSelectEstado");
 
-        if (!btnCerrar || !form) {
-            console.error("Elementos del modal no encontrados");
-            cerrarModal(modal);
-            return;
-        }
-
         // ===== PRECARGAR DATOS =====
-        inputDocumento.value = item.document;
-        inputNombre.value = item.first_name;
-        inputApellido.value = item.last_name;
-        inputTelefono.value = item.phone_number;
-        inputCorreo.value = item.email;
+        inputNombres.value = user.nombres;
+        inputApellidos.value = user.apellidos;
+        inputCorreo.value = user.correo;
+        inputTelefono.value = user.telefono;
 
-        // ===== RELLENAR ROLES =====
-        const roles = await get("roles");
+        // ===== RELLENAR SELECT DE ROLES =====
+        const roles = await get("roles"); // Endpoint para roles
         roles.data.forEach(r => {
             const op = document.createElement("option");
             op.value = r.id;
             op.textContent = r.name;
-
-            if (r.name === item.rol) op.selected = true;
-
+            if (r.id === user.rol_id) op.selected = true;
             selectRol.append(op);
         });
 
-        // ===== RELLENAR ESTADOS =====
-        const estados = await get("EstadoUsuarios");
-
+        // ===== RELLENAR SELECT DE ESTADOS =====
+        const estados = await get("estadosUsuarios"); // Endpoint para estados de usuario
         estados.data.forEach(e => {
             const op = document.createElement("option");
             op.value = e.id;
-            op.textContent = e.status;
-
-            if (e.name === item.estado) op.selected = true;
-
+            op.textContent = e.name;
+            if (e.id === user.estado_id) op.selected = true;
             selectEstado.append(op);
         });
 
+        // CIERRE DEL MODAL
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         let enviando = false;
@@ -69,23 +53,22 @@ export const editModalUsuario = (item) => {
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
-
             if (!validate.validarCampos(e)) return;
+
+            loading("Modificando Usuario");
 
             const payload = {
                 ...validate.datos,
                 rol_id: selectRol.value,
-                status_id: selectEstado.value
+                estado_id: selectEstado.value
             };
 
             try {
                 enviando = true;
-
-                const response = await patch(`user/${item.id}`, payload);
+                const response = await patch(`usuarios/${user.id}`, payload);
 
                 if (!response || !response.success) {
-                    cerrarModal(modal);
-                    if (response?.errors?.length) {
+                    if (response?.errors && response.errors.length > 0) {
                         response.errors.forEach(err => error(err));
                     } else {
                         error(response?.message || "Error al actualizar el usuario");
@@ -96,14 +79,16 @@ export const editModalUsuario = (item) => {
 
                 cerrarModal(modal);
                 success(response.message || "Usuario actualizado correctamente");
-                UsersController();
+                form.reset();
+                // Recargar la lista de usuarios
+                usersController();
+                enviando = false;
 
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
+                enviando = false;
             }
-
-            enviando = false;
         });
     });
 };

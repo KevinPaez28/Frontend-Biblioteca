@@ -3,17 +3,21 @@ import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlCrearArea from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 import AreasController from "../roomsController.js";
 
 export const abrirModalCrearArea = async () => {
-    mostrarModal(htmlCrearArea);
+
+    const modal = mostrarModal(htmlCrearArea); 
 
     requestAnimationFrame(() => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formArea");
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formArea");
+
+        if (!form) return;
+
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         let enviando = false;
 
@@ -22,7 +26,8 @@ export const abrirModalCrearArea = async () => {
             if (enviando) return;
 
             if (!validate.validarCampos(event)) return;
-
+            loading("Registrando Area");
+            cerrarModal(modal);
             const payload = {
                 ...validate.datos,
                 estado_id: 1
@@ -32,21 +37,22 @@ export const abrirModalCrearArea = async () => {
                 enviando = true;
 
                 const response = await post("salas/create", payload);
-                console.log(response);
 
                 if (!response || !response.success) {
-                    if (response?.errors && response.errors.length > 0) {
-                        cerrarModal();
+
+                    cerrarModal(modal);
+
+                    if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {
-                        cerrarModal();
                         error(response?.message || "Error al crear el área");
                     }
+
                     enviando = false;
                     return;
                 }
-
-                cerrarModal();
+                form.reset();
+                cerrarModal(modal);
                 success(response.message || "Área creada correctamente");
                 AreasController();
 

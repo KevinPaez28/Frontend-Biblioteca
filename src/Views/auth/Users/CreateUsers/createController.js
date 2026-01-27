@@ -8,24 +8,21 @@ import UsersController from "../UsersController.js";
 
 export const abrirModalCrearUsuario = async () => {
 
-    // ================== MOSTRAR MODAL ==================
-    mostrarModal(htmlCrearUsuario);
+    const modal = mostrarModal(htmlCrearUsuario);
 
     requestAnimationFrame(async () => {
 
-        // ================== CONSTANTES DEL DOM ==================
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formUsuario");
-        const selectRol = document.querySelector("#selectRol");
-        const selectEstado = document.querySelector("#selectEstado");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formUsuario");
+        const selectRol = modal.querySelector("#selectRol");
+        const selectEstado = modal.querySelector("#selectEstado");
 
-        // ================== BOTÓN CERRAR ==================
-        btnCerrar.addEventListener("click", cerrarModal);
 
-        // ================== BANDERA DE ENVÍO ==================
+
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
+
         let enviando = false;
 
-        // ================== EVENTO SUBMIT ==================
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
             if (enviando) return;
@@ -43,8 +40,8 @@ export const abrirModalCrearUsuario = async () => {
                 const response = await post("user/create", payload);
 
                 if (!response || !response.success) {
-                    cerrarModal();
-                    if (response?.errors && response.errors.length > 0) {
+                    cerrarModal(modal);
+                    if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {
                         error(response?.message || "Error al crear el usuario");
@@ -53,7 +50,7 @@ export const abrirModalCrearUsuario = async () => {
                     return;
                 }
 
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Usuario creado correctamente");
                 UsersController();
 
@@ -65,7 +62,7 @@ export const abrirModalCrearUsuario = async () => {
             enviando = false;
         });
 
-        // ================== CARGA DE DATOS DINÁMICOS ==================
+        // ===== CARGAR ROLES =====
         try {
             const roles = await get("roles");
             roles.data.forEach(r => {
@@ -81,3 +78,4 @@ export const abrirModalCrearUsuario = async () => {
 
     });
 };
+

@@ -7,73 +7,69 @@ import { success, error, loading } from "../../../../Helpers/alertas.js";
 import fichasController from "../FichasController.js";
 
 export const abrirModalCrearFicha = async () => {
-    // Evitar abrir más de un modal de crear ficha a la vez
     if (document.querySelector("#formFicha")) return;
 
     const modal = mostrarModal(htmlCrearFicha);
 
-    // Referencias locales dentro del modal
-    const btnCerrar = modal.querySelector("#btnCerrarModal");
-    const form = modal.querySelector("#formFicha");
-    const selectPrograma = modal.querySelector("#inputPrograma");
+    requestAnimationFrame(async () => {
 
-    // ===== CARGAR PROGRAMAS DINÁMICAMENTE =====
-    const programas = await get("programa");
-    selectPrograma.innerHTML = `<option value="">Seleccione un programa</option>`;
-    if (programas?.data?.length) {
-        programas.data.forEach(p => {
-            const op = document.createElement("option");
-            op.value = p.id;
-            op.textContent = p.training_program;
-            selectPrograma.append(op);
-        });
-    }
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formFicha");
+        const selectPrograma = modal.querySelector("#inputPrograma");
 
-    // Cerrar modal
-    const handleCerrar = () => cerrarModal(modal);
-    btnCerrar.addEventListener("click", handleCerrar);
+        // ===== CARGAR PROGRAMAS =====
+        const programas = await get("programa");
+        selectPrograma.innerHTML = `<option value="">Seleccione un programa</option>`;
+        if (programas?.data?.length) {
+            programas.data.forEach(p => {
+                const op = document.createElement("option");
+                op.value = p.id;
+                op.textContent = p.training_program;
+                selectPrograma.append(op);
+            });
+        }
 
-    // Submit
-    let enviando = false;
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (enviando) return;
-        if (!validate.validarCampos(event)) return;
+        // ===== CERRAR =====
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        const payload = { ...validate.datos };
+        // ===== SUBMIT =====
+        let enviando = false;
 
-        try {
-            enviando = true;
-            cerrarModal(modal);
-            loading("Creando ficha..."); 
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            if (enviando) return;
+            if (!validate.validarCampos(event)) return;
 
-            const response = await post("ficha/create", payload);
+            const payload = { ...validate.datos };
 
-            if (!response || !response.success) {
-                if (response?.errors?.length) {
-                    response.errors.forEach(err => error(err));
-                    cerrarModal(modal);
-                } else {
-                    error(response?.message || "Error al crear la ficha");
+            try {
+                enviando = true;
+                cerrarModal(modal);
+                loading("Creando ficha...");
+
+                const response = await post("ficha/create", payload);
+
+                if (!response || !response.success) {
+                    if (response?.errors?.length) {
+                        response.errors.forEach(err => error(err));
+                    } else {
+                        error(response?.message || "Error al crear la ficha");
+                    }
+                    enviando = false;
+                    return;
                 }
-                enviando = false;
-                return;
+
+                success(response.message || "Ficha creada correctamente");
+                form.reset();
+                fichasController();
+
+            } catch (err) {
+                console.error(err);
+                error("Ocurrió un error inesperado");
             }
 
-            cerrarModal(modal);
-            success(response.message || "Ficha creada correctamente");
-            form.reset();
-            fichasController();
             enviando = false;
+        });
 
-        } catch (err) {
-            console.error(err);
-            error("Ocurrió un error inesperado");
-            enviando = false;
-        }
-    };
-
-    // Limpiar listeners antiguos (por si acaso) y agregar nuevo
-    form.removeEventListener("submit", handleSubmit);
-    form.addEventListener("submit", handleSubmit);
+    });
 };

@@ -120,37 +120,38 @@ const permisosOcultos = [
 ];
 
 export const abrirModalCrearRol = async () => {
-    mostrarModal(htmlCrearRol);
+
+    const modal = mostrarModal(htmlCrearRol);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formRol");
-        const permisosContainer = document.querySelector("#permisosContainer");
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formRol");
+        const permisosContainer = modal.querySelector("#permisosContainer");
 
-        // ===== CARGAR PERMISOS FILTRADOS =====
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
+
+        // ===== CARGAR PERMISOS =====
         try {
             const response = await get("roles/permisos");
-            if (response && response.success) {
-                const permisosFiltrados = response.data.filter(p => !permisosOcultos.includes(p.name));
-                
-                permisosContainer.innerHTML = permisosFiltrados.map(p => `
-                    <label class="permiso-item badge badge-permissions" style="margin:3px; cursor:pointer; display:inline-block;">
-                        <input type="checkbox" name="permisos" value="${p.id}" style="margin-right:5px;">
-                        ${permisoLabels[p.name] || p.name}
-                    </label>
-                `).join("");
 
-                // Mensaje si no hay permisos visibles
-                if (permisosFiltrados.length === 0) {
-                    permisosContainer.innerHTML = `
-                        <div class="text-center p-3">
-                            <span class="badge badge-secondary">No hay permisos disponibles</span>
-                        </div>
-                    `;
-                }
+            if (response?.success) {
+                const permisosFiltrados = response.data.filter(p =>
+                    !permisosOcultos.includes(p.name)
+                );
+
+                permisosContainer.innerHTML = permisosFiltrados.length
+                    ? permisosFiltrados.map(p => `
+                        <label class="permiso-item badge badge-permissions" style="margin:3px; cursor:pointer; display:inline-block;">
+                            <input type="checkbox" name="permisos" value="${p.id}" style="margin-right:5px;">
+                            ${permisoLabels[p.name] || p.name}
+                        </label>
+                      `).join("")
+                    : `<div class="text-center p-3">
+                        <span class="badge badge-secondary">No hay permisos disponibles</span>
+                       </div>`;
             }
+
         } catch (err) {
             console.error(err);
             error("No se pudieron cargar los permisos");
@@ -163,14 +164,15 @@ export const abrirModalCrearRol = async () => {
 
         let enviando = false;
 
+        // ===== SUBMIT =====
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
 
             const permisosSeleccionados = Array.from(
-                document.querySelectorAll('input[name="permisos"]:checked')
-            ).map(input => Number(input.value));
+                modal.querySelectorAll('input[name="permisos"]:checked')
+            ).map(i => Number(i.value));
 
             const payload = {
                 ...validate.datos,
@@ -179,24 +181,25 @@ export const abrirModalCrearRol = async () => {
 
             try {
                 enviando = true;
+
                 const response = await post("roles/create", payload);
 
-                if (!response || !response.success) {
+                if (!response?.success) {
                     error(response?.message || "Error al crear el rol");
                     enviando = false;
                     return;
                 }
 
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Rol creado correctamente");
                 rolesController();
-                enviando = false;
 
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
-                enviando = false;
             }
+
+            enviando = false;
         });
     });
 };

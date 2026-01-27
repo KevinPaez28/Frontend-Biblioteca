@@ -7,13 +7,11 @@ import { success, error } from "../../../../Helpers/alertas.js";
 import schedulesController from "../schedulesController.js";
 
 export const editarmodalHorario = (horario) => {
-    // Evitar abrir múltiples modales
     if (document.querySelector("#formHorario")) return;
 
     const modal = mostrarModal(htmlEditarHorario);
 
     requestAnimationFrame(() => {
-        // ================== ELEMENTOS DEL MODAL ==================
         const btnCerrar = modal.querySelector("#btnCerrarModal");
         const form = modal.querySelector("#formHorario");
         const inputNombre = modal.querySelector("#inputNombre");
@@ -27,16 +25,13 @@ export const editarmodalHorario = (horario) => {
             return;
         }
 
-        // ================== PRECARGAR DATOS ==================
         inputNombre.value = horario.horario;
         inputInicio.value = horario.start_time_24 ?? horario.start_time;
         inputFin.value = horario.end_time_24 ?? horario.end_time;
         inputJornada.value = horario.jornada;
 
-        // ================== CERRAR MODAL ==================
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        // ================== SUBMIT ==================
         let enviando = false;
 
         const handleSubmit = async (e) => {
@@ -62,7 +57,6 @@ export const editarmodalHorario = (horario) => {
                     enviando = false;
                     return;
                 }
-                
 
                 form.reset();
                 cerrarModal(modal);
@@ -77,7 +71,7 @@ export const editarmodalHorario = (horario) => {
             enviando = false;
         };
 
-        form.removeEventListener("submit", handleSubmit); // limpieza por seguridad
         form.addEventListener("submit", handleSubmit);
     });
 };
+

@@ -72,64 +72,71 @@ const permisoLabels = {
 };
 
 export const editarModalRol = async (rol) => {
-    mostrarModal(htmlEditarRol);
+
+    const modal = mostrarModal(htmlEditarRol);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formRol");
-        const permisosContainer = document.querySelector("#permisosContainer");
 
-        // ===== PRECARGAR DATOS =====
-        document.querySelector("#inputRol").value = rol.name || "";
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formRol");
+        const permisosContainer = modal.querySelector("#permisosContainer");
+        const inputRol = modal.querySelector("#inputRol");
 
-        // Cargar permisos desde backend
-        let permisos = [];
+        if (!form || !permisosContainer) return;
+
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
+
+        // ===== PRECARGAR NOMBRE =====
+        inputRol.value = rol.name || "";
+
+        // ===== CARGAR PERMISOS =====
         try {
             const response = await get("roles/permisos");
-            if (response && response.success) permisos = response.data;
+
+            if (response?.success) {
+                permisosContainer.innerHTML = response.data.map(p => {
+
+                    const isChecked = rol.permissions?.some(rp => rp.id === p.id);
+
+                    return `
+                        <label class="permiso-item badge badge-permissions" style="margin:3px; cursor:pointer;">
+                            <input type="checkbox" name="permisos" value="${p.id}" ${isChecked ? "checked" : ""} style="margin-right:5px;">
+                            ${permisoLabels[p.name] || p.name}
+                        </label>
+                    `;
+                }).join("");
+            }
+
         } catch (err) {
             console.error(err);
             error("No se pudieron cargar los permisos");
         }
 
-        // Renderizar checkboxes como badges
-        permisosContainer.innerHTML = permisos.map(p => {
-            const isChecked = rol.permissions?.some(rp => rp.id === p.id);
-            return `
-                <label class="permiso-item badge ${isChecked ? "badge-permissions   " : "badge-permissions"}" style="margin:3px; cursor:pointer;">
-                    <input type="checkbox" name="permisos" value="${p.id}" ${isChecked ? "checked" : ""} style="margin-right:5px;">
-                    ${permisoLabels[p.name] || p.name}
-                </label>
-            `;
-        }).join("");
-
-        btnCerrar.addEventListener("click", cerrarModal);
-
         let enviando = false;
 
+        // ===== SUBMIT =====
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
 
             const permisosSeleccionados = Array.from(
-                document.querySelectorAll('input[name="permisos"]:checked')
-            ).map(input => Number(input.value));
+                modal.querySelectorAll('input[name="permisos"]:checked')
+            ).map(i => Number(i.value));
 
-            const payload = { 
+            const payload = {
                 ...validate.datos,
                 permisos: permisosSeleccionados
             };
 
             try {
                 enviando = true;
+
                 const response = await patch(`roles/edit/${rol.id}`, payload);
-                console.log(response);
-                
-                if (!response || !response.success) {
+
+                if (!response?.success) {
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
                     } else {
                         error(response?.message || "Error al actualizar el rol");
                     }
@@ -137,17 +144,17 @@ export const editarModalRol = async (rol) => {
                     return;
                 }
 
-                form.reset();
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Rol actualizado correctamente");
                 rolesController();
-                enviando = false;
 
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
-                enviando = false;
             }
+
+            enviando = false;
         });
     });
 };
+

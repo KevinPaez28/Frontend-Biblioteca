@@ -1,5 +1,5 @@
 import { delet } from "../../../../Helpers/api.js";
-import { success, error, confirm } from "../../../../Helpers/alertas.js";
+import { success, error, confirm, loading } from "../../../../Helpers/alertas.js";
 import eventsController from "../eventsController.js";
 
 export const deleteEvento = async (item) => {
@@ -9,10 +9,10 @@ export const deleteEvento = async (item) => {
     );
 
     if (!result.isConfirmed) return;
+    loading("Eliminando Evento");
 
     try {
         const response = await delet(`eventos/delete/${item.id}`);
-        console.log(item.id);
 
         if (!response || !response.success) {
             if (response?.errors && response.errors.length > 0) {

@@ -20,6 +20,7 @@ import AssitanceController from "../Views/auth/EventAssistance/AssitanceControll
 import RolesController from "../Views/auth/Roles/RolesController.js";
 import HistoriesController from "../Views/auth/Histories/HistoriesController.js";
 import asistenciaController from "../Views/Asistencia/asistenciaController.js";
+import profileController from "../Views/auth/Profile/profileController.js";
 // ================= RUTAS =================
 export const routes = {
 
@@ -146,6 +147,11 @@ export const routes = {
     path: "auth/Histories/index.html",
     controller: HistoriesController,
     meta: { can: "history.index" }
-  }
-
+  },
+  Perfil: {
+    path: "auth/Profile/index.html",
+    controller: profileController,
+    meta: { can: "history.index" }
+  },
+  
 };

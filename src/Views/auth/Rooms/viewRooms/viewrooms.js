@@ -5,13 +5,21 @@ import htmlContent from "./index.html?raw";
 export const abrirModalReason = (item, index) => {
     console.log(item);
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
-        document.querySelector('#modalNombreMotivo').textContent = item.name || `Motivo ${index + 1}`;
-        document.querySelector('#modalDescripcionMotivo').textContent = item.description || '';
-        document.querySelector('#modalEstadoMotivo').textContent =  "Estado: " + item.state.name;
+        modal.querySelector('#modalNombreMotivo').textContent =
+            item.name || `Motivo ${index + 1}`;
 
-        document.querySelector("#btnCerrarModal").addEventListener("click", cerrarModal);
+        modal.querySelector('#modalDescripcionMotivo').textContent =
+            item.description || '';
+
+        modal.querySelector('#modalEstadoMotivo').textContent =
+            "Estado: " + item.state.name;
+
+        modal
+            .querySelector("#btnCerrarModal")
+            .addEventListener("click", () => cerrarModal(modal));
     });
 };
+

@@ -3,7 +3,7 @@ import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlContent from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 import EventsController from "../eventsController.js";
 
 export const editModalEvento = (item) => {
@@ -59,7 +59,7 @@ export const editModalEvento = (item) => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
-
+            loading("Editando Evento");
             const payload = {
                 ...validate.datos,
                 hora_inicio: inputHoraInicio.value,

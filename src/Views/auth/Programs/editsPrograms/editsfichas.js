@@ -2,23 +2,25 @@ import { patch, get } from "../../../../Helpers/api.js";
 import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
-import htmlEditarPrograma from "./index.html?raw"; // tu modal de programas
+import htmlEditarPrograma from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
 import programasController from "../ProgramsController.js";
 
 export const editarModalPrograma = async (programa) => {
-    mostrarModal(htmlEditarPrograma);
+
+    const modal = mostrarModal(htmlEditarPrograma);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formPrograma");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formPrograma");
 
         // ===== PRECARGAR DATOS =====
-        document.querySelector("#inputPrograma").value = programa.training_program  || "";
+        modal.querySelector("#inputPrograma").value =
+            programa.training_program || "";
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        let enviando = false; // evita envíos dobles
+        let enviando = false;
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -33,10 +35,9 @@ export const editarModalPrograma = async (programa) => {
                 const response = await patch(`programa/${programa.id}`, payload);
 
                 if (!response || !response.success) {
+                    cerrarModal(modal);
                     if (response?.errors?.length) {
-                        cerrarModal();
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
                     } else {
                         error(response?.message || "Error al actualizar el programa");
                     }
@@ -45,9 +46,9 @@ export const editarModalPrograma = async (programa) => {
                 }
 
                 form.reset();
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Programa actualizado correctamente");
-                programasController(); // recarga la tabla
+                programasController();
                 enviando = false;
 
             } catch (err) {

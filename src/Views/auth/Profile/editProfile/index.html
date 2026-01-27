@@ -1,0 +1,65 @@
+<form id="formUser" class="modal-contenido" novalidate autocomplete="off">
+
+    <!-- Títulos -->
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Editar Usuario</h3>
+        <p class="modal-subtitulo">
+            Modifica la información del usuario registrado
+        </p>
+    </div>
+
+    <!-- ================= DATOS ================= -->
+    <div class="modal-seccion">
+        <h4>Datos Personales</h4>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label" for="modalInputNombres">Nombres *</label>
+                <input class="input" type="text" id="modalInputNombres" name="nombres" required />
+            </div>
+
+            <div class="form__grupo">
+                <label class="label" for="modalInputApellidos">Apellidos *</label>
+                <input class="input" type="text" id="modalInputApellidos" name="apellidos" required />
+            </div>
+
+            <div class="form__grupo">
+                <label class="label" for="modalInputCorreo">Correo Electrónico *</label>
+                <input class="input" type="email" id="modalInputCorreo" name="correo" required />
+            </div>
+
+            <div class="form__grupo">
+                <label class="label" for="modalInputTelefono">Teléfono</label>
+                <input class="input" type="text" id="modalInputTelefono" name="telefono" />
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= INFORMACIÓN DEL SISTEMA ================= -->
+    <div class="modal-seccion">
+        <h4>Rol y Estado</h4>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label" for="modalSelectRol">Rol *</label>
+                <select class="input" id="modalSelectRol" name="rol"></select>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label" for="modalSelectEstado">Estado *</label>
+                <select class="input" id="modalSelectEstado" name="estado"></select>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" class="btn-cerrar" id="btnCerrarModal">Cerrar</button>
+        <button type="submit" class="btn-editar" id="btnGuardarModal">Guardar cambios</button>
+    </div>
+
+</form>

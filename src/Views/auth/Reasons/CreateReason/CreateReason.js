@@ -3,17 +3,18 @@ import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlCrearMotivo from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 import ReasonController from "../ReasonController.js";
 
 export const abrirModalCrearMotivo = async () => {
-    mostrarModal(htmlCrearMotivo);
+
+    const modal = mostrarModal(htmlCrearMotivo);
 
     requestAnimationFrame(() => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formMotivo");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formMotivo");
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         let enviando = false;
 
@@ -22,31 +23,34 @@ export const abrirModalCrearMotivo = async () => {
             if (enviando) return;
 
             if (!validate.validarCampos(event)) return;
+            loading("Registrando Motivo");
+            cerrarModal(modal);
 
             const payload = { 
                 ...validate.datos,
                 estados_id: 1
-             };
-
+            };
 
             try {
                 enviando = true;
                 const response = await post("motivos/create", payload);
                 
                 if (!response || !response.success) {
-                    cerrarModal();
-                    if (response?.errors && response.errors.length > 0) {
+                    cerrarModal(modal);
+                    if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {
                         error(response?.message || "Error al crear el motivo");
                     }
-                    enviando = false; // desbloqueamos si hay error
+                    enviando = false;
                     return;
                 }
+
                 form.reset();
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Motivo creado correctamente");
-                ReasonController()
+                ReasonController();
+
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");

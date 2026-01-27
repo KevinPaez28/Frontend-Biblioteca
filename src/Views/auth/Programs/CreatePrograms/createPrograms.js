@@ -8,13 +8,13 @@ import programasController from "../ProgramsController.js";
 
 export const abrirModalCrearPrograma = async () => {
 
-    mostrarModal(htmlCrearPrograma);
+    const modal = mostrarModal(htmlCrearPrograma);
 
     requestAnimationFrame(() => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formPrograma");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formPrograma");
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         let enviando = false;
 
@@ -32,8 +32,8 @@ export const abrirModalCrearPrograma = async () => {
 
                 if (!response || !response.success) {
                     if (response?.errors?.length) {
+                        cerrarModal(modal);
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
                     } else {
                         error(response?.message || "Error al crear el programa");
                     }
@@ -41,9 +41,9 @@ export const abrirModalCrearPrograma = async () => {
                     return;
                 }
 
-                cerrarModal();
-                success(response.message || "Programa creado correctamente");
+                cerrarModal(modal);
                 form.reset();
+                success(response.message || "Programa creado correctamente");
                 programasController();
                 enviando = false;
 

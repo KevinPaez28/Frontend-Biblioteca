@@ -6,98 +6,102 @@ import { error, success } from "../../../../Helpers/alertas.js";
 import shiftsController from "../shiftsController.js";
 
 export const editarmodalHorario = async (jornada) => {
-    console.log(jornada);
+    const modal = mostrarModal(html);
 
-    mostrarModal(html);
+    requestAnimationFrame(async () => {
 
-    const horariosContainer = document.getElementById("horariosContainer");
-    const btnCerrarModal = document.getElementById("btnCerrarModal");
-    const btnGuardarAsignacion = document.getElementById("btnGuardarAsignacion");
+        const horariosContainer = modal.querySelector("#horariosContainer");
+        const btnCerrarModal = modal.querySelector("#btnCerrarModal");
+        const btnGuardarAsignacion = modal.querySelector("#btnGuardarAsignacion");
 
-    horariosContainer.innerHTML = "";
-
-    const res = await get("horarios");
-
-    if (res && res.data && res.data.length > 0) {
-
-        res.data.forEach((item) => {
-
-            // ===== CARD =====
-            const label = document.createElement("label");
-            label.classList.add("horario-card");
-
-            // ===== RADIO =====
-            const radio = document.createElement("input");
-            radio.type = "radio";
-            radio.name = "horario_id";
-            radio.classList.add("horario-card__check");
-            radio.value = item.id;
-
-            // ===== INFO =====
-            const info = document.createElement("div");
-            info.classList.add("horario-card__info");
-
-            const nombre = document.createElement("p");
-            nombre.classList.add("horario-card__title");
-            nombre.textContent = item.name;
-
-            const horas = document.createElement("p");
-            horas.classList.add("horario-card__time");
-            horas.textContent = `${item.start_time} - ${item.end_time}`;
-
-            info.appendChild(nombre);
-            info.appendChild(horas);
-
-            label.appendChild(radio);
-            label.appendChild(info);
-
-            horariosContainer.appendChild(label);
-        });
-
-    } else {
-        const p = document.createElement("p");
-        p.textContent = "No hay horarios registrados";
-        horariosContainer.appendChild(p);
-    }
-
-    // ===== CERRAR =====
-    btnCerrarModal.addEventListener("click", cerrarModal);
-
-    // ===== GUARDAR =====
-    btnGuardarAsignacion.addEventListener("click", async () => {
-
-        const seleccionado = document.querySelector(
-            ".horario-card__check:checked"
-        );
-
-        if (!seleccionado) {
-            error("Debes seleccionar un horario");
+        if (!horariosContainer || !btnCerrarModal || !btnGuardarAsignacion) {
+            console.error("Elementos del modal no encontrados");
+            cerrarModal(modal);
             return;
         }
 
-        try {
-            const response = await patch(`jornadas/edit/${jornada.id}`, {
-                nombre: jornada.jornada,
-                horario_id: seleccionado.value
+        horariosContainer.innerHTML = "";
+
+        const res = await get("horarios");
+
+        if (res && res.data && res.data.length > 0) {
+
+            res.data.forEach((item) => {
+
+                const label = document.createElement("label");
+                label.classList.add("horario-card");
+
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "horario_id";
+                radio.classList.add("horario-card__check");
+                radio.value = item.id;
+
+                const info = document.createElement("div");
+                info.classList.add("horario-card__info");
+
+                const nombre = document.createElement("p");
+                nombre.classList.add("horario-card__title");
+                nombre.textContent = item.name;
+
+                const horas = document.createElement("p");
+                horas.classList.add("horario-card__time");
+                horas.textContent = `${item.start_time} - ${item.end_time}`;
+
+                info.appendChild(nombre);
+                info.appendChild(horas);
+
+                label.appendChild(radio);
+                label.appendChild(info);
+
+                horariosContainer.appendChild(label);
             });
-            if (!response || !response.success) {
-                if (response?.errors && response.errors.length > 0) {
-                    cerrarModal();
-                    response.errors.forEach(err => error(err));
-                } else {
-                    cerrarModal();
-                    error(response?.message || "Error al actualizar la jornada");
-                }
+
+        } else {
+            const p = document.createElement("p");
+            p.textContent = "No hay horarios registrados";
+            horariosContainer.appendChild(p);
+        }
+
+        // ===== CERRAR =====
+        btnCerrarModal.addEventListener("click", () => cerrarModal(modal));
+
+        // ===== GUARDAR =====
+        btnGuardarAsignacion.addEventListener("click", async () => {
+
+            const seleccionado = modal.querySelector(".horario-card__check:checked");
+
+            if (!seleccionado) {
+                error("Debes seleccionar un horario");
                 return;
             }
 
-            cerrarModal();
-            shiftsController()
-            success(response.message);
+            try {
+                const response = await patch(`jornadas/edit/${jornada.id}`, {
+                    nombre: jornada.jornada,
+                    horario_id: seleccionado.value
+                });
 
-        } catch (err) {
-            console.error(err);
-            error("Ocurrió un error inesperado");
-        }
+                if (!response || !response.success) {
+                    cerrarModal(modal);
+                    if (response?.errors?.length) {
+                        response.errors.forEach(err => error(err));
+                    } else {
+                        error(response?.message || "Error al actualizar la jornada");
+                    }
+                    return;
+                }
+
+                cerrarModal(modal);
+                shiftsController();
+                success(response.message);
+
+            } catch (err) {
+                console.error(err);
+                error("Ocurrió un error inesperado");
+            }
+        });
+
     });
 };
+

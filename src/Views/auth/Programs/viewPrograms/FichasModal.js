@@ -4,14 +4,15 @@ import htmlContent from "./index.html?raw";
 
 export const abrirModalPrograma = (item, index) => {
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
-        document.querySelector("#modalNombre").textContent = `Programa ${index + 1}`;
-        document.querySelector("#modalPrograma").textContent = item.training_program || "—";
+        modal.querySelector("#modalNombre").textContent = `Programa ${index + 1}`;
+        modal.querySelector("#modalPrograma").textContent =
+            item.training_program || "—";
 
-        document
+        modal
             .querySelector("#btnCerrarModal")
-            .addEventListener("click", cerrarModal);
+            .addEventListener("click", () => cerrarModal(modal));
     });
 };

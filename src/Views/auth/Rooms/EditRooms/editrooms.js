@@ -3,18 +3,18 @@ import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlContent from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 import roomsController from "../roomsController.js";
 
 export const editmodalreason = (item) => {
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formRoom");
-        const inputNombre = document.querySelector("#modalInputNombreSala");
-        const inputDescripcion = document.querySelector("#modalInputDescripcion");
-        const selectEstado = document.querySelector("#modalInputActivo");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formRoom");
+        const inputNombre = modal.querySelector("#modalInputNombreSala");
+        const inputDescripcion = modal.querySelector("#modalInputDescripcion");
+        const selectEstado = modal.querySelector("#modalInputActivo");
 
         // ===== PRECARGAR DATOS =====
         inputNombre.value = item.name;
@@ -34,22 +34,21 @@ export const editmodalreason = (item) => {
             selectEstado.append(op);
         });
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        // CIERRE CORRECTO DEL MODAL
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         let enviando = false;
 
-        // ===== ENVIAR FORM =====
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
-
             if (!validate.validarCampos(e)) return;
-
+            loading("Modificando Motivo");
+            cerrarModal(modal);
             const payload = {
                 ...validate.datos,
                 estado_sala: selectEstado.value
             };
-
 
             try {
                 enviando = true;
@@ -59,18 +58,18 @@ export const editmodalreason = (item) => {
                 if (!response || !response.success) {
                     if (response?.errors && response.errors.length > 0) {
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
+                        cerrarModal(modal);
                     } else {
                         error(response?.message || "Error al actualizar el horario");
                     }
-                    enviando = false; // desbloqueamos si hay error
+                    enviando = false;
                     return;
-
                 }
-                cerrarModal();
+
+                cerrarModal(modal);
                 success(response.message || "Sala actualizada correctamente");
                 form.reset();
-                roomsController(); // refresca tabla
+                roomsController();
                 enviando = false;
 
             } catch (err) {

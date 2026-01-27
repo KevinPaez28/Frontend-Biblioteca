@@ -55,9 +55,11 @@ export default async () => {
             }
             return; 
         }
+        
         // ===== Login exitoso =====
         success(response.message || "Inicio de sesión exitoso");
         localStorage.setItem("role_id", response.data.role_id);
+        localStorage.setItem("user_id", response.data.id);
         localStorage.setItem("permissions",JSON.stringify(response.data.permissions));
         localStorage.setItem("nombres",response.data.names)
         localStorage.setItem("apellido",response.data.last_name)

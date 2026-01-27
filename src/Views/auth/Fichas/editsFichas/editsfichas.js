@@ -2,22 +2,24 @@ import { patch, get } from "../../../../Helpers/api.js";
 import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
-import htmlEditarFicha from "./index.html?raw"; // tu modal de fichas
+import htmlEditarFicha from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
 import fichasController from "../FichasController.js";
 
 export const editarmodalFicha = async (ficha) => {
-    mostrarModal(htmlEditarFicha);
+    const modal = mostrarModal(htmlEditarFicha);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formFicha");
+
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formFicha");
+        const inputFicha = modal.querySelector("#inputFicha");
+        const selectPrograma = modal.querySelector("#inputPrograma");
 
         // ===== PRECARGAR DATOS =====
-        document.querySelector("#inputFicha").value = ficha.ficha || "";
-        
-        // ===== PRECARGAR PROGRAMAS DINÁMICAMENTE =====
-        const selectPrograma = document.querySelector("#inputPrograma");
+        inputFicha.value = ficha.ficha || "";
+
+        // ===== CARGAR PROGRAMAS =====
         const programas = await get("programa");
         if (programas?.data?.length) {
             programas.data.forEach(p => {
@@ -29,14 +31,15 @@ export const editarmodalFicha = async (ficha) => {
             });
         }
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        // ===== CERRAR =====
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        let enviando = false; // evita envíos dobles
+        let enviando = false;
 
+        // ===== SUBMIT =====
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
-
             if (!validate.validarCampos(e)) return;
 
             const payload = { ...validate.datos };
@@ -48,7 +51,6 @@ export const editarmodalFicha = async (ficha) => {
                 if (!response || !response.success) {
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
-                        cerrarModal();
                     } else {
                         error(response?.message || "Error al actualizar la ficha");
                     }
@@ -56,17 +58,17 @@ export const editarmodalFicha = async (ficha) => {
                     return;
                 }
 
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Ficha actualizada correctamente");
                 form.reset();
-                fichasController(); // recarga la tabla
-                enviando = false;
+                fichasController();
 
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
-                enviando = false;
             }
+
+            enviando = false;
         });
     });
 };

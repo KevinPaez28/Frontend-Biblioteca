@@ -79,9 +79,11 @@ export default async () => {
 
     // Trae fichas, programas y roles al mismo tiempo
     
-    const fichas= get("ficha"); 
-    const programas= get("programa");
-    const roles=get("roles");
+    const fichas= await get("ficha"); 
+    
+    const programas= await get("programa");
+    const roles=await get("roles");
+    console.log(roles);
 
     
     // Llena select de roles
@@ -92,7 +94,7 @@ export default async () => {
         selectRol.append(op);
     });
 
-    // Llena select de fichas
+    // // Llena select de fichas
     fichas.data.forEach(f => {
         const op = document.createElement("option");
         op.value = f.id;
@@ -100,7 +102,7 @@ export default async () => {
         selectFicha.append(op);
     });
 
-    // Llena select de programas
+    // // Llena select de programas
     programas.data.forEach(p => {
         const op = document.createElement("option");
         op.value = p.id;

@@ -6,6 +6,11 @@ let modalesAbiertos = [];
  */
 export const mostrarModal = (contenido) => {
     // Ocultar último modal si existe
+    if (modalesAbiertos.length > 0) {
+        const existente = modalesAbiertos[modalesAbiertos.length - 1];
+        existente.innerHTML = contenido; // solo cambia contenido
+        return existente;
+    }
     const ultimo = modalesAbiertos[modalesAbiertos.length - 1];
     if (ultimo) ultimo.classList.add('invisible');
 

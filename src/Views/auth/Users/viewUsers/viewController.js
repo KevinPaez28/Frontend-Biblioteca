@@ -4,33 +4,34 @@ import htmlContent from "./index.html?raw";
 
 export const abrirModalUsuario = (item, index) => {
 
-    mostrarModal(htmlContent);
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(() => {
 
-        document.querySelector("#modalDocumentoUsuario").textContent =
-            item.document || "—";
+        const documento = modal.querySelector("#modalDocumentoUsuario");
+        const nombre = modal.querySelector("#modalNombreUsuario");
+        const apellido = modal.querySelector("#modalApellidoUsuario");
+        const telefono = modal.querySelector("#modalTelefonoUsuario");
+        const correo = modal.querySelector("#modalCorreoUsuario");
+        const rol = modal.querySelector("#modalRolUsuario");
+        const estado = modal.querySelector("#modalEstadoUsuario");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
 
-        document.querySelector("#modalNombreUsuario").textContent =
-            item.first_name || `Usuario ${index + 1}`;
+        if (!documento || !nombre || !apellido || !telefono || !correo || !rol || !estado || !btnCerrar) {
+            console.error("Elementos del modal usuario no encontrados");
+            cerrarModal(modal);
+            return;
+        }
 
-        document.querySelector("#modalApellidoUsuario").textContent =
-            item.last_name || "—";
+        documento.textContent = item.document || "—";
+        nombre.textContent = item.first_name || `Usuario ${index + 1}`;
+        apellido.textContent = item.last_name || "—";
+        telefono.textContent = item.phone_number || "—";
+        correo.textContent = item.email || "—";
+        rol.textContent = item.rol || "—";
+        estado.textContent = "Estado: " + (item.estado || "—");
 
-        document.querySelector("#modalTelefonoUsuario").textContent =
-            item.phone_number || "—";
-
-        document.querySelector("#modalCorreoUsuario").textContent =
-            item.email || "—";
-
-        document.querySelector("#modalRolUsuario").textContent =
-            item.rol || "—";
-
-        document.querySelector("#modalEstadoUsuario").textContent =
-            "Estado: " + (item.estado || "—");
-
-        document
-            .querySelector("#btnCerrarModal")
-            .addEventListener("click", cerrarModal);
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
     });
 };
+    

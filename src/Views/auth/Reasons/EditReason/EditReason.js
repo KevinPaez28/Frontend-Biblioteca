@@ -3,18 +3,19 @@ import * as validate from "../../../../Helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlContent from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../Helpers/alertas.js";
 import reasonsController from "../ReasonController.js";
 
 export const editmodalreason = (item) => {
-    mostrarModal(htmlContent);
+
+    const modal = mostrarModal(htmlContent);
 
     requestAnimationFrame(async () => {
-        const btnCerrar = document.querySelector("#btnCerrarModal");
-        const form = document.querySelector("#formReason"); // 👈 tu form del modal
-        const inputNombre = document.querySelector("#modalInputNombreMotivo");
-        const inputDescripcion = document.querySelector("#modalInputDescripcion");
-        const selectEstado = document.querySelector("#modalInputActivo");
+        const btnCerrar = modal.querySelector("#btnCerrarModal");
+        const form = modal.querySelector("#formReason");
+        const inputNombre = modal.querySelector("#modalInputNombreMotivo");
+        const inputDescripcion = modal.querySelector("#modalInputDescripcion");
+        const selectEstado = modal.querySelector("#modalInputActivo");
 
         // ===== PRECARGAR DATOS =====
         inputNombre.value = item.name;
@@ -34,9 +35,9 @@ export const editmodalreason = (item) => {
             selectEstado.append(op);
         });
 
-        btnCerrar.addEventListener("click", cerrarModal);
+        btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        let enviando = false; // misma bandera
+        let enviando = false;
 
         // ===== ENVIAR FORM =====
         form.addEventListener("submit", async (e) => {
@@ -45,6 +46,7 @@ export const editmodalreason = (item) => {
 
             if (!validate.validarCampos(e)) return;
 
+            loading("Actualizando Motivo");
             const payload = {
                 ...validate.datos,
                 estados_id: selectEstado.value
@@ -57,28 +59,27 @@ export const editmodalreason = (item) => {
                 console.log(response);
                 
                 if (!response || !response.success) {
-                    if (response?.errors && response.errors.length > 0) {
-                        cerrarModal();
+                    cerrarModal(modal);
+                    if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {
-                        cerrarModal();
                         error(response?.message || "Error al actualizar el motivo");
                     }
                     enviando = false;
                     return;
                 }
 
-                cerrarModal();
+                cerrarModal(modal);
                 success(response.message || "Motivo actualizado correctamente");
                 form.reset();
-                reasonsController(); // refresca tabla
-                enviando = false;
+                reasonsController();
 
             } catch (err) {
                 console.error(err);
                 error("Ocurrió un error inesperado");
-                enviando = false;
             }
+
+            enviando = false;
         });
     });
 };

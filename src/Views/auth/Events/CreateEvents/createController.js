@@ -29,11 +29,12 @@ export const abrirModalCrearEvento = async () => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
-
+            
             loading("Creando evento");
+            cerrarModal(modal);
 
             const { fecha, hora, ...resto } = validate.datos;
-
+            
             const payload = {
                 ...resto,
                 fecha: `${fecha}`,
