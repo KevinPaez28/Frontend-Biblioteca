@@ -1,0 +1,61 @@
+<form id="formCambiarPassword" class="modal-contenido" novalidate autocomplete="off">
+
+    <!-- ================= TÍTULOS ================= -->
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Cambiar Contraseña</h3>
+        <p class="modal-subtitulo">
+            Ingresa tu contraseña actual y elige una nueva contraseña segura
+        </p>
+    </div>
+
+    <!-- ================= SEGURIDAD ================= -->
+    <div class="modal-seccion">
+
+        <div class="modal-grid vertical">
+
+            <div class="form__grupo">
+                <label class="label">Contraseña Actual *</label>
+                <input type="password" name="current_password" class="input-filter" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="form__label">Nueva Contraseña:</label>
+                <input class="input-filter" type="password" id="newPassword" name="newPassword" required minlength="8">
+            </div>
+        </div>
+
+        <!-- Reglas -->
+        <div class="instrucciones-import">
+            <ul>
+                <p class="rules-title">La contraseña debe contener:</p>
+                <li>Al menos 8 caracteres</li>
+                <li>Al menos una letra mayúscula</li>
+                <li>Al menos una letra minúscula</li>
+                <li>Al menos un número</li>
+                <li>Al menos un carácter especial</li>
+            </ul>
+        </div>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label">Confirmar Nueva Contraseña *</label>
+                <input class="input-filter" type="password" id="confirmPassword" name="confirmPassword" minlength="8" required>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" class="btn-cerrar" id="btnCerrarModal">
+            Cancelar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Guardar Cambios
+        </button>
+    </div>
+
+</form>

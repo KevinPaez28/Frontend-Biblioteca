@@ -4,7 +4,7 @@ import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlUserModal from "./index.html?raw";
 import { success, error, loading } from "../../../../Helpers/alertas.js";
-
+import profileController from "../profileController.js"
 export const editUserModal = (user) => {
     const modal = mostrarModal(htmlUserModal);
 
@@ -12,6 +12,7 @@ export const editUserModal = (user) => {
         const btnCerrar = modal.querySelector("#btnCerrarModal");
         const form = modal.querySelector("#formUser");
 
+        const inputDocumento = modal.querySelector("#modalInputDocumento");
         const inputNombres = modal.querySelector("#modalInputNombres");
         const inputApellidos = modal.querySelector("#modalInputApellidos");
         const inputCorreo = modal.querySelector("#modalInputCorreo");
@@ -19,12 +20,13 @@ export const editUserModal = (user) => {
         const selectRol = modal.querySelector("#modalSelectRol");
         const selectEstado = modal.querySelector("#modalSelectEstado");
 
-        // ===== PRECARGAR DATOS =====
-        inputNombres.value = user.nombres;
-        inputApellidos.value = user.apellidos;
-        inputCorreo.value = user.correo;
-        inputTelefono.value = user.telefono;
-
+        // ===== PRECARGAR DATOS ===== 
+        inputDocumento.value = user.document || "";
+        inputNombres.value = user.first_name || "";
+        inputApellidos.value = user.last_name || "";
+        inputCorreo.value = user.email || "";
+        inputTelefono.value = user.phone_number || "";
+        
         // ===== RELLENAR SELECT DE ROLES =====
         const roles = await get("roles"); // Endpoint para roles
         roles.data.forEach(r => {
@@ -36,14 +38,7 @@ export const editUserModal = (user) => {
         });
 
         // ===== RELLENAR SELECT DE ESTADOS =====
-        const estados = await get("estadosUsuarios"); // Endpoint para estados de usuario
-        estados.data.forEach(e => {
-            const op = document.createElement("option");
-            op.value = e.id;
-            op.textContent = e.name;
-            if (e.id === user.estado_id) op.selected = true;
-            selectEstado.append(op);
-        });
+       
 
         // CIERRE DEL MODAL
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
@@ -56,19 +51,25 @@ export const editUserModal = (user) => {
             if (!validate.validarCampos(e)) return;
 
             loading("Modificando Usuario");
+            cerrarModal(modal);
 
             const payload = {
                 ...validate.datos,
+                usuario: user.id,             
                 rol_id: selectRol.value,
-                estado_id: selectEstado.value
+                status_id: 1
             };
+
+            console.log(payload);
+            
 
             try {
                 enviando = true;
-                const response = await patch(`usuarios/${user.id}`, payload);
+                const response = await patch(`user/${user.id}`, payload);
 
                 if (!response || !response.success) {
-                    if (response?.errors && response.errors.length > 0) {
+                  cerrarModal(modal);
+                  if (response?.errors && response.errors.length > 0) {
                         response.errors.forEach(err => error(err));
                     } else {
                         error(response?.message || "Error al actualizar el usuario");
@@ -80,8 +81,7 @@ export const editUserModal = (user) => {
                 cerrarModal(modal);
                 success(response.message || "Usuario actualizado correctamente");
                 form.reset();
-                // Recargar la lista de usuarios
-                usersController();
+                profileController();
                 enviando = false;
 
             } catch (err) {

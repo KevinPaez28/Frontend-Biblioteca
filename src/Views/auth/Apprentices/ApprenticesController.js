@@ -3,6 +3,7 @@ import { abrirModalCrearAprendiz } from "./CreateApprentices/createController.js
 import { editModalAprendiz } from "./EditApprentices/ApprenticeseditController.js";
 import { importApprenties } from "./importApprentices/imporApprentices.js";
 import { abrirModalAprendiz } from "./viewApprentices/viewController.js";
+import { deleteUsuario } from "./DeleteApprentices/deleteController.js"; // 👈 AÑADIDO
 import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
 import "../../../Styles/Assitances/assistances.css";
@@ -122,6 +123,14 @@ export default async () => {
                     btnEditar.textContent = "Editar";
                     btnEditar.addEventListener("click", () => editModalAprendiz(item));
                     td7.append(btnEditar);
+                }
+
+                if (tienePermiso("users.destroy")) {
+                    const btnEliminar = document.createElement("button");
+                    btnEliminar.classList.add("btn-eliminar");
+                    btnEliminar.textContent = "Eliminar";
+                    btnEliminar.addEventListener("click", () => deleteUsuario(item));
+                    td7.append(btnEliminar);
                 }
 
                 tr.append(td1, td2, td3, td4, td5, td6, td7);

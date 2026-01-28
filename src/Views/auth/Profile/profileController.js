@@ -3,12 +3,12 @@ import { get } from "../../../Helpers/api.js";
 import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
 import { editUserModal } from "./editProfile/editprofile.js";
+import { abrirModalCambiarPassword } from "./Reset_password/resetController.js"; 
 
 export default async () => {
   const contenedor = document.querySelector(".contenido-dashboard");
   const btnEditar = document.getElementById("btnEditarPerfil");
-
-  // Campos del perfil
+  const linkCambiarPass = document.getElementById("perfil-cambiar-pass"); 
   const camposPerfil = {
     documento: document.getElementById("perfil-documento"),
     nombres: document.getElementById("perfil-nombres"),
@@ -17,12 +17,10 @@ export default async () => {
     telefono: document.getElementById("perfil-telefono"),
   };
 
-  // Ocultar botón si no tiene permiso de actualización
   if (!tienePermiso("users.update") && btnEditar) {
     btnEditar.style.display = "none";
   }
 
-  // Función para cargar datos del perfil
   const cargarPerfil = async () => {
     try {
       showSpinner(contenedor);
@@ -30,9 +28,16 @@ export default async () => {
       const userId = localStorage.getItem("user_id");
       const res = await get(`user/profile/${userId}`);
       const data = res.data;
-    
-      console.log(res);
-      
+
+      btnEditar?.addEventListener("click", () => {
+        editUserModal(data);
+      });
+
+      linkCambiarPass?.addEventListener("click", (e) => {
+        e.preventDefault();
+        abrirModalCambiarPassword(data);
+      });
+
       if (data) {
         camposPerfil.documento.textContent = data.document || "-";
         camposPerfil.nombres.textContent = data.first_name || "-";
@@ -42,22 +47,10 @@ export default async () => {
       }
     } catch (error) {
       console.error("Error cargando perfil:", error);
-      Object.values(camposPerfil).forEach((campo) => {
-      });
     } finally {
-      try {
-        hideSpinner(contenedor);
-      } catch (spinnerError) {
-        console.error("Error al ocultar spinner:", spinnerError);
-      }
+      hideSpinner(contenedor);
     }
   };
 
-    btnEditar.addEventListener("click", () => {
-      editUserModal();
-    });
-  
-
-  // INIT
   await cargarPerfil();
 };

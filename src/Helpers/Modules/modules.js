@@ -192,12 +192,28 @@ export const validarCampos = (event, contexto = null) => {
     }
 
     if (campo.type === "password" && !campo.closest(".form__grupo").classList.contains("oculto")) {
+
+      let passOk = true;
+
       if (contexto === "login") {
-        okCampo = validarPasswordLogin({ target: campo }) && okCampo;
-      } else {
-        okCampo = validarPassword({ target: campo }) && okCampo;
+        passOk = validarPasswordLogin({ target: campo });
+      }
+      else if (campo.name === "current_password") {
+        passOk = validarCampo({ target: campo });
+      }
+      else {
+        passOk = validarPassword({ target: campo });
+      }
+
+      if (!passOk) {
+        okCampo = false;
+        errores.push({
+          campo: nombre,
+          mensaje: campo.closest(".form__grupo").style.getPropertyValue("--error-message")
+        });
       }
     }
+
 
 
     // Validación de vacío

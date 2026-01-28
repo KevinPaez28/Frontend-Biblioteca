@@ -1,6 +1,6 @@
 import { delet } from "../../../../Helpers/api.js";
-import { success, error, confirm } from "../../../../Helpers/alertas.js";
-import UsersController from "../UsersController.js";
+import { success, error, confirm, loading } from "../../../../Helpers/alertas.js";
+import UsersController from "../ApprenticesController.js";
 
 export const deleteUsuario = async (item) => {
 
@@ -9,6 +9,7 @@ export const deleteUsuario = async (item) => {
     );
 
     if (!result.isConfirmed) return;
+    loading("eliminando Aprendiz")
 
     try {
         const response = await delet(`user/delete/${item.id}`);

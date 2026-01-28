@@ -75,6 +75,30 @@
     justify-content: center;
 }
 
+/* 🔥 ARREGLO DEL LINK DE PERFIL */
+.sidebar__profile-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    text-decoration: none;
+    color: #fff;
+}
+
+/* 🔥 ICONO EN CÍRCULO BLANCO OTRA VEZ */
+.sidebar__profile-link i {
+    background-color: #fff;
+    color: #328a07;
+    padding: 8px;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+.sidebar__profile-link:hover {
+    opacity: 0.9;
+}
+
 .Perfil{
     padding: 7px;
     background-color: #fff;
