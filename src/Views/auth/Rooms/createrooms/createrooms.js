@@ -14,43 +14,41 @@ export const abrirModalCrearArea = async () => {
 
         const btnCerrar = modal.querySelector("#btnCerrarModal");
         const form = modal.querySelector("#formArea");
-
         if (!form) return;
 
-        btnCerrar.addEventListener("click", () => cerrarModal(modal));
+        btnCerrar.onclick = () => cerrarModal(modal); // 🔥 no se acumula
 
         let enviando = false;
 
-        form.addEventListener("submit", async (event) => {
+        form.onsubmit = async (event) => {   // 🔥 no se acumula
             event.preventDefault();
             if (enviando) return;
 
             if (!validate.validarCampos(event)) return;
+
+            enviando = true;
             loading("Registrando Area");
             cerrarModal(modal);
+
             const payload = {
                 ...validate.datos,
                 estado_id: 1
             };
 
             try {
-                enviando = true;
-
                 const response = await post("salas/create", payload);
 
                 if (!response || !response.success) {
-
                     cerrarModal(modal);
-
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {
                         error(response?.message || "Error al crear el área");
                     }
-
                     enviando = false;
                     return;
                 }
+
                 form.reset();
                 cerrarModal(modal);
                 success(response.message || "Área creada correctamente");
@@ -62,6 +60,7 @@ export const abrirModalCrearArea = async () => {
             }
 
             enviando = false;
-        });
+        };
     });
 };
+

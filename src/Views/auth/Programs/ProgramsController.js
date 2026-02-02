@@ -4,6 +4,8 @@ import { abrirModalPrograma } from "./viewPrograms/FichasModal.js";
 import { editarModalPrograma } from "./editsPrograms/editsfichas.js";
 import { abrirModalCrearPrograma } from "./CreatePrograms/createPrograms.js";
 import { tienePermiso } from "../../../helpers/auth.js";
+import { deletePrograma } from "./deletePrograms/deleteProgram.js";
+
 
 export default async () => {
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
@@ -61,13 +63,14 @@ export default async () => {
                         });
                         td3.appendChild(btnEditar);
                     }
-
-                    // Botón ELIMINAR condicional
+                    
                     if (tienePermiso("programs.destroy")) {
                         const btnEliminar = document.createElement("button");
                         btnEliminar.classList.add("btn-eliminar");
                         btnEliminar.textContent = "Eliminar";
-                        // Agregar event listener cuando lo tengas
+                        btnEliminar.addEventListener("click", () => {
+                            deletePrograma(item);
+                        });
                         td3.appendChild(btnEliminar);
                     }
 
@@ -81,7 +84,7 @@ export default async () => {
             } else {
                 const tr = document.createElement("tr");
                 const td = document.createElement("td");
-                td.colSpan = 3; // #, Programa, Acciones
+                td.colSpan = 3;
                 td.textContent = "No hay programas registrados";
                 tr.appendChild(td);
                 tbody.appendChild(tr);

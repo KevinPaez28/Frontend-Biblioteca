@@ -4,6 +4,7 @@ import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
 import htmlCrearHorario from "./index.html?raw";
 import { success, error, loading } from "../../../../Helpers/alertas.js";
+import schedulesController from "../schedulesController.js";
 
 export const abrirModalCrearHorario = async () => {
     // Evitar abrir más de un modal de crear horario
@@ -56,6 +57,7 @@ export const abrirModalCrearHorario = async () => {
 
             form.reset();
             cerrarModal(modal);
+            schedulesController()
             success(response.message || "Horario creado correctamente");
 
         } catch (err) {

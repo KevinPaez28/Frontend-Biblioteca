@@ -142,5 +142,5 @@ export const abrirModalCrearAprendiz = async () => {
     };
 
     form.removeEventListener("submit", handleSubmit); // limpieza por seguridad
-    form.addEventListener("submit", handleSubmit);
+  form.addEventListener("submit", handleSubmit);
 };

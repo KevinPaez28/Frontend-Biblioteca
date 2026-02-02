@@ -13,11 +13,14 @@ export default async () => {
     const inputBuscar = document.querySelector(".input-filter");
     const btnBuscar = document.querySelector(".btn-outline");
 
+    // 🔹 BOTÓN NUEVO MOTIVO
     if (btnNuevoMotivo) {
+        btnNuevoMotivo.onclick = null; // limpia eventos anteriores
+
         if (tienePermiso("reasons.store")) {
-            btnNuevoMotivo.addEventListener("click", () => {
+            btnNuevoMotivo.onclick = () => {
                 abrirModalCrearMotivo();
-            });
+            };
         } else {
             btnNuevoMotivo.style.display = "none";
         }
@@ -31,7 +34,6 @@ export default async () => {
             tbody.innerHTML = "";
 
             if (motivos && motivos.data && motivos.data.length > 0) {
-                console.log(motivos);
 
                 motivos.data.forEach((item, index) => {
                     const tr = document.createElement("tr");
@@ -61,18 +63,14 @@ export default async () => {
                     const btnVer = document.createElement("button");
                     btnVer.classList.add("btn-ver");
                     btnVer.textContent = "Ver";
-                    btnVer.addEventListener("click", () => {
-                        abrirModalReason(item, index);
-                    });
+                    btnVer.onclick = () => abrirModalReason(item, index);
                     td5.appendChild(btnVer);
 
                     if (tienePermiso("reasons.update")) {
                         const btnEditar = document.createElement("button");
                         btnEditar.classList.add("btn-editar");
                         btnEditar.textContent = "Editar";
-                        btnEditar.addEventListener("click", () => {
-                            editmodalreason(item, index);
-                        });
+                        btnEditar.onclick = () => editmodalreason(item, index);
                         td5.appendChild(btnEditar);
                     }
 
@@ -80,9 +78,7 @@ export default async () => {
                         const btnEliminar = document.createElement("button");
                         btnEliminar.classList.add("btn-eliminar");
                         btnEliminar.textContent = "Eliminar";
-                        btnEliminar.addEventListener("click", () => {
-                            deleteShifts(item)
-                        });
+                        btnEliminar.onclick = () => deleteShifts(item);
                         td5.appendChild(btnEliminar);
                     }
 
@@ -114,26 +110,21 @@ export default async () => {
             tr.appendChild(td);
             tbody.appendChild(tr);
         } finally {
-            try {
-                if (contenedor) {
-                    hideSpinner(contenedor);
-                }
-            } catch (spinnerError) {
-                console.error("Error al ocultar spinner:", spinnerError);
-            }
+            if (contenedor) hideSpinner(contenedor);
         }
     };
 
+    // 🔹 FILTROS (SIN DUPLICAR EVENTOS)
     if (btnBuscar && inputBuscar) {
-        btnBuscar.addEventListener("click", () => {
+        btnBuscar.onclick = () => {
             cargarMotivos(inputBuscar.value.trim());
-        });
+        };
 
-        inputBuscar.addEventListener("keyup", (e) => {
+        inputBuscar.onkeyup = (e) => {
             if (e.key === "Enter") {
                 cargarMotivos(inputBuscar.value.trim());
             }
-        });
+        };
     }
 
     await cargarMotivos();

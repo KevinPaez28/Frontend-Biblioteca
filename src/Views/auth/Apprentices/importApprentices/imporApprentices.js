@@ -21,7 +21,7 @@ export const importApprenties = () => {
         let enviando = false;
 
         // ===== SUBMIT =====
-        form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
 
@@ -38,7 +38,6 @@ export const importApprenties = () => {
                 loading("Registrando aprendices...");
 
                 const response = await postFile("user/import", archivo);
-                console.log(response);
                 
                 closeAlert();
 
@@ -76,7 +75,7 @@ export const importApprenties = () => {
 
                 // ===== Importación exitosa =====
                 cerrarModal(modal);
-                success(response.message || "Importación exitosa");
+                success("Importación exitosa");
                 await ApprenticesController();
                 enviando = false;
 

@@ -28,7 +28,6 @@ Chart.register(
 // ===================== GRÁFICA DE LÍNEAS =====================
 export async function cargarGraficaLineas() {
     const result = await get("asistencia/estadisticas/mes");
-    console.log("LINEAS:", result);
 
     if (!result || !result.data) return;
 
@@ -57,7 +56,6 @@ export async function cargarGraficaLineas() {
 // ===================== GRÁFICA CIRCULAR =====================
 export async function cargarGraficaCircular() {
     const result = await get("asistencia/estadisticas/eventos");
-    console.log("BY EVENT:", result);
 
     if (!result || !result.data) return;
 

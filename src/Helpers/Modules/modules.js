@@ -238,7 +238,6 @@ export const validarCampos = (event, contexto = null) => {
   });
 
   if (!valido) {
-    console.log("Errores de validación:", errores); // <-- imprime errores
   }
   return valido;
 };

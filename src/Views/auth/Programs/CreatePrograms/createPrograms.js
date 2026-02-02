@@ -18,7 +18,7 @@ export const abrirModalCrearPrograma = async () => {
 
         let enviando = false;
 
-        form.addEventListener("submit", async (event) => {
+      form.addEventListener("submit", async (event) => {
             event.preventDefault();
             if (enviando) return;
 

@@ -23,7 +23,7 @@ export const abrirModalCrearUsuario = async () => {
 
         let enviando = false;
 
-        form.addEventListener("submit", async (event) => {
+      form.addEventListener("submit", async (event) => {
             event.preventDefault();
             if (enviando) return;
 
@@ -52,7 +52,7 @@ export const abrirModalCrearUsuario = async () => {
 
                 cerrarModal(modal);
                 success(response.message || "Usuario creado correctamente");
-                UsersController();
+                cargarUsuarios();
 
             } catch (err) {
                 console.error(err);
@@ -64,6 +64,7 @@ export const abrirModalCrearUsuario = async () => {
 
         // ===== CARGAR ROLES =====
         try {
+            selectRol.innerHTML = '<option value="">Seleccione un rol</option>'; 
             const roles = await get("roles");
             roles.data.forEach(r => {
                 const op = document.createElement("option");

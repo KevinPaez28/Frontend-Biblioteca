@@ -75,7 +75,7 @@ export default async () => {
 
     // ================= SUBMIT DEL FORMULARIO =================
     
-    form.addEventListener("submit", async (event) => {
+  form.addEventListener("submit", async (event) => {
         event.preventDefault(); // Evitamos el envío por defecto
 
         // Validaciones generales antes de enviar
@@ -86,7 +86,6 @@ export default async () => {
 
         // Enviamos datos a la API
         const response = await post("asistencia/create", data);
-        console.log(data);
         console.count("POST asistencia");
 
         

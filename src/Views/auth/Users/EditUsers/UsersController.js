@@ -66,7 +66,7 @@ export const editModalUsuario = (item) => {
 
         let enviando = false;
 
-        form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
 

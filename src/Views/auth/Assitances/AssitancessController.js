@@ -76,10 +76,8 @@ export default async () => {
             });
 
             const url = `asistencia?${params.toString()}`;
-            console.log("🔄 URL:", url);
 
             const response = await get(url);
-            console.log("📊 Response:", response);
 
             // Limpiar tabla y paginación
             tabla.innerHTML = "";

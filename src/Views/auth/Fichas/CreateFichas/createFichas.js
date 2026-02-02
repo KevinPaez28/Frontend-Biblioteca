@@ -35,7 +35,7 @@ export const abrirModalCrearFicha = async () => {
         // ===== SUBMIT =====
         let enviando = false;
 
-        form.addEventListener("submit", async (event) => {
+      form.addEventListener("submit", async (event) => {
             event.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(event)) return;

@@ -40,7 +40,7 @@ export const editmodalreason = (item) => {
         let enviando = false;
 
         // ===== ENVIAR FORM =====
-        form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
 
@@ -56,7 +56,6 @@ export const editmodalreason = (item) => {
                 enviando = true;
 
                 const response = await patch(`motivos/${item.id}`, payload);
-                console.log(response);
                 
                 if (!response || !response.success) {
                     cerrarModal(modal);

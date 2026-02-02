@@ -3,7 +3,6 @@ import "../../../../Components/Models/modal.css";
 import htmlContent from "./index.html?raw";
 
 export const abrirModalReason = (item, index) => {
-    console.log(item);
     
     const modal = mostrarModal(htmlContent);
 

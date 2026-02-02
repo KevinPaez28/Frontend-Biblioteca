@@ -23,7 +23,6 @@ export const deleteAsistenciasFicha = async (item, eventoNombre = null) => {
 
         // 3. Llamamos al endpoint DELETE
         const response = await delet(`asistencia/delete/ficha?${params.toString()}`);
-        console.log(response);
         
         // 4. Manejo de errores
         if (!response || response.error) {

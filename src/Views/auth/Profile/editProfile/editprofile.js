@@ -45,7 +45,7 @@ export const editUserModal = (user) => {
 
         let enviando = false;
 
-        form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
@@ -60,7 +60,6 @@ export const editUserModal = (user) => {
                 status_id: 1
             };
 
-            console.log(payload);
             
 
             try {

@@ -26,12 +26,11 @@ export default async () => {
     // Bandera para evitar envíos dobles
     let enviando = false;
 
-    form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (enviando) return; // si ya se está enviando, no hacemos nada
 
         if (!validate.validarCampos(e, "reset-password")) {
-            console.log("Campos inválidos");
             return;
         }
 
@@ -41,7 +40,6 @@ export default async () => {
             password_confirmation: validate.datos.confirmPassword,
         };
 
-        console.log("Datos a enviar:", data);
 
         enviando = true; // bloqueamos nuevos envíos
 

@@ -37,7 +37,6 @@ export const tienePermiso = (permiso) => {
   try {
     const permisosArray = JSON.parse(permisosGuardados);
     const permisos = Array.isArray(permisosArray) ? permisosArray : [];
-    console.log('Permisos:', permisos, '| Tiene', permiso, ':', permisos.includes(permiso));
     
     return permisos.includes(permiso);
   } catch (e) {

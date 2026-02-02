@@ -24,13 +24,12 @@ export default async () => {
 
     let enviando = false;
 
-    form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         if (enviando) return; // evita doble envío
 
         if (!validate.validarCampos(e, "login")) {
-            console.log("Campos inválidos");
             return;
         }
 
@@ -38,7 +37,6 @@ export default async () => {
             document: String(validate.datos.document)
         };
 
-        console.log("Datos a enviar:", data);
 
         enviando = true; // bloqueamos mientras se procesa la petición
 

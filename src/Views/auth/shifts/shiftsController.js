@@ -29,7 +29,6 @@ export default async () => {
       }
 
       const jornadas = await get("jornadas/complete");
-      console.log("✅ Response jornadas:", jornadas);
 
       cardsContainer.innerHTML = "";
 

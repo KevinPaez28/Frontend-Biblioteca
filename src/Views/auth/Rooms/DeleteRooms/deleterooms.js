@@ -12,7 +12,6 @@ export const deleteAreas = async (item) => {
     loading("Eliminand Area");
     try {
         const response = await delet(`salas/delete/${item.id}`);
-        console.log(item.id);
 
         if (!response || !response.success) {
             if (response?.errors && response.errors.length > 0) {

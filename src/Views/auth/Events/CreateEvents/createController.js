@@ -25,7 +25,7 @@ export const abrirModalCrearEvento = async () => {
         let enviando = false;
 
         // ================== EVENTO SUBMIT ==================
-        form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;

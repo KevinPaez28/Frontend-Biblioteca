@@ -28,11 +28,10 @@ export default async () => {
     });
 
     // ================= SUBMIT DEL FORMULARIO =================
-    form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         if (!validate.validarCampos(e, "login")) {
-            console.log("dañado");
             return;
         }
 
@@ -44,7 +43,6 @@ export default async () => {
 
         
         const response = await login(data);
-        console.log(response);
         
         // ===== Manejo de errores =====
         if (!response.ok || (response.errors && response.errors.length > 0)) {

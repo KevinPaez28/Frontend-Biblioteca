@@ -22,7 +22,7 @@ export const editarModalPrograma = async (programa) => {
 
         let enviando = false;
 
-        form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
 

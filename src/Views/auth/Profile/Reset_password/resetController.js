@@ -38,13 +38,12 @@ export const abrirModalCambiarPassword = (item) => {
 
         // ================= SUBMIT =================
         let enviando = false;
-        form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
 
             // Validar todos los campos
             if (!validate.validarCampos(e)) {
-                console.log("Campos inválidos");
                 return;
             }     
             loading("Actualizando contraseña...");

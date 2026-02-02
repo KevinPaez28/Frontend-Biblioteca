@@ -12,7 +12,6 @@ export const deleteFicha = async (item) => {
 
     try {
         const response = await delet(`ficha/delete/${item.id}`);
-        console.log(item.id);
 
         if (!response || !response.success) {
             if (response?.errors && response.errors.length > 0) {

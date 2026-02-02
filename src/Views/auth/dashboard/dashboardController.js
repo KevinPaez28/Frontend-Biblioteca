@@ -49,7 +49,6 @@ export default async () => {
 
     // ================= EVENTOS =================
     const eventos = await get("eventos/today"); // endpoint GET
-    console.log(eventos);
   
     const contenedorEventos = document.querySelector(".eventos-lista");
 

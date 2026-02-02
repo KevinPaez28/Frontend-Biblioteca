@@ -21,7 +21,7 @@ export default async () => {
 
 
     // ================= EVENTO SUBMIT DEL FORMULARIO =================
-    form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (e) => {
 
         // Evita que la página se recargue
         e.preventDefault();
@@ -83,7 +83,6 @@ export default async () => {
     
     const programas= await get("programa");
     const roles=await get("roles");
-    console.log(roles);
 
     
     // Llena select de roles

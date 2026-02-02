@@ -13,7 +13,7 @@ export const abrirModalExportAsistencias = async () => {
 
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        form.addEventListener("submit", async (event) => {
+      form.addEventListener("submit", async (event) => {
             event.preventDefault();
 
             const fechaInicio = modal.querySelector("#filtroFechaInicio").value;

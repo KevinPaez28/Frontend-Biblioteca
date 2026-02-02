@@ -23,6 +23,8 @@ export default async () => {
 
       const jornadas = await get(`horarios/jornadas?search=${search}`);
 
+
+
       tbody.innerHTML = "";
 
       if (jornadas && jornadas.data && jornadas.data.length > 0) {
@@ -57,21 +59,14 @@ export default async () => {
 
           const jornadaLower = item.jornada.toLowerCase();
 
-          if (jornadaLower.includes("mañana")) {
-            spanJornada.classList.add("badge-morning");
-            spanJornada.textContent = "Mañana";
-          } else if (jornadaLower.includes("tarde")) {
-            spanJornada.classList.add("badge-afternoon");
-            spanJornada.textContent = "Tarde";
-          } else {
-            spanJornada.classList.add("badge-night");
-            spanJornada.textContent = "Noche";
-          }
+          spanJornada.classList.add("badge-morning");
+          spanJornada.textContent = item.jornada;
+
 
           td5.appendChild(spanJornada);
 
           const td6 = document.createElement("td");
-          
+
           const btnVer = document.createElement("button");
           btnVer.classList.add("btn-ver");
           btnVer.textContent = "Ver";
@@ -95,7 +90,7 @@ export default async () => {
             btnEliminar.classList.add("btn-eliminar");
             btnEliminar.textContent = "Eliminar";
             btnEliminar.addEventListener("click", () => {
-              
+
             });
             td6.appendChild(btnEliminar);
           }

@@ -12,7 +12,6 @@ export const deleteShifts = async (item, horariosDiv) => {
 
     try {
         const response = await delet(`motivos/delete/${item.id}`)
-        console.log(item.id);
         
 
         if (!response || !response.success) {

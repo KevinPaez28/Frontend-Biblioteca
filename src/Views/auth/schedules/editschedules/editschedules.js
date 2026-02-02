@@ -71,7 +71,7 @@ export const editarmodalHorario = (horario) => {
             enviando = false;
         };
 
-        form.addEventListener("submit", handleSubmit);
+      form.addEventListener("submit", handleSubmit);
     });
 };
 

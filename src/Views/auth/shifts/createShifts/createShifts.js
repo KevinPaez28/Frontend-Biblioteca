@@ -72,7 +72,7 @@ export const abrirModalCrearJornada = async () => {
         };
 
         form.removeEventListener("submit", handleSubmit); // limpieza
-        form.addEventListener("submit", handleSubmit);
+      form.addEventListener("submit", handleSubmit);
 
         // ================== CARGA DE DATOS DINÁMICOS ==================
         try {

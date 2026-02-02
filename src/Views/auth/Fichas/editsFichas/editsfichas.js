@@ -37,7 +37,7 @@ export const editarmodalFicha = async (ficha) => {
         let enviando = false;
 
         // ===== SUBMIT =====
-        form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
@@ -49,6 +49,7 @@ export const editarmodalFicha = async (ficha) => {
                 const response = await patch(`ficha/${ficha.id}`, payload);
 
                 if (!response || !response.success) {
+                    cerrarModal(modal);
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {
@@ -57,7 +58,7 @@ export const editarmodalFicha = async (ficha) => {
                     enviando = false;
                     return;
                 }
-
+                
                 cerrarModal(modal);
                 success(response.message || "Ficha actualizada correctamente");
                 form.reset();
