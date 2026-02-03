@@ -15,6 +15,7 @@ export default async () => {
     const selectRol = form.querySelector(".rol");
     const selectFicha = form.querySelector(".ficha");
     const selectPrograma = form.querySelector(".programa");
+    const Tdocumento = form.querySelector(".Tdocumento");
 
     // Bandera para evitar múltiples envíos seguidos
     let enviando = false;
@@ -40,6 +41,8 @@ export default async () => {
 
         // Copia los datos validados
         const data = { ...validate.datos };
+
+        console.log(data)
 
         // Petición al backend
         const response = await post("user/create", data);
@@ -80,9 +83,12 @@ export default async () => {
     // Trae fichas, programas y roles al mismo tiempo
     
     const fichas= await get("ficha"); 
-    
     const programas= await get("programa");
     const roles=await get("roles");
+    const tipo = await get("Tipo_documento")
+
+    console.log(tipo);
+    
 
     
     // Llena select de roles
@@ -91,6 +97,13 @@ export default async () => {
         op.value = r.id;
         op.textContent = r.name;
         selectRol.append(op);
+    });
+
+    tipo.data.forEach(r => {
+        const op = document.createElement("option");
+        op.value = r.id;
+        op.textContent = r.name;
+        Tdocumento.append(op);
     });
 
     // // Llena select de fichas
@@ -120,7 +133,7 @@ export default async () => {
         // Buscar roles administrador y ayudante
         const adminOrHelpers = roles.data.filter(r => {
             const n = r.name.toLowerCase();
-            return n === "administrador" || n === "ayudante";
+            return n === "administrador" || n === "apoyo";
         });
 
         // Grupos que dependen de ficha/programa

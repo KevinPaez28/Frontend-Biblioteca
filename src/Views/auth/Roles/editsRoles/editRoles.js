@@ -6,7 +6,7 @@ import htmlEditarRol from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
 import rolesController from "../RolesController.js";
 
-// Mapa de permisos amigables (el mismo que usas en la tabla)
+// Mapa de permisos amigables
 const permisoLabels = {
     "auth.login": "Iniciar sesión",
     "auth.reset-password": "Solicitar recuperación",
@@ -71,6 +71,18 @@ const permisoLabels = {
     "rooms.destroy": "Eliminar sala",
 };
 
+// Permisos ocultos que no se muestran en el modal
+const permisosOcultos = [
+    "auth.login",
+    "auth.reset-password", 
+    "auth.reset-password.change",
+    "auth.validate-token",
+    "user-status.index",
+    "user-status.store",
+    "user-status.update",
+    "user-status.destroy",
+];
+
 export const editarModalRol = async (rol) => {
 
     const modal = mostrarModal(htmlEditarRol);
@@ -94,17 +106,18 @@ export const editarModalRol = async (rol) => {
             const response = await get("roles/permisos");
 
             if (response?.success) {
-                permisosContainer.innerHTML = response.data.map(p => {
-
-                    const isChecked = rol.permissions?.some(rp => rp.id === p.id);
-
-                    return `
-                        <label class="permiso-item badge badge-permissions" style="margin:3px; cursor:pointer;">
-                            <input type="checkbox" name="permisos" value="${p.id}" ${isChecked ? "checked" : ""} style="margin-right:5px;">
-                            ${permisoLabels[p.name] || p.name}
-                        </label>
-                    `;
-                }).join("");
+                permisosContainer.innerHTML = response.data
+                    // Filtrar los permisos ocultos
+                    .filter(p => !permisosOcultos.includes(p.name))
+                    .map(p => {
+                        const isChecked = rol.permissions?.some(rp => rp.id === p.id);
+                        return `
+                            <label class="permiso-item badge badge-permissions" style="margin:3px; cursor:pointer;">
+                                <input type="checkbox" name="permisos" value="${p.id}" ${isChecked ? "checked" : ""} style="margin-right:5px;">
+                                ${permisoLabels[p.name] || p.name}
+                            </label>
+                        `;
+                    }).join("");
             }
 
         } catch (err) {
@@ -115,7 +128,7 @@ export const editarModalRol = async (rol) => {
         let enviando = false;
 
         // ===== SUBMIT =====
-      form.addEventListener("submit", async (e) => {
+        form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
@@ -157,4 +170,3 @@ export const editarModalRol = async (rol) => {
         });
     });
 };
-

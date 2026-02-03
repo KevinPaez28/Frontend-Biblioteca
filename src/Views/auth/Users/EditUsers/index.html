@@ -12,10 +12,20 @@
     <div class="modal-seccion">
         <h4>Identificación</h4>
 
-        <div class="form__grupo">
-            <label class="label">Documento *</label>
-            <input id="modalInputDocumento" name="documento" type="text" class="input" required maxlength="10"
-                minlength="8">
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label">Tipo de documento *</label>
+                <select id="modalInputtipoDocumento" name="tipo_documento" class="input" required>
+                    <option value="">Seleccione tipo de documento</option>
+                </select>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Documento *</label>
+                <input id="modalInputDocumento" name="documento" type="text" class="input" required maxlength="10"
+                    minlength="8">
+            </div>
         </div>
     </div>
 

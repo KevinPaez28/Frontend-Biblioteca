@@ -79,6 +79,8 @@ export default async () => {
 
             const response = await get(url);
 
+            console.log(response);
+            
             // Limpiar tabla y paginación
             tabla.innerHTML = "";
             pagination.innerHTML = "";

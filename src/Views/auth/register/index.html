@@ -25,9 +25,18 @@
                 </div>
 
                 <div class="form__grupo">
-                    <label class="form__label">No. Documento:</label>
-                    <input class="form__input" type="text" id="documento" name="documento" maxlength="10" minLength="8" required>
+                    <label class="form__label">Tipo documento:</label>
+                    <select class="form__input Tdocumento" name="tipo_documento" required>
+                        <option value="">Seleccione</option>
+                    </select>
                 </div>
+
+                <div class="form__grupo">
+                    <label class="form__label">No. Documento:</label>
+                    <input class="form__input" type="text" id="documento" name="documento" maxlength="10" minLength="8"
+                        required>
+                </div>
+
 
                 <div class="form__grupo">
                     <label class="form__label">Rol en el Sena:</label>
@@ -35,6 +44,7 @@
                         <option value="">Seleccione</option>
                     </select>
                 </div>
+
 
                 <div class="form__grupo">
                     <label class="form__label">Correo Electrónico:</label>
@@ -48,7 +58,8 @@
 
                 <div class="form__grupo">
                     <label class="form__label">Teléfono:</label>
-                    <input class="form__input" type="text" id="telefono" name="telefono" maxlength="10" minLength="10" required>
+                    <input class="form__input" type="text" id="telefono" name="telefono" maxlength="10" minLength="10"
+                        required>
                 </div>
 
                 <div class="form__grupo activo oculto">

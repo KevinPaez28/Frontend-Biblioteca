@@ -16,6 +16,7 @@ export const editModalUsuario = (item) => {
         const form = modal.querySelector("#formUsuario");
 
         const inputDocumento = modal.querySelector("#modalInputDocumento");
+        const inputTipoDocumento = modal.querySelector("#modalInputtipoDocumento");
         const inputNombre = modal.querySelector("#modalInputNombre");
         const inputApellido = modal.querySelector("#modalInputApellido");
         const inputTelefono = modal.querySelector("#modalInputTelefono");
@@ -37,36 +38,46 @@ export const editModalUsuario = (item) => {
         inputTelefono.value = item.phone_number;
         inputCorreo.value = item.email;
 
+        console.log(item);
+
+
         // ===== RELLENAR ROLES =====
         const roles = await get("roles");
         roles.data.forEach(r => {
             const op = document.createElement("option");
             op.value = r.id;
             op.textContent = r.name;
-
             if (r.name === item.rol) op.selected = true;
-
             selectRol.append(op);
         });
 
         // ===== RELLENAR ESTADOS =====
         const estados = await get("EstadoUsuarios");
-
         estados.data.forEach(e => {
             const op = document.createElement("option");
             op.value = e.id;
             op.textContent = e.status;
-
             if (e.name === item.estado) op.selected = true;
-
             selectEstado.append(op);
         });
+
+        const tipo = await get("Tipo_documento");
+
+        tipo.data.forEach(e => {
+            const op = document.createElement("option");
+            op.value = e.id;              
+            op.textContent = e.acronym;  
+            if (e.id == item.document_type_id) op.selected = true;
+            inputTipoDocumento.append(op);
+        });
+
+
 
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         let enviando = false;
 
-      form.addEventListener("submit", async (e) => {
+        form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
 

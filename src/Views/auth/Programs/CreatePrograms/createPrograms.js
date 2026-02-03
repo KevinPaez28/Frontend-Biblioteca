@@ -18,7 +18,7 @@ export const abrirModalCrearPrograma = async () => {
 
         let enviando = false;
 
-      form.addEventListener("submit", async (event) => {
+        form.onsubmit = async (event) => {           
             event.preventDefault();
             if (enviando) return;
 
@@ -52,6 +52,6 @@ export const abrirModalCrearPrograma = async () => {
                 error("Ocurrió un error inesperado");
                 enviando = false;
             }
-        });
+        };
     });
 };

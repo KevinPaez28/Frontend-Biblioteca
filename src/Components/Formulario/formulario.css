@@ -161,7 +161,7 @@
     align-items: center;
 }
 
-.space>*:nth-child(10) {
+.space>*:nth-child(11) {
     grid-column: 1 / 3;
     display: flex;
     justify-content: center;

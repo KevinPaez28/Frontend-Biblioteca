@@ -9,6 +9,7 @@ export const abrirModalUsuario = (item, index) => {
     requestAnimationFrame(() => {
 
         const documento = modal.querySelector("#modalDocumentoUsuario");
+        const Tipodocumento = modal.querySelector("#modalTipoDocumentoUsuario");
         const nombre = modal.querySelector("#modalNombreUsuario");
         const apellido = modal.querySelector("#modalApellidoUsuario");
         const telefono = modal.querySelector("#modalTelefonoUsuario");
@@ -17,13 +18,8 @@ export const abrirModalUsuario = (item, index) => {
         const estado = modal.querySelector("#modalEstadoUsuario");
         const btnCerrar = modal.querySelector("#btnCerrarModal");
 
-        if (!documento || !nombre || !apellido || !telefono || !correo || !rol || !estado || !btnCerrar) {
-            console.error("Elementos del modal usuario no encontrados");
-            cerrarModal(modal);
-            return;
-        }
-
         documento.textContent = item.document || "—";
+        Tipodocumento.textContent = item.document_type || "—";
         nombre.textContent = item.first_name || `Usuario ${index + 1}`;
         apellido.textContent = item.last_name || "—";
         telefono.textContent = item.phone_number || "—";

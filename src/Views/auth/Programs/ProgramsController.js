@@ -69,7 +69,7 @@ export default async () => {
                         btnEliminar.classList.add("btn-eliminar");
                         btnEliminar.textContent = "Eliminar";
                         btnEliminar.addEventListener("click", () => {
-                            deletePrograma(item);
+                            deletePrograma(item, index);
                         });
                         td3.appendChild(btnEliminar);
                     }

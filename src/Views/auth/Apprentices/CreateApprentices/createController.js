@@ -9,9 +9,9 @@ import ApprenticesController from "../ApprenticesController.js";
 export const abrirModalCrearAprendiz = async () => {
     // Evitar abrir más de un modal de crear usuario
     if (document.querySelector("#formUsuario")) return;
-
+    
     const modal = mostrarModal(htmlCrearUsuario);
-
+    
     // ====== REFERENCIAS LOCALES AL MODAL ======
     const btnCerrar = modal.querySelector("#btnCerrarModal");
     const form = modal.querySelector("#formUsuario");
@@ -20,7 +20,8 @@ export const abrirModalCrearAprendiz = async () => {
     const selectFicha = modal.querySelector("#selectFicha");
     const selectPrograma = modal.querySelector("#selectPrograma");
     const seccionAprendiz = modal.querySelector("#seccionAprendiz");
-
+    const Tdocumento = modal.querySelector("#tipodocumento");
+    
     // ====== BOTÓN CERRAR ======
     btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
@@ -46,6 +47,15 @@ export const abrirModalCrearAprendiz = async () => {
 
     // ====== CARGA DE DATOS DINÁMICOS ======
     try {
+
+        const tipo = await get("Tipo_documento")
+       
+                   tipo.data.forEach(r => {
+                       const op = document.createElement("option");
+                       op.value = r.id;
+                       op.textContent = r.name;
+                       Tdocumento.append(op);
+                   });
         const [roles, estados, fichas] = await Promise.all([
             get("roles"),
             get("EstadoUsuarios"),

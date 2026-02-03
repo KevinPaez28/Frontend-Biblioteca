@@ -94,7 +94,7 @@ export const editModalAprendiz = (item) => {
         let enviando = false;
 
         // ===== SUBMIT =====
-      form.addEventListener("submit", async (e) => {
+        form.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
@@ -131,7 +131,7 @@ export const editModalAprendiz = (item) => {
             }
 
             enviando = false;
-        });
+        },{ once: true });
     });
 };
 
