@@ -18,7 +18,7 @@ export const abrirModalCrearMotivo = async () => {
 
         let enviando = false;
 
-        form.addEventListener("submit", async (event) => {
+        form.onsubmit = async (event) => {
             event.preventDefault();
             if (enviando) return;
 
@@ -57,6 +57,6 @@ export const abrirModalCrearMotivo = async () => {
             }
 
             enviando = false;
-        });
+        };
     });
 };

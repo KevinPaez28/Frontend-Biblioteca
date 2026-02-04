@@ -1,8 +1,8 @@
 import "../../../Components/Formulario/formulario.css"
 
 import { get, login, post } from "../../../Helpers/api";
-import * as validate from "../../../Helpers/Modules/modules"; 
-import { success, error } from "../../../Helpers/alertas";
+import * as validate from "../../../Helpers/Modules/modules";
+import { success, error, loading } from "../../../Helpers/alertas";
 
 export default async () => {
 
@@ -26,21 +26,23 @@ export default async () => {
             return; // Salimos del forEach para no aplicar otras validaciones
         }
     });
-
+    
     // ================= SUBMIT DEL FORMULARIO =================
-  form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (!validate.validarCampos(e, "login")) {
+    form.onsubmit = async (event) => {
+        event.preventDefault();
+        
+        if (!validate.validarCampos(event, "login")) {
             return;
         }
-
+        
         // Obtenemos los datos validados
         const data = {
             document: String(validate.datos.document),
             password: String(validate.datos.password)
         };
-
+        
+        
+        loading("Iniciando Sesion")
         
         const response = await login(data);
         
@@ -51,17 +53,17 @@ export default async () => {
             } else {
                 error(response.message || "Error al iniciar sesión");
             }
-            return; 
+            return;
         }
-        
+
         // ===== Login exitoso =====
         success(response.message || "Inicio de sesión exitoso");
         localStorage.setItem("role_id", response.data.role_id);
         localStorage.setItem("user_id", response.data.id);
-        localStorage.setItem("permissions",JSON.stringify(response.data.permissions));
-        localStorage.setItem("nombres",response.data.names)
-        localStorage.setItem("apellido",response.data.last_name)
+        localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
+        localStorage.setItem("nombres", response.data.names)
+        localStorage.setItem("apellido", response.data.last_name)
         window.location.hash = "#/Dashboard";
         form.reset();
-    });
+    };
 };

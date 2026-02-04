@@ -6,21 +6,34 @@ import htmlCrearAsistencia from "./index.html?raw";
 import { success, error } from "../../../../Helpers/alertas.js";
 import asistenciasController from "../AssitanceController.js";
 
+
+// ============================================================================
+// FUNCIÓN: abrirModalCrearAsistenciaEvento
+// ============================================================================
+// - Modal para **crear asistencias masivas por evento y ficha**.
+// - Carga dinámicamente eventos y fichas en selects.
+// - Envía POST a `asistencia/events/create`.
+// - Maneja **response compleja**: `created[]` + `skipped[]`.
+// ============================================================================
 export const abrirModalCrearAsistenciaEvento = async () => {
 
+    // Abre modal con formulario de creación de asistencias
     const modal = mostrarModal(htmlCrearAsistencia);
 
     requestAnimationFrame(async () => {
+        // ===== REFERENCIAS DOM =====
         const btnCerrar = modal.querySelector("#btnCerrarModal");
         const form = modal.querySelector("#formAsistenciaEvento");
 
         const selectEvento = modal.querySelector("#selectEvento");
         const selectFicha = modal.querySelector("#selectFicha");
 
+        // Botón cerrar modal
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        /* ================= OBTENER DATOS ================= */
+        /* ================= OBTENER DATOS DINÁMICOS ================= */
 
+        // Carga paralela de eventos y fichas
         const eventos = await get("eventos");
         const fichas = await get("ficha");
 
@@ -28,7 +41,7 @@ export const abrirModalCrearAsistenciaEvento = async () => {
         eventos.data.forEach(e => {
             const op = document.createElement("option");
             op.value = e.id;
-            op.textContent = e.name;
+            op.textContent = e.name; // Nombre del evento
             selectEvento.append(op);
         });
 
@@ -36,33 +49,38 @@ export const abrirModalCrearAsistenciaEvento = async () => {
         fichas.data.forEach(f => {
             const op = document.createElement("option");
             op.value = f.id;
-            op.textContent = f.ficha;
+            op.textContent = f.ficha; // Número de ficha
             selectFicha.append(op);
         });
 
-        /* ================= SUBMIT ================= */
-        let enviando = false;
+        /* ================= MANEJO SUBMIT ================= */
+        let enviando = false; // Previene doble envío
 
-        form.addEventListener("submit", async (event) => {
+        form.onsubmit = async (event) => {           
             event.preventDefault();
             if (enviando) return;
 
+            // Valida todos los campos del formulario
             if (!validate.validarCampos(event)) return;
 
+            // Payload con datos validados del formulario
             const payload = { ...validate.datos };
 
             try {
                 enviando = true;
 
+                // POST masivo: crea asistencias para toda la ficha en el evento
                 const response = await post("asistencia/events/create", payload);
 
+                // ===== MANEJO DE ERRORES COMPLEJOS =====
                 if (!response || !response.success) {
                     cerrarModal(modal);
 
                     if (response?.errors?.length) {
+                        // Errores de validación individuales
                         response.errors.forEach(err => error(err));
                     } else {
-                        // Si message es un objeto con created/skipped
+                        // Response con created/skipped (importación parcial)
                         if (response?.message && typeof response.message === "object") {
                             const created = response.message.created?.join(', ') || 'Ninguno';
                             const skipped = response.message.skipped?.join(', ') || 'Ninguno';
@@ -79,16 +97,18 @@ export const abrirModalCrearAsistenciaEvento = async () => {
 
                 cerrarModal(modal);
 
-                // Manejo correcto del success si message es objeto
+                // ===== MANEJO DE ÉXITO COMPLEJO =====
                 if (response?.message && typeof response.message === "object") {
                     const created = response.message.created?.join(', ') || 'Ninguno';
                     const skipped = response.message.skipped?.join(', ') || 'Ninguno';
 
-                    success(`Asistencias creadas correctamente.\nUsuarios añadidos: ${created}\nUsuarios omitidos: ${skipped}`);
+                    // Muestra resumen de creación masiva
+                    success(`Asistencias creadas correctamente`)
                 } else {
                     success(response.message || "Asistencia registrada correctamente");
                 }
 
+                // Limpia y recarga vista
                 form.reset();
                 asistenciasController();
                 enviando = false;
@@ -98,7 +118,6 @@ export const abrirModalCrearAsistenciaEvento = async () => {
                 error("Ocurrió un error inesperado");
                 enviando = false;
             }
-        });
-
+        };
     });
 };

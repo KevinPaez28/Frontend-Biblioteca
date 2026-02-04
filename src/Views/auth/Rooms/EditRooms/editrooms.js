@@ -39,10 +39,10 @@ export const editmodalreason = (item) => {
 
         let enviando = false;
 
-      form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {
+            event.preventDefault();
             if (enviando) return;
-            if (!validate.validarCampos(e)) return;
+            if (!validate.validarCampos(event)) return;
             loading("Modificando Motivo");
             cerrarModal(modal);
             const payload = {
@@ -77,6 +77,6 @@ export const editmodalreason = (item) => {
                 error("Ocurrió un error inesperado");
                 enviando = false;
             }
-        });
+        };
     });
 };

@@ -109,8 +109,7 @@ const permisoLabels = {
 
 // Lista de permisos OCULTOS (misma lista)
 const permisosOcultos = [
-    "auth.login",
-    "auth.reset-password", 
+    "auth.reset-password",
     "auth.reset-password.change",
     "auth.validate-token",
     "user-status.index",
@@ -165,8 +164,8 @@ export const abrirModalCrearRol = async () => {
         let enviando = false;
 
         // ===== SUBMIT =====
-      form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {
+            event.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
 
@@ -200,6 +199,6 @@ export const abrirModalCrearRol = async () => {
             }
 
             enviando = false;
-        });
+        };
     });
 };

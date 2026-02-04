@@ -38,14 +38,14 @@ export const abrirModalCambiarPassword = (item) => {
 
         // ================= SUBMIT =================
         let enviando = false;
-      form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {
+            event.preventDefault();
             if (enviando) return;
 
             // Validar todos los campos
             if (!validate.validarCampos(e)) {
                 return;
-            }     
+            }
             loading("Actualizando contraseña...");
             cerrarModal(modal);
             enviando = true;
@@ -53,11 +53,11 @@ export const abrirModalCambiarPassword = (item) => {
             const payload = {
                 current_password: inputActual.value,
                 new_password: inputNueva.value,
-                new_password_confirmation: inputConfirmar.value, 
+                new_password_confirmation: inputConfirmar.value,
 
-            };  
+            };
 
-            
+
 
             try {
                 const response = await patch(`user/newpassword/${item.id}`, payload);
@@ -82,6 +82,6 @@ export const abrirModalCambiarPassword = (item) => {
             } finally {
                 enviando = false;
             }
-        });
+        };
     });
 };

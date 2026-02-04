@@ -1,100 +1,106 @@
 <div class="contenido-dashboard">
 
-    <!-- Ruta / ubicación -->
-    <div class="ruta-dashboard">
-      Inicio / <span>Asistencias</span>
-    </div>
-  
-    <!-- Título -->
-    <div class="titulo-accion">
-      <h1 class="titulo-dashboard">Asistencias</h1>
-    </div>
-  
-    <!-- Filtros -->
-    <section class="seccion-dashboard">
-      <div class="filter-section filter-doble ">
-        <div>
-          <label>Filtrar por nombre</label>
-          <input type="text" class="input-filter" id="filtroNombre">
-        </div>
-       
-        <div>
-          <label>Filtrar por apellidos</label>
-          <input type="text" class="input-filter " id="filtroApellido">
-        </div>
-       
-        <button class="btn btn-outline" id="btnFiltros">
-          <i class="ri-filter-3-line"></i>
-          Filtros
-        </button>
-      </div>
-  
-      <div class="filter-section filter-oculto" id="filtrosAvanzados" >
-        <div>
-          <label>Filtrar por documento</label>
-          <input type="text" class="input-filter tamanio" id="filtroDocumento">
-        </div>
-       
-        <div>
-          <label>Filtrar por ficha</label>
-          <input type="text" class="input-filter tamanio" id="filtroFicha">
-        </div>
-       
-        <div>
-          <label>Filtrar por fecha</label>
-          <input type="date" class="input-filter" id="filtroFecha">
-        </div>
-       
-        <div>
-          <label>Filtrar por motivo</label>
-          <select class="input-filter" id="filtroMotivo">
-            <option value="">Filtrar por motivo</option>
-          </select>
-        </div>
-       
-        <div>
-          <label class="roles">Filtrar por rol</label>
-          <select class="input-filter tamanioRol" id="filtroRol">
-            <option value="">Filtrar por rol</option>
-          </select>
-        </div>
-      </div>
-    </section>
-  
-    <!-- Tabla -->
-    <section class="seccion-dashboard">
-      <div class="encabezado-seccion">
-        <span>Listado de asistencias</span>
-      </div>
-  
-      <!-- CONTENEDOR con spinner dentro (igual que historial) -->
-      <div id="asistencias-contenedor">
-        <section class="table-section tabla-container">
-          <table class="table asistencias-table">
-            <thead class="asistencias-thead">
-              <tr class="asistencias-tr">
-                <th class="asistencias-th">#</th>
-                <th class="asistencias-th">Ficha</th>
-                <th class="asistencias-th">Nombres</th>
-                <th class="asistencias-th">Apellidos</th>
-                <th class="asistencias-th">Fecha y hora</th>
-                <th class="asistencias-th">Motivo</th>
-                <th class="asistencias-th">Acciones</th>
-              </tr>
-            </thead>
-  
-            <tbody id="tablaAsistencias" class="asistencias-tbody">
-              <!-- JS desde backend -->
-            </tbody>
-          </table>
-        </section>
-  
-        <!-- Spinner (igual que historial) -->
-        <div class="spinner-overlay hidden" id="spinner-asistencias">
-          <div class="spinner"></div>
-        </div>
-      </div>
-    </section>
-  
+  <!-- Ruta / ubicación -->
+  <div class="ruta-dashboard">
+    Inicio / <span>Asistencias</span>
   </div>
-  
+
+  <!-- Título -->
+  <div class="titulo-accion">
+    <h1 class="titulo-dashboard">Asistencias</h1>
+
+    <div class="acciones-header">
+      <button class="btn btn-menuImport" id="btnExportarAsistencias">
+        <i class="ri-add-line"></i>
+        Exportar Asistencias
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <section class="seccion-dashboard">
+    <div class="filter-section filter-doble ">
+      <div>
+        <label>Filtrar por nombre</label>
+        <input type="text" class="input-filter" id="filtroNombre">
+      </div>
+
+      <div>
+        <label>Filtrar por apellidos</label>
+        <input type="text" class="input-filter " id="filtroApellido">
+      </div>
+
+      <button class="btn btn-outline" id="btnFiltros">
+        <i class="ri-filter-3-line"></i>
+        Filtros
+      </button>
+    </div>
+
+    <div class="filter-section filter-oculto" id="filtrosAvanzados">
+      <div>
+        <label>Filtrar por documento</label>
+        <input type="text" class="input-filter tamanio" id="filtroDocumento">
+      </div>
+
+      <div>
+        <label>Filtrar por ficha</label>
+        <input type="text" class="input-filter tamanio" id="filtroFicha">
+      </div>
+
+      <div>
+        <label>Filtrar por fecha</label>
+        <input type="date" class="input-filter" id="filtroFecha">
+      </div>
+
+      <div>
+        <label>Filtrar por motivo</label>
+        <select class="input-filter" id="filtroMotivo">
+          <option value="">Filtrar por motivo</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="roles">Filtrar por rol</label>
+        <select class="input-filter tamanioRol" id="filtroRol">
+          <option value="">Filtrar por rol</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tabla -->
+  <section class="seccion-dashboard">
+    <div class="encabezado-seccion">
+      <span>Listado de asistencias</span>
+    </div>
+
+    <!-- CONTENEDOR con spinner dentro (igual que historial) -->
+    <div id="asistencias-contenedor">
+      <section class="table-section tabla-container">
+        <table class="table asistencias-table">
+          <thead class="asistencias-thead">
+            <tr class="asistencias-tr">
+              <th class="asistencias-th">#</th>
+              <th class="asistencias-th">Ficha</th>
+              <th class="asistencias-th">Nombres</th>
+              <th class="asistencias-th">Apellidos</th>
+              <th class="asistencias-th">Fecha y hora</th>
+              <th class="asistencias-th">Motivo</th>
+              <th class="asistencias-th">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody id="tablaAsistencias" class="asistencias-tbody">
+            <!-- JS desde backend -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Spinner (igual que historial) -->
+      <div class="spinner-overlay hidden" id="spinner-asistencias">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </section>
+
+</div>

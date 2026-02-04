@@ -55,11 +55,12 @@ export const editModalEvento = (item) => {
         let enviando = false;
 
         // ===== SUBMIT =====
-      form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {
+            event.preventDefault();
             if (enviando) return;
-            if (!validate.validarCampos(e)) return;
+            if (!validate.validarCampos(event)) return;
             loading("Editando Evento");
+            cerrarModal(modal);
             const payload = {
                 ...validate.datos,
                 hora_inicio: inputHoraInicio.value,
@@ -88,6 +89,6 @@ export const editModalEvento = (item) => {
             }
 
             enviando = false;
-        });
+        };
     });
 };

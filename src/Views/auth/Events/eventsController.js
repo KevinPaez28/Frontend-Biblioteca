@@ -55,7 +55,6 @@ export default async () => {
 
                     spanFecha.innerHTML = `
                         <strong>${item.date || "—"}</strong><br>
-                        <small>${horaInicio} - ${horaFin}</small>
                     `;
                     td5.appendChild(spanFecha);
 

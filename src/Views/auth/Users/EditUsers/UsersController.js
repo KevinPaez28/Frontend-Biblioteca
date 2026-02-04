@@ -77,11 +77,11 @@ export const editModalUsuario = (item) => {
 
         let enviando = false;
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {
+            event.preventDefault();
             if (enviando) return;
 
-            if (!validate.validarCampos(e)) return;
+            if (!validate.validarCampos(event)) return;
 
             const payload = {
                 ...validate.datos,
@@ -115,6 +115,6 @@ export const editModalUsuario = (item) => {
             }
 
             enviando = false;
-        });
+        };
     });
 };

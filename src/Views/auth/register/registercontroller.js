@@ -22,16 +22,16 @@ export default async () => {
 
 
     // ================= EVENTO SUBMIT DEL FORMULARIO =================
-  form.addEventListener("submit", async (e) => {
+    form.onsubmit = async (event) => {
 
         // Evita que la página se recargue
-        e.preventDefault();
+        event.preventDefault();
 
         // Si ya se está enviando, no deja volver a enviar
         if (enviando) return;
 
         // Ejecuta validaciones generales
-        if (!validate.validarCampos(e)) return;
+        if (!validate.validarCampos(event)) return;
 
         // Muestra alerta de carga
         loading("Registrando usuario");
@@ -74,23 +74,23 @@ export default async () => {
 
         // Permite volver a enviar después
         enviando = false;
-    });
+    };
 
 
 
     // ================= CARGA DE DATOS DESDE API =================
 
     // Trae fichas, programas y roles al mismo tiempo
-    
-    const fichas= await get("ficha"); 
-    const programas= await get("programa");
-    const roles=await get("roles");
+
+    const fichas = await get("ficha");
+    const programas = await get("programa");
+    const roles = await get("roles");
     const tipo = await get("Tipo_documento")
 
     console.log(tipo);
-    
 
-    
+
+
     // Llena select de roles
     roles.data.forEach(r => {
         const op = document.createElement("option");

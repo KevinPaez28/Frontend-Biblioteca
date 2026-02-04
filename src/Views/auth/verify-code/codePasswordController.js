@@ -34,7 +34,7 @@ export default async () => {
     // Evitamos envío múltiple
     let enviando = false;
 
-  form.addEventListener("submit", async (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (enviando) return; // si ya se está enviando, no hacemos nada
 

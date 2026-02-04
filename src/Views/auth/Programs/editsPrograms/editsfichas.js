@@ -23,10 +23,10 @@ export const editarModalPrograma = async (programa) => {
         let enviando = false;
 
         form.onsubmit = async (event) => {           
-            e.preventDefault();
+            event.preventDefault();
             if (enviando) return;
 
-            if (!validate.validarCampos(e)) return;
+            if (!validate.validarCampos(event)) return;
 
             const payload = { ...validate.datos };
 

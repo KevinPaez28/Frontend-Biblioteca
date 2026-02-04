@@ -2,12 +2,26 @@ import "../../../Styles/Assitances/assistances.css";
 import { abrirModalAsistencia } from "./ViewAssitances/viewAssistances.js";
 import { get } from "../../../Helpers/api.js";
 import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { abrirModalReason } from "./exportAssistances/export.js";
 
+
+// ============================================================================
+// ASISTENCIAS CONTROLLER PRINCIPAL (export default)
+// ============================================================================
+// - Vista completa de asistencias con filtros avanzados, paginación y export.
+// - Carga dinámicamente selects de roles y motivos.
+// - Filtros reactivos en tiempo real.
+// - Tabla con botón "Ver" por fila.
+// ============================================================================
 export default async () => {
+    
+    // ===== ELEMENTOS DOM PRINCIPALES =====
     const tabla = document.querySelector("#tablaAsistencias");
     const contenedor = document.getElementById("asistencias-contenedor");
-    const pagination = document.querySelector(".pagination") || createPagination(); // Crear si no existe
-    showSpinner(contenedor);
+    const pagination = document.querySelector(".pagination") || createPagination(); // Crea si no existe
+    const btnExportarAsistencias = document.getElementById("btnExportarAsistencias");
+
+    showSpinner(contenedor); // Spinner inicial
 
     // ================= FILTROS =================
     const filtros = {
@@ -20,18 +34,24 @@ export default async () => {
         rol: document.querySelector("#filtroRol"),
     };
 
+    // Elementos UI
     const btnFiltros = document.querySelector("#btnFiltros");
     const filtrosAvanzados = document.querySelector("#filtrosAvanzados");
 
-    // ================= MOSTRAR / OCULTAR =================
+    // ================= BOTÓN EXPORTAR =================
+    btnExportarAsistencias.addEventListener("click", () => {
+        abrirModalReason(); // Abre modal de exportación Excel
+    });
+
+    // ================= MOSTRAR / OCULTAR FILTROS =================
     btnFiltros.addEventListener("click", () => {
         filtrosAvanzados.classList.toggle("filter-visible");
     });
 
-    // ================= CARGAR SELECTS =================
+    // ================= CARGAR SELECTS DINÁMICOS =================
     const cargarSelects = async () => {
         try {
-            // ROLES
+            // ===== ROLES =====
             const roles = await get("roles");
             if (roles?.data?.length) {
                 roles.data.forEach(r => {
@@ -42,7 +62,7 @@ export default async () => {
                 });
             }
 
-            // MOTIVOS
+            // ===== MOTIVOS =====
             const motivos = await get("motivos");
             if (motivos?.data?.length) {
                 motivos.data.forEach(m => {
@@ -57,34 +77,36 @@ export default async () => {
         }
     };
 
-    let currentPage = 1;
+    let currentPage = 1; // Página actual
 
-    // ================= FUNCIÓN CENTRAL CON PAGINACIÓN =================
+    // ================= FUNCIÓN CENTRAL: CARGAR ASISTENCIAS =================
     const cargarAsistencias = async (page = 1) => {
         currentPage = page;
         showSpinner(contenedor);
 
         try {
+            // Construye query string con filtros + paginación
             const params = new URLSearchParams();
             params.append("page", page);
 
-            // Agregar filtros
+            // Agrega filtros activos
             Object.entries(filtros).forEach(([key, input]) => {
                 if (input && input.value.trim() !== "") {
                     params.append(key, input.value.trim());
                 }
             });
 
+            // Endpoint de asistencias con parámetros
             const url = `asistencia?${params.toString()}`;
-
             const response = await get(url);
 
-            console.log(response);
+            console.log(response); // Debug
             
-            // Limpiar tabla y paginación
+            // Limpia tabla y paginación
             tabla.innerHTML = "";
             pagination.innerHTML = "";
 
+            // ===== TABLA VACÍA =====
             if (!response?.data?.records || response.data.records.length === 0) {
                 const tr = document.createElement("tr");
                 const td = document.createElement("td");
@@ -96,31 +118,38 @@ export default async () => {
                 return;
             }
 
-            // Llenar tabla
+            // ===== RELLENA TABLA =====
             const records = response.data.records;
             const meta = response.data.meta;
 
             records.forEach((item, index) => {
                 const tr = document.createElement("tr");
 
+                // #1: Número secuencial global
                 const td1 = document.createElement("td");
                 td1.textContent = (meta.current_page - 1) * meta.per_page + index + 1;
 
+                // #2: Ficha
                 const td2 = document.createElement("td");
                 td2.textContent = item.Ficha || "—";
 
+                // #3: Nombre
                 const td3 = document.createElement("td");
                 td3.textContent = item.FirstName || "—";
 
+                // #4: Apellido
                 const td4 = document.createElement("td");
                 td4.textContent = item.LastName || "—";
 
+                // #5: Fecha/Hora
                 const td5 = document.createElement("td");
                 td5.textContent = item.DateTime || "—";
 
+                // #6: Motivo (presente, falta, etc.)
                 const td6 = document.createElement("td");
                 td6.textContent = item.Reason || "—";
 
+                // #7: Acción (solo botón VER)
                 const td7 = document.createElement("td");
                 const btnVer = document.createElement("button");
                 btnVer.classList.add("btn-ver");
@@ -132,7 +161,7 @@ export default async () => {
                 tabla.appendChild(tr);
             });
 
-            // PAGINACIÓN
+            // ===== PAGINACIÓN DINÁMICA =====
             const btnPrev = document.createElement("button");
             btnPrev.textContent = "« Anterior";
             btnPrev.disabled = meta.current_page === 1;
@@ -156,33 +185,35 @@ export default async () => {
 
         } catch (error) {
             console.error("Error cargando asistencias:", error);
+            // Error en tabla
             tabla.innerHTML = `
                 <tr>
                     <td colspan="7" style="text-align:center;color:red">
-                        Error al cargar asistencias. Revisa la consola.
+                    Error al cargar asistencias. Revisa la consola.
                     </td>
                 </tr>
             `;
         } finally {
-            hideSpinner(contenedor);
+            hideSpinner(contenedor); // Siempre oculta spinner
         }
     };
 
-    // ================= FILTROS EN TIEMPO REAL =================
+    // ================= FILTROS REACTIVOS =================
     Object.values(filtros).forEach(input => {
         if (!input) return;
         input.addEventListener(
             input.tagName === "SELECT" ? "change" : "input",
-            () => cargarAsistencias(1)
+            () => cargarAsistencias(1) // Vuelve a página 1
         );
     });
 
-    // ================= INIT =================
-    await cargarSelects();
-    cargarAsistencias();
+    // ================= INICIALIZACIÓN =================
+    await cargarSelects();     // Carga roles + motivos
+    cargarAsistencias();       // Carga primera página
 };
 
-// Función helper para crear contenedor de paginación si no existe
+// ================= HELPER: CREAR PAGINACIÓN =================
+// Función auxiliar para crear contenedor de paginación si no existe
 function createPagination() {
     const pagination = document.createElement("div");
     pagination.className = "pagination";

@@ -20,7 +20,7 @@ export const abrirModalCrearArea = async () => {
 
         let enviando = false;
 
-        form.onsubmit = async (event) => {   // 🔥 no se acumula
+        form.onsubmit = async (event) => {
             event.preventDefault();
             if (enviando) return;
 

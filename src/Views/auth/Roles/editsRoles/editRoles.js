@@ -73,7 +73,6 @@ const permisoLabels = {
 
 // Permisos ocultos que no se muestran en el modal
 const permisosOcultos = [
-    "auth.login",
     "auth.reset-password", 
     "auth.reset-password.change",
     "auth.validate-token",
@@ -93,8 +92,6 @@ export const editarModalRol = async (rol) => {
         const form = modal.querySelector("#formRol");
         const permisosContainer = modal.querySelector("#permisosContainer");
         const inputRol = modal.querySelector("#inputRol");
-
-        if (!form || !permisosContainer) return;
 
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
@@ -128,10 +125,10 @@ export const editarModalRol = async (rol) => {
         let enviando = false;
 
         // ===== SUBMIT =====
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {
+            event.preventDefault();
             if (enviando) return;
-            if (!validate.validarCampos(e)) return;
+            if (!validate.validarCampos(event)) return;
 
             const permisosSeleccionados = Array.from(
                 modal.querySelectorAll('input[name="permisos"]:checked')
@@ -167,6 +164,6 @@ export const editarModalRol = async (rol) => {
             }
 
             enviando = false;
-        });
+        };
     });
 };

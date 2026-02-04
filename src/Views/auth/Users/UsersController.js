@@ -1,11 +1,10 @@
 import { get } from "../../../Helpers/api.js";
-// import { abrirModalCrearUsuario } from "./CreateUsers/createController.js";
 import { deleteUsuario } from "./deleteUsers/deleteController.js";
 import { editModalUsuario } from "./EditUsers/UsersController.js";
 import { abrirModalUsuario } from "./viewUsers/viewController.js";
 import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
-import { abrirModalCrearAprendiz } from "../Apprentices/CreateApprentices/createController.js";
+import { modalCrearUser } from "./CreateUsers/createController.js";
 
 export default async () => {
     const tbody = document.querySelector(".seccion-dashboard .table tbody");
@@ -23,7 +22,7 @@ export default async () => {
     });
 
     if (btnNuevoUsuario && tienePermiso("users.store")) {
-        btnNuevoUsuario.addEventListener("click", () => abrirModalCrearAprendiz())
+        btnNuevoUsuario.addEventListener("click", () => modalCrearUser())
 
     } else if (btnNuevoUsuario) {
         btnNuevoUsuario.style.display = "none";

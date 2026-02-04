@@ -35,7 +35,7 @@ export const abrirModalCrearFicha = async () => {
         // ===== SUBMIT =====
         let enviando = false;
 
-      form.addEventListener("submit", async (event) => {
+        form.onsubmit = async (event) => {           
             event.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(event)) return;
@@ -69,7 +69,6 @@ export const abrirModalCrearFicha = async () => {
             }
 
             enviando = false;
-        });
-
+        };
     });
 };

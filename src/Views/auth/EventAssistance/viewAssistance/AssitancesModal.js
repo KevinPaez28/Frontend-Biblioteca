@@ -16,7 +16,7 @@ export const abrirModalAsistencia = (item, index) => {
             item.Ficha || "—";
 
         modal.querySelector("#modalEncargado").textContent =
-            `${item.FirstName || ""} ${item.LastName || ""}`.trim() || "—";
+            item.Encargado || "—"
 
         modal.querySelector("#modalFechaHora").textContent = item.DateTime 
             ? new Date(item.DateTime).toLocaleString()

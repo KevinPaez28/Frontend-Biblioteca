@@ -26,11 +26,11 @@ export default async () => {
     // Bandera para evitar envíos dobles
     let enviando = false;
 
-  form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    form.onsubmit = async (event) => {
+        event.preventDefault();
         if (enviando) return; // si ya se está enviando, no hacemos nada
 
-        if (!validate.validarCampos(e, "reset-password")) {
+        if (!validate.validarCampos(event, "reset-password")) {
             return;
         }
 
@@ -66,5 +66,5 @@ export default async () => {
             error("Ocurrió un error inesperado");
             enviando = false; // desbloqueamos si hay error
         }
-    });
+    };
 };

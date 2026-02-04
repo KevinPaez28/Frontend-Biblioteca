@@ -25,16 +25,16 @@ export const abrirModalCrearEvento = async () => {
         let enviando = false;
 
         // ================== EVENTO SUBMIT ==================
-      form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {           
+            event.preventDefault();
             if (enviando) return;
-            if (!validate.validarCampos(e)) return;
-            
+            if (!validate.validarCampos(event)) return;
+
             loading("Creando evento");
             cerrarModal(modal);
 
             const { fecha, hora, ...resto } = validate.datos;
-            
+
             const payload = {
                 ...resto,
                 fecha: `${fecha}`,
@@ -67,7 +67,7 @@ export const abrirModalCrearEvento = async () => {
             }
 
             enviando = false;
-        });
+        };
 
         // ================== CARGA DE DATOS DINÁMICOS ==================
         try {

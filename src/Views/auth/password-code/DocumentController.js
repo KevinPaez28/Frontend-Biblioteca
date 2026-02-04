@@ -24,12 +24,12 @@ export default async () => {
 
     let enviando = false;
 
-  form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    form.onsubmit = async (event) => {
+        event.preventDefault();
 
         if (enviando) return; // evita doble envío
 
-        if (!validate.validarCampos(e, "login")) {
+        if (!validate.validarCampos(event, "login")) {
             return;
         }
 
@@ -62,7 +62,5 @@ export default async () => {
         enviando = false; // desbloqueamos
 
         window.location.hash = `#/Verifycode`;
-    });
-
-
+    };
 };

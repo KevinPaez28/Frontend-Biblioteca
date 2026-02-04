@@ -37,10 +37,10 @@ export const editarmodalFicha = async (ficha) => {
         let enviando = false;
 
         // ===== SUBMIT =====
-      form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {           
+            event.preventDefault();
             if (enviando) return;
-            if (!validate.validarCampos(e)) return;
+            if (!validate.validarCampos(event)) return;
 
             const payload = { ...validate.datos };
 
@@ -70,6 +70,6 @@ export const editarmodalFicha = async (ficha) => {
             }
 
             enviando = false;
-        });
+        };
     });
 };

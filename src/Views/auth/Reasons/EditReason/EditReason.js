@@ -40,21 +40,22 @@ export const editmodalreason = (item) => {
         let enviando = false;
 
         // ===== ENVIAR FORM =====
-      form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {
+            event.preventDefault();
             if (enviando) return;
 
-            if (!validate.validarCampos(e)) return;
+            if (!validate.validarCampos(event)) return;
 
             loading("Actualizando Motivo");
+            cerrarModal(modal);
             const payload = {
                 ...validate.datos,
                 estados_id: selectEstado.value
             };
-
+            
             try {
                 enviando = true;
-
+                
                 const response = await patch(`motivos/${item.id}`, payload);
                 
                 if (!response || !response.success) {
@@ -79,6 +80,6 @@ export const editmodalreason = (item) => {
             }
 
             enviando = false;
-        });
+        };
     });
 };

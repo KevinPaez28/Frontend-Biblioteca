@@ -45,8 +45,8 @@ export const editUserModal = (user) => {
 
         let enviando = false;
 
-      form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        form.onsubmit = async (event) => {
+            event.preventDefault();
             if (enviando) return;
             if (!validate.validarCampos(e)) return;
 
@@ -88,6 +88,6 @@ export const editUserModal = (user) => {
                 error("Ocurrió un error inesperado");
                 enviando = false;
             }
-        });
+        };
     });
 };
