@@ -15,7 +15,7 @@ import asistenciasController from "../AssitanceController.js";
 // Envía POST a endpoint asistencia/events/create.
 // Maneja respuestas complejas con arrays created[] y skipped[].
 // ============================================================================
-export const abrirModalCrearAsistenciaEvento = async () => {
+export const abrirModalExportAsistencias = async () => {
 
     const modal = mostrarModal(htmlCrearAsistencia);
 

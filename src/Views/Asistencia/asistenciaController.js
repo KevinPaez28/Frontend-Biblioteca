@@ -1,7 +1,7 @@
 import "../../Components/Formulario/formulario.css"
 import { get, post } from "../../Helpers/api";
 import * as validate from "../../Helpers/Modules/modules"; // validaciones
-import { success, error } from "../../Helpers/alertas";
+import { success, error, loading, closeAlert } from "../../Helpers/alertas";
 console.count("HomeController cargado");
 
 export default async () => {
@@ -16,7 +16,7 @@ export default async () => {
     // Traemos los motivos y los eventos de hoy desde la API
     const eventos = await get("eventos/today");
     const motivos = await get("motivos");
-    
+
     // ================= RELLENAR SELECTS =================
     // Rellenamos select de motivos
     motivos.data.forEach(m => {
@@ -74,34 +74,49 @@ export default async () => {
     });
 
     // ================= SUBMIT DEL FORMULARIO =================
-    
-  form.addEventListener("submit", async (event) => {
-        event.preventDefault(); // Evitamos el envío por defecto
 
-        // Validaciones generales antes de enviar
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        
         if (!validate.validarCampos(event)) return;
 
-        // Obtenemos los datos validados
-        const data = { ...validate.datos };
+        try {
 
-        // Enviamos datos a la API
-        const response = await post("asistencia/create", data);
-        console.count("POST asistencia");
+            loading("Registrando asistencia...");
 
-        
-        // ================= MANEJO DE RESPUESTAS =================
-        
-         if (!response || !response.success) {
-                if (response?.errors && response.errors.length > 0) {
-                    response.errors.forEach(err => error(err));
-                } else {
-                    error(response?.message || "Error al actualizar la jornada");
+            // Esperar a que reCAPTCHA esté listo
+            await grecaptcha.ready(async () => {
+
+                const token = await grecaptcha.execute(
+                    "6Lc2YmksAAAAAJ_KMFarZmicnTEqWt1wdi-Q6xAf",
+                    { action: "asistencia" }
+                );
+
+                const data = {
+                    ...validate.datos,
+                    recaptcha_token: token
+                };
+                console.log(data);
+                
+                const response = await post("asistencia/create", data);
+
+                if (!response || !response.success) {
+                    if (response?.errors && response.errors.length > 0) {
+                        response.errors.forEach(err => error(err));
+                    } else {
+                        error(response?.message || "Error al registrar");
+                    }
+                    return;
                 }
-                return;
-            }
+                closeAlert()
+                success(response.message || "Asistencia registrada correctamente");
+                form.reset();
+            });
 
-        // Si todo sale bien
-        success(response.message || "Asistencia registrada correctamente");
-        form.reset(); // Limpiamos el formulario
+        } catch (err) {
+            console.error(err);
+            error("Error con reCAPTCHA");
+        }
     });
+
 };
