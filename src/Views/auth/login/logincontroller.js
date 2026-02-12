@@ -4,66 +4,87 @@ import { get, login, post } from "../../../Helpers/api";
 import * as validate from "../../../Helpers/Modules/modules";
 import { success, error, loading } from "../../../Helpers/alertas";
 
+/**
+ * @description Initializes the login form functionality, including validation and submission.
+ * @returns {Promise<void>}
+ */
 export default async () => {
 
     // ================= OBTENER ELEMENTOS DEL DOM =================
+    // Get the form element from the DOM
     const form = document.querySelector("#formulario_login");
 
+    // Get all input elements within the form
     const campos = form.querySelectorAll("input");
 
+    // Iterate over each input field to attach specific validation logic
     campos.forEach(campo => {
+        // Check if the current field is the 'documento' field
         if (campo.id === "documento") {
-            // Validar solo números y longitud máxima mientras se escribe
+            /**
+             * @description Validates that only numbers are allowed and limits the maximum length while typing.
+             * @param {KeyboardEvent} e - The keyboard event.
+             */
             campo.addEventListener("keydown", e => {
-                validate.validarNumeros(e);
-                validate.validarMaximo(e, campo.maxLength || 10);
+                validate.validarNumeros(e); // Validate only numbers are entered
+                validate.validarMaximo(e, campo.maxLength || 10); // Validate maximum length
             });
-            // Validar longitud mínima y campo requerido al perder el foco
+            /**
+             * @description Validates the minimum length and required field when the input loses focus.
+             * @param {FocusEvent} e - The focus event.
+             */
             campo.addEventListener("blur", e => {
-                validate.validarMinimo(e, campo.minLength || 6);
-                validate.validarCampo(e);
+                validate.validarMinimo(e, campo.minLength || 6); // Validate minimum length
+                validate.validarCampo(e); // Validate that the field is not empty
             });
-            return; // Salimos del forEach para no aplicar otras validaciones
+            return; // Exit the forEach loop to prevent applying other validations
         }
     });
     
     // ================= SUBMIT DEL FORMULARIO =================
+    // Handle the form submission
     form.onsubmit = async (event) => {
+        // Prevent the default form submission behavior
         event.preventDefault();
         
+        // Validate all form fields
         if (!validate.validarCampos(event, "login")) {
-            return;
+            return; // If validation fails, exit the function
         }
         
-        // Obtenemos los datos validados
+        // Get the validated data from the form
         const data = {
-            document: String(validate.datos.document),
-            password: String(validate.datos.password)
+            document: String(validate.datos.document), // Ensure document is a string
+            password: String(validate.datos.password) // Ensure password is a string
         };
         
         
-        loading("Iniciando Sesion")
+        loading("Iniciando Sesion") // Show a loading message
         
-        const response = await login(data);
+        const response = await login(data); // Send the login request to the API
         
         // ===== Manejo de errores =====
+        // Check if the login was not successful or if there are errors
         if (!response.ok || (response.errors && response.errors.length > 0)) {
+            // If there are specific errors, display them
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {
+                // If there is a general error, display it
                 error(response.message || "Error al iniciar sesión");
             }
-            return;
+            return; // Exit the function
         }
 
         // ===== Login exitoso =====
-        success(response.message || "Inicio de sesión exitoso");
-        localStorage.setItem("role_id", response.data.role_id);
-        localStorage.setItem("user_id", response.data.id);
-        localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
-        localStorage.setItem("nombres", response.data.names)
-        localStorage.setItem("apellido", response.data.last_name)
-        window.location.hash = "#/Dashboard";
-        form.reset();
+        // If the login was successful
+        success(response.message || "Inicio de sesión exitoso"); // Display a success message
+        localStorage.setItem("role_id", response.data.role_id); // Store the user's role ID in local storage
+        localStorage.setItem("user_id", response.data.id); // Store the user's ID in local storage
+        localStorage.setItem("permissions", JSON.stringify(response.data.permissions)); // Store the user's permissions in local storage
+        localStorage.setItem("nombres", response.data.names) // Store the user's first name in local storage
+        localStorage.setItem("apellido", response.data.last_name) // Store the user's last name in local storage
+        window.location.hash = "#/Dashboard"; // Redirect to the dashboard
+        form.reset(); // Reset the form
     };
 };

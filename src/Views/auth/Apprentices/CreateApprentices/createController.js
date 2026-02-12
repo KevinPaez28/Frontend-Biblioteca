@@ -146,7 +146,6 @@ export const abrirModalCrearAprendiz = async () => {
             rol: validate.datos.rol,
             tipo_documento: validate.datos.tipo_documento,
             estado_id: validate.datos.estado,
-            // Genera una contraseña aleatoria de 10 caracteres
             contrasena: Math.random().toString(36).slice(-10)
         };
 

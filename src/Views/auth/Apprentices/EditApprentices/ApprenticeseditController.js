@@ -40,6 +40,7 @@ export const editModalAprendiz = (item) => {
         const selectFicha = modal.querySelector("#modalSelectFicha");
         const selectPrograma = modal.querySelector("#modalSelectPrograma");
         const selectEstado = modal.querySelector("#modalSelectEstado");
+        const Tdocumento = modal.querySelector("#tipodocumento");
 
         // ===== PRECARGA DE DATOS DEL USUARIO =====
         // Llena todos los campos con los datos actuales del aprendiz
@@ -59,6 +60,16 @@ export const editModalAprendiz = (item) => {
             // Selecciona automáticamente el estado actual del aprendiz
             if (e.status === item.estado) op.selected = true;
             selectEstado.append(op);
+        });
+
+        const tipo = await get("Tipo_documento")
+
+        // Agrega cada tipo de documento al <select>
+        tipo.data.forEach(r => {
+            const op = document.createElement("option");
+            op.value = r.id;
+            op.textContent = r.name;
+            Tdocumento.append(op);
         });
 
         // ===== CARGA DE FICHAS Y PROGRAMAS =====
