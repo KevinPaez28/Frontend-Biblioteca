@@ -4,90 +4,90 @@ import * as validate from "../../../Helpers/Modules/modules";
 import { success, error } from "../../../Helpers/alertas";
 
 /**
- * @description This function sets up the password recovery form, handles input validation,
- *              and submits the form to request a password reset code.
+ * @description Esta función configura el formulario de recuperación de contraseña, maneja la validación de la entrada,
+ *              y envía el formulario para solicitar un código de restablecimiento de contraseña.
  */
 export default async () => {
-    // Get the form element from the DOM using its ID
+    // Obtiene el elemento del formulario del DOM usando su ID
     const form = document.querySelector("#formulario_passwordCode");
-    // Get all input elements within the form
+    // Obtiene todos los elementos de entrada dentro del formulario
     const campos = form.querySelectorAll("input");
 
-    // Loop through each input field to attach specific validation rules
+    // Itera a través de cada campo de entrada para adjuntar reglas de validación específicas
     campos.forEach(campo => {
-        // Check if the current input field is the 'documento' (document number) field
+        // Comprueba si el campo de entrada actual es el campo 'documento' (número de documento)
         if (campo.id === "documento") {
-            // Attach event listeners for real-time and focus-based validation
+            // Adjunta listeners de eventos para la validación en tiempo real y basada en el foco
 
-            // Validate that only numbers are entered and limit the maximum length while typing
+            // Valida que solo se introduzcan números y limita la longitud máxima al escribir
             campo.addEventListener("keydown", e => {
-                validate.validarNumeros(e); // Use the validate module to allow only numbers
-                validate.validarMaximo(e, campo.maxLength || 10); // Limit the maximum length of the input
+                validate.validarNumeros(e); // Utiliza el módulo de validación para permitir solo números
+                validate.validarMaximo(e, campo.maxLength || 10); // Limita la longitud máxima de la entrada
             });
 
-            // Validate the minimum length and that the field is not empty when the input loses focus
+            // Valida la longitud mínima y que el campo no esté vacío cuando la entrada pierde el foco
             campo.addEventListener("blur", e => {
-                validate.validarMinimo(e, campo.minLength || 6); // Ensure the minimum length is met
-                validate.validarCampo(e); // Ensure the field is not empty
+                validate.validarMinimo(e, campo.minLength || 6); // Asegura que se cumpla la longitud mínima
+                validate.validarCampo(e); // Asegura que el campo no esté vacío
             });
         }
     });
 
-    // Flag to prevent multiple submissions
+    // Bandera para evitar envíos múltiples
     let enviando = false;
 
-    // Handle the form submission event
+    // Maneja el evento de envío del formulario
     form.onsubmit = async (event) => {
-        // Prevent the default form submission behavior
+        // Previene el comportamiento de envío del formulario por defecto
         event.preventDefault();
 
-        // If the form is already being submitted, prevent another submission
+        // Si el formulario ya está siendo enviado, previene otro envío
         if (enviando) return;
 
-        // Validate all form fields before submission
+        // Valida todos los campos del formulario antes del envío
         if (!validate.validarCampos(event, "login")) {
-            return; // If validation fails, exit the function
+            return; // Si la validación falla, sale de la función
         }
 
-        // Create a data object containing the document number from the validated form data
+        // Crea un objeto de datos que contiene el número de documento de los datos del formulario validados
         const data = {
-            document: String(validate.datos.document) // Ensure the document number is converted to a string
+            document: String(validate.datos.document) // Asegura que el número de documento se convierta en una cadena
         };
 
-        // Set the 'enviando' flag to true to prevent multiple submissions
+        // Establece la bandera 'enviando' a true para evitar envíos múltiples
         enviando = true;
 
-        // Send a POST request to the 'Reset-password' endpoint with the document number
+        // Envía una solicitud POST al endpoint 'Reset-password' con el número de documento
         const response = await post('Reset-password', data);
 
-        // Handle the response from the API
+        // Maneja la respuesta de la API
         if (!response || !response.success) {
-            // If the response indicates an error
+            // Si la respuesta indica un error
 
-            // Display specific error messages if available
+            // Muestra mensajes de error específicos si están disponibles
             if (response?.errors && response.errors.length > 0) {
-                response.errors.forEach(err => error(err)); // Iterate through each error and display it
+                response.errors.forEach(err => error(err)); // Itera a través de cada error y lo muestra
             } else {
-                // Display a general error message if no specific errors are provided
+                // Muestra un mensaje de error general si no se proporcionan errores específicos
                 error(response?.message || "Error al enviar la recuperación");
             }
 
-            enviando = false; // Reset the 'enviando' flag to allow future submissions
-            return; // Exit the function
+            enviando = false; // Restablece la bandera 'enviando' para permitir envíos futuros
+            return; // Sale de la función
         }
 
-        // If the password reset request is successful
+        // Si la solicitud de restablecimiento de contraseña es exitosa
 
-        // Store the user's email in local storage for use in the next step
+        // Almacena el correo electrónico del usuario en el almacenamiento local para usarlo en el siguiente paso
         localStorage.setItem("email_reset", response.data.email);
 
-        // Display a success message
+        // Muestra un mensaje de éxito
         success(response.message || "Se ha enviado el correo de recuperación correctamente");
 
-        form.reset(); // Reset the form fields
-        enviando = false; // Reset the 'enviando' flag to allow future submissions
+        form.reset(); // Restablece los campos del formulario
+        enviando = false; // Restablece la bandera 'enviando' para permitir envíos futuros
 
-        // Redirect the user to the 'Verifycode' page to verify the reset code
+        // Redirige al usuario a la página 'Verifycode' para verificar el código de restablecimiento
         window.location.hash = `#/Verifycode`;
     };
 };

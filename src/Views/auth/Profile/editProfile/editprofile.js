@@ -7,16 +7,16 @@ import { success, error, loading } from "../../../../Helpers/alertas.js";
 import profileController from "../profileController.js"
 
 /**
- * @description Function to display and handle the user editing modal.
- * @param {object} user - The user object containing user information.
+ * @description Función para mostrar y manejar el modal de edición de usuario.
+ * @param {object} user - El objeto de usuario que contiene la información del usuario.
  */
 export const editUserModal = (user) => {
-    // Display the modal with the provided HTML content
+    // Muestra el modal con el contenido HTML proporcionado
     const modal = mostrarModal(htmlUserModal);
 
-    // Use requestAnimationFrame to ensure the modal is fully rendered before manipulating it
+    // Usa requestAnimationFrame para asegurar que el modal se renderice completamente antes de manipularlo
     requestAnimationFrame(async () => {
-        // Get references to various elements within the modal
+        // Obtiene referencias a varios elementos dentro del modal
         const btnCerrar = modal.querySelector("#btnCerrarModal");
         const form = modal.querySelector("#formUser");
 
@@ -30,7 +30,7 @@ export const editUserModal = (user) => {
         const Tdocumento = modal.querySelector("#tipodocumento");
 
         // ===== PRECARGAR DATOS =====
-        // Pre-populate the input fields with the user's existing data
+        // Pre-poblar los campos de entrada con los datos existentes del usuario
         inputDocumento.value = user.document || "";
         inputNombres.value = user.first_name || "";
         inputApellidos.value = user.last_name || "";
@@ -38,7 +38,7 @@ export const editUserModal = (user) => {
         inputTelefono.value = user.phone_number || "";
 
         // ===== RELLENAR SELECT DE ROLES =====
-        // Fetch the list of roles from the API
+        // Obtiene la lista de roles desde la API
 
         const tipo = await get("Tipo_documento")
 
@@ -51,12 +51,12 @@ export const editUserModal = (user) => {
         });
 
         const roles = await get("roles"); // Endpoint para roles
-        // Iterate over each role and create an option element for it
+        // Itera sobre cada rol y crea un elemento option para él
         roles.data.forEach(r => {
             const op = document.createElement("option");
             op.value = r.id;
             op.textContent = r.name;
-            // If the role ID matches the user's role ID, mark it as selected
+            // Si el ID del rol coincide con el ID del rol del usuario, lo marca como seleccionado
             if (r.id === user.rol_id) op.selected = true;
             selectRol.append(op);
         });
@@ -65,27 +65,27 @@ export const editUserModal = (user) => {
 
 
         // CIERRE DEL MODAL
-        // Add an event listener to the close button to close the modal
+        // Agrega un event listener al botón de cerrar para cerrar el modal
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        // Variable to prevent multiple form submissions
+        // Variable para prevenir el envío múltiple del formulario
         let enviando = false;
 
-        // Handle the form submission
+        // Maneja el envío del formulario
         form.onsubmit = async (event) => {
-            // Prevent the default form submission behavior
+            // Previene el comportamiento de envío del formulario por defecto
             event.preventDefault();
-            // If the form is already submitting, prevent another submission
+            // Si el formulario ya está en proceso de envío, previene otro envío
             if (enviando) return;
-            // Validate the form fields
+            // Valida los campos del formulario
             if (!validate.validarCampos(event)) return;
 
-            // Display a loading message
+            // Muestra un mensaje de carga
             loading("Modificando Usuario");
-            // Close the modal
+            // Cierra el modal
             cerrarModal(modal);
 
-            // Create a payload object with the data to be sent to the API
+            // Crea un objeto de carga útil con los datos que se enviarán a la API
             const payload = {
                 ...validate.datos,
                 usuario: user.id,
@@ -95,15 +95,15 @@ export const editUserModal = (user) => {
             };
 
             try {
-                // Set 'enviando' to true to prevent multiple submissions
+                // Establece 'enviando' en true para prevenir el envío múltiple
                 enviando = true;
-                // Send a PATCH request to update the user
+                // Envía una solicitud PATCH para actualizar el usuario
                 const response = await patch(`user/${user.id}`, payload);
 
-                // If the response is not successful
+                // Si la respuesta no es exitosa
                 if (!response || !response.success) {
                     cerrarModal(modal);
-                    // Display any errors
+                    // Muestra cualquier error
                     if (response?.errors && response.errors.length > 0) {
                         response.errors.forEach(err => error(err));
                     } else {
@@ -113,7 +113,7 @@ export const editUserModal = (user) => {
                     return;
                 }
 
-                // If the update is successful
+                // Si la actualización es exitosa
                 cerrarModal(modal);
                 success(response.message || "Usuario actualizado correctamente");
                 form.reset();
@@ -121,7 +121,7 @@ export const editUserModal = (user) => {
                 enviando = false;
 
             } catch (err) {
-                // Handle any errors that occur during the update process
+                // Maneja cualquier error que ocurra durante el proceso de actualización
                 console.error(err);
                 error("Ocurrió un error inesperado");
                 enviando = false;

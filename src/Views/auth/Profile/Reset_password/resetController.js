@@ -6,41 +6,41 @@ import { success, error, loading } from "../../../../Helpers/alertas.js";
 import htmlCambiarPassword from "./index.html?raw";
 
 /**
- * @description Opens a modal to allow the user to change their password.
- * @param {object} item - The user object containing user information, including the user ID.
+ * @description Abre un modal para permitir al usuario cambiar su contraseña.
+ * @param {object} item - El objeto de usuario que contiene la información del usuario, incluyendo el ID del usuario.
  */
 export const abrirModalCambiarPassword = (item) => {
-    // Display the modal using the provided HTML content
+    // Muestra el modal utilizando el contenido HTML proporcionado
     const modal = mostrarModal(htmlCambiarPassword);
 
-    // Use requestAnimationFrame to ensure the modal is fully rendered before manipulating it
+    // Utiliza requestAnimationFrame para asegurar que el modal se renderice completamente antes de manipularlo
     requestAnimationFrame(() => {
-        // Get a reference to the password change form within the modal
+        // Obtiene una referencia al formulario de cambio de contraseña dentro del modal
         const form = modal.querySelector("#formCambiarPassword");
-        // If the form is not found, log an error and exit
+        // Si el formulario no se encuentra, registra un error y sale
         if (!form) return console.error("Formulario no encontrado");
 
-        // Get references to the close button and input fields within the form
+        // Obtiene referencias al botón de cerrar y a los campos de entrada dentro del formulario
         const btnCerrar = modal.querySelector("#btnCerrarModal");
         const inputActual = form.querySelector('input[name="current_password"]');
         const inputNueva = form.querySelector('input[name="newPassword"]');
         const inputConfirmar = form.querySelector('input[name="confirmPassword"]');
 
-        // Store the input fields in an array for easier iteration
+        // Almacena los campos de entrada en un array para facilitar la iteración
         const inputs = [inputActual, inputNueva, inputConfirmar];
 
         // ================= VALIDACIÓN VISUAL POR CAMPO =================
-        // Attach validation event listeners to each input field
+        // Adjunta event listeners de validación a cada campo de entrada
         inputs.forEach(campo => {
             campo.addEventListener("blur", () => {
-                // If the field is the current password field, perform basic field validation
+                // Si el campo es el campo de contraseña actual, realiza la validación básica del campo
                 if (campo.name === "current_password") {
                     validate.validarCampo({ target: campo });
                 }
-                // Otherwise, perform password-specific validation
+                // De lo contrario, realiza la validación específica de la contraseña
                 else {
                     const valido = validate.validarPassword({ target: campo });
-                    // If the password is valid, remove the error class from the input's parent element
+                    // Si la contraseña es válida, elimina la clase de error del elemento padre de la entrada
                     if (valido) {
                         campo.closest(".form__grupo").classList.remove("error");
                     }
@@ -49,31 +49,31 @@ export const abrirModalCambiarPassword = (item) => {
         });
 
         // ================= BOTÓN CERRAR =================
-        // Add an event listener to the close button to close the modal
+        // Agrega un event listener al botón de cerrar para cerrar el modal
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
         // ================= SUBMIT =================
-        // Flag to prevent multiple form submissions
+        // Bandera para evitar el envío múltiple del formulario
         let enviando = false;
-        // Handle the form submission event
+        // Maneja el evento de envío del formulario
         form.onsubmit = async (event) => {
-            // Prevent the default form submission behavior
+            // Previene el comportamiento de envío del formulario por defecto
             event.preventDefault();
-            // If the form is already submitting, prevent another submission
+            // Si el formulario ya está siendo enviado, previene otro envío
             if (enviando) return;
 
-            // Validate all form fields
+            // Valida todos los campos del formulario
             if (!validate.validarCampos(e)) {
                 return;
             }
-            // Display a loading message
+            // Muestra un mensaje de carga
             loading("Actualizando contraseña...");
-            // Close the modal
+            // Cierra el modal
             cerrarModal(modal);
-            // Set 'enviando' to true to prevent multiple submissions
+            // Establece 'enviando' en true para evitar el envío múltiple
             enviando = true;
 
-            // Create a payload object with the password data
+            // Crea un objeto de carga útil con los datos de la contraseña
             const payload = {
                 current_password: inputActual.value,
                 new_password: inputNueva.value,
@@ -82,13 +82,13 @@ export const abrirModalCambiarPassword = (item) => {
             };
 
             try {
-                // Send a PATCH request to update the password
+                // Envía una solicitud PATCH para actualizar la contraseña
                 const response = await patch(`user/newpassword/${item.id}`, payload);
 
-                // If the response is not successful
+                // Si la respuesta no es exitosa
                 if (!response || !response.success) {
                     cerrarModal(modal);
-                    // Display any errors
+                    // Muestra cualquier error
                     if (response?.errors?.length) {
                         response.errors.forEach(err => error(err));
                     } else {
@@ -97,17 +97,17 @@ export const abrirModalCambiarPassword = (item) => {
                     return;
                 }
 
-                // If the update is successful, display a success message
+                // Si la actualización es exitosa, muestra un mensaje de éxito
                 success(response.message || "Contraseña actualizada correctamente");
                 form.reset();
                 cerrarModal(modal);
 
             } catch (err) {
-                // Handle any errors that occur during the update process
+                // Maneja cualquier error que ocurra durante el proceso de actualización
                 console.error(err);
                 error("Ocurrió un error inesperado");
             } finally {
-                // Reset 'enviando' to false to allow future submissions
+                // Restablece 'enviando' a false para permitir envíos futuros
                 enviando = false;
             }
         };

@@ -6,16 +6,16 @@ import { editUserModal } from "./editProfile/editprofile.js";
 import { abrirModalCambiarPassword } from "./Reset_password/resetController.js";
 
 /**
- * @description This function is the main entry point for the profile page.
- * It fetches the user's profile data, renders it, and sets up event listeners for interacting with the profile.
+ * @description Esta función es el punto de entrada principal para la página de perfil.
+ * Obtiene los datos del perfil del usuario, los renderiza y establece los listeners de eventos para interactuar con el perfil.
  */
 export default async () => {
-  // Get references to DOM elements
-  const contenedor = document.querySelector(".contenido-dashboard"); // Main content container
-  const btnEditar = document.getElementById("btnEditarPerfil"); // Button to edit the profile
-  const linkCambiarPass = document.getElementById("perfil-cambiar-pass"); // Link to change the password
+  // Obtiene referencias a los elementos del DOM
+  const contenedor = document.querySelector(".contenido-dashboard"); // Contenedor principal del contenido
+  const btnEditar = document.getElementById("btnEditarPerfil"); // Botón para editar el perfil
+  const linkCambiarPass = document.getElementById("perfil-cambiar-pass"); // Enlace para cambiar la contraseña
 
-  // Object containing references to the profile data display fields
+  // Objeto que contiene referencias a los campos de visualización de datos del perfil
   const camposPerfil = {
     documento: document.getElementById("perfil-documento"),
     nombres: document.getElementById("perfil-nombres"),
@@ -24,38 +24,38 @@ export default async () => {
     telefono: document.getElementById("perfil-telefono"),
   };
 
-  // Check if the user has permission to update user profiles
+  // Comprueba si el usuario tiene permiso para actualizar los perfiles de usuario
   if (!tienePermiso("users.update") && btnEditar) {
-    // If the user doesn't have permission, hide the edit button
+    // Si el usuario no tiene permiso, oculta el botón de edición
     btnEditar.style.display = "none";
   }
 
   /**
-   * @description Function to load the user's profile data from the API and display it on the page.
+   * @description Función para cargar los datos del perfil del usuario desde la API y mostrarlos en la página.
    */
   const cargarPerfil = async () => {
     try {
-      // Show a loading spinner while fetching data
+      // Muestra un spinner de carga mientras se obtienen los datos
       showSpinner(contenedor);
 
-      // Get the user ID from local storage
+      // Obtiene el ID del usuario del almacenamiento local
       const userId = localStorage.getItem("user_id");
-      // Fetch the user's profile data from the API
+      // Obtiene los datos del perfil del usuario desde la API
       const res = await get(`user/profile/${userId}`);
       const data = res.data;
 
-      // Add an event listener to the edit button to open the edit modal
+      // Agrega un listener de eventos al botón de edición para abrir el modal de edición
       btnEditar?.addEventListener("click", () => {
         editUserModal(data);
       });
 
-      // Add an event listener to the change password link to open the change password modal
+      // Agrega un listener de eventos al enlace de cambio de contraseña para abrir el modal de cambio de contraseña
       linkCambiarPass?.addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent the default link behavior
+        e.preventDefault(); // Previene el comportamiento predeterminado del enlace
         abrirModalCambiarPassword(data);
       });
 
-      // If the profile data is available, display it in the corresponding fields
+      // Si los datos del perfil están disponibles, los muestra en los campos correspondientes
       if (data) {
         camposPerfil.documento.textContent = data.document || "-";
         camposPerfil.nombres.textContent = data.first_name || "-";
@@ -64,14 +64,14 @@ export default async () => {
         camposPerfil.telefono.textContent = data.phone_number || "-";
       }
     } catch (error) {
-      // Log any errors that occur during the profile loading process
+      // Registra cualquier error que ocurra durante el proceso de carga del perfil
       console.error("Error cargando perfil:", error);
     } finally {
-      // Hide the loading spinner, regardless of whether the profile loaded successfully
+      // Oculta el spinner de carga, independientemente de si el perfil se cargó correctamente
       hideSpinner(contenedor);
     }
   };
 
-  // Call the function to load the profile data when the page loads
+  // Llama a la función para cargar los datos del perfil cuando se carga la página
   await cargarPerfil();
 };

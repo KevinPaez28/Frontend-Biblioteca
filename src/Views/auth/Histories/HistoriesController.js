@@ -3,33 +3,33 @@ import { get } from "../../../Helpers/api.js";
 import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
 
 /**
- * @description This function initializes and populates the history log section of the application.
- * It fetches history data from an API, displays it, and handles pagination and filtering.
+ * @description Esta función inicializa y popula la sección del registro de historial de la aplicación.
+ * Obtiene datos del historial desde una API, los muestra y maneja la paginación y el filtrado.
  */
 export default async () => {
 
-    // Get references to DOM elements
-    const contenedor = document.getElementById("historial-lista"); // Main container for the history list
-    const pagination = document.querySelector(".pagination"); // Container for pagination controls
+    // Obtener referencias a los elementos del DOM
+    const contenedor = document.getElementById("historial-lista"); // Contenedor principal para la lista del historial
+    const pagination = document.querySelector(".pagination"); // Contenedor para los controles de paginación
 
-    // Get input elements for filtering
+    // Obtener elementos de entrada para el filtrado
     const inputs = document.querySelectorAll(".input-filter");
-    const inputAccion  = inputs[0]; // Input for filtering by action
-    const inputUsuario = inputs[1]; // Input for filtering by user
-    const inputModulo  = inputs[2]; // Input for filtering by module
+    const inputAccion  = inputs[0]; // Input para filtrar por acción
+    const inputUsuario = inputs[1]; // Input para filtrar por usuario
+    const inputModulo  = inputs[2]; // Input para filtrar por módulo
 
-    const btnFiltrar = document.querySelector(".btn-outline"); // Button to apply filters
+    const btnFiltrar = document.querySelector(".btn-outline"); // Botón para aplicar los filtros
 
-    let currentPage = 1; // Current page number
+    let currentPage = 1; // Número de página actual
 
     /**
-     * @description Fetches history data from the API and renders it in the container.
-     * @param {number} [page=1] - The page number to fetch.
+     * @description Obtiene los datos del historial desde la API y los renderiza en el contenedor.
+     * @param {number} [page=1] - El número de página a obtener.
      */
     const cargarHistorial = async (page = 1) => {
-        currentPage = page; // Update the current page
+        currentPage = page; // Actualizar la página actual
 
-        // Construct URL parameters for filtering
+        // Construir los parámetros de la URL para el filtrado
         const params = new URLSearchParams({
             page,
             action: inputAccion.value.trim(),
@@ -38,55 +38,55 @@ export default async () => {
         }).toString();
     
         try {
-            showSpinner(contenedor); // Show a loading spinner
+            showSpinner(contenedor); // Mostrar un spinner de carga
 
-            // Fetch data from the API
+            // Obtener datos desde la API
             const response = await get(`historial?${params}`);
-            contenedor.innerHTML = ""; // Clear the container
-            pagination.innerHTML = ""; // Clear the pagination
+            contenedor.innerHTML = ""; // Limpiar el contenedor
+            pagination.innerHTML = ""; // Limpiar la paginación
 
-            const data = response.data; // Laravel paginator: Get the paginated data
-            const records = data.data; // Get the actual history records
+            const data = response.data; // Paginador de Laravel: Obtener los datos paginados
+            const records = data.data; // Obtener los registros de historial actuales
 
-            // Check if there are any history records
+            // Comprobar si hay registros de historial
             if (records?.length) {
-                // Iterate over each record
+                // Iterar sobre cada registro
                 records.forEach(item => {
-                    const divItem = document.createElement("div"); // Create a div for each history item
+                    const divItem = document.createElement("div"); // Crear un div para cada elemento del historial
                     divItem.classList.add("historial-item");
 
-                    const divAccion = document.createElement("div"); // Div for the action type
+                    const divAccion = document.createElement("div"); // Div para el tipo de acción
                     divAccion.classList.add("historial-accion");
 
-                    const accion = item.action?.name?.toLowerCase() || "crear"; // Get the action name or default to "crear"
-                    divAccion.classList.add(accion); // Add a class based on the action name
-                    divAccion.textContent = item.action?.name || "Acción"; // Set the action text
+                    const accion = item.action?.name?.toLowerCase() || "crear"; // Obtener el nombre de la acción o establecer el valor predeterminado a "crear"
+                    divAccion.classList.add(accion); // Agregar una clase basada en el nombre de la acción
+                    divAccion.textContent = item.action?.name || "Acción"; // Establecer el texto de la acción
 
-                    const divInfo = document.createElement("div"); // Div for the history information
+                    const divInfo = document.createElement("div"); // Div para la información del historial
                     divInfo.classList.add("historial-info");
 
-                    const strong = document.createElement("strong"); // Strong element for the user name
-                    strong.textContent = item.user?.perfil?.name || "Usuario"; // Set the user name
+                    const strong = document.createElement("strong"); // Elemento strong para el nombre del usuario
+                    strong.textContent = item.user?.perfil?.name || "Usuario"; // Establecer el nombre del usuario
 
-                    const p = document.createElement("p"); // Paragraph for the description
-                    p.innerHTML = item.description || "Sin descripción"; // Set the description
+                    const p = document.createElement("p"); // Párrafo para la descripción
+                    p.innerHTML = item.description || "Sin descripción"; // Establecer la descripción
 
-                    divInfo.append(strong, p); // Append user and description
+                    divInfo.append(strong, p); // Añadir usuario y descripción
 
-                    const divFecha = document.createElement("div"); // Div for the date and time
+                    const divFecha = document.createElement("div"); // Div para la fecha y la hora
                     divFecha.classList.add("historial-fecha");
 
-                    const fecha = new Date(item.created_at); // Create a Date object
+                    const fecha = new Date(item.created_at); // Crear un objeto de fecha
                     divFecha.innerHTML = `
                         <span>${fecha.toLocaleDateString()}</span>
                         <small>${fecha.toLocaleTimeString()}</small>
-                    `; // Set the formatted date and time
+                    `; // Establecer la fecha y la hora formateadas
 
-                    divItem.append(divAccion, divInfo, divFecha); // Append all elements to the item div
-                    contenedor.appendChild(divItem); // Add the item to the container
+                    divItem.append(divAccion, divInfo, divFecha); // Añadir todos los elementos al div del elemento
+                    contenedor.appendChild(divItem); // Agregar el elemento al contenedor
                 });
             } else {
-                // Display a message if there are no history records
+                // Mostrar un mensaje si no hay registros de historial
                 contenedor.innerHTML = `
                     <div class="historial-empty">
                         No hay registros en el historial
@@ -95,37 +95,37 @@ export default async () => {
             }
 
             // 🔹 PAGINACIÓN
-            const btnPrev = document.createElement("button"); // Button to go to the previous page
+            const btnPrev = document.createElement("button"); // Botón para ir a la página anterior
             btnPrev.textContent = "«";
-            btnPrev.disabled = data.current_page === 1; // Disable if it's the first page
-            btnPrev.onclick = () => cargarHistorial(data.current_page - 1); // Load the previous page
+            btnPrev.disabled = data.current_page === 1; // Deshabilitar si es la primera página
+            btnPrev.onclick = () => cargarHistorial(data.current_page - 1); // Cargar la página anterior
             pagination.appendChild(btnPrev);
 
-            // Create buttons for each page
+            // Crear botones para cada página
             for (let i = 1; i <= data.last_page; i++) {
-                const btn = document.createElement("button"); // Button for each page number
+                const btn = document.createElement("button"); // Botón para cada número de página
                 btn.textContent = i;
-                if (i === data.current_page) btn.disabled = true; // Disable if it's the current page
-                btn.onclick = () => cargarHistorial(i); // Load the corresponding page
+                if (i === data.current_page) btn.disabled = true; // Deshabilitar si es la página actual
+                btn.onclick = () => cargarHistorial(i); // Cargar la página correspondiente
                 pagination.appendChild(btn);
             }
 
-            const btnNext = document.createElement("button"); // Button to go to the next page
+            const btnNext = document.createElement("button"); // Botón para ir a la página siguiente
             btnNext.textContent = "»";
-            btnNext.disabled = data.current_page === data.last_page; // Disable if it's the last page
-            btnNext.onclick = () => cargarHistorial(data.current_page + 1); // Load the next page
+            btnNext.disabled = data.current_page === data.last_page; // Deshabilitar si es la última página
+            btnNext.onclick = () => cargarHistorial(data.current_page + 1); // Cargar la página siguiente
             pagination.appendChild(btnNext);
 
         } catch (e) {
             console.error(e);
         } finally {
-            hideSpinner(contenedor); // Hide the spinner after loading
+            hideSpinner(contenedor); // Ocultar el spinner después de cargar
         }
     };
 
-    // Add event listeners to the filter button and inputs
-    btnFiltrar.addEventListener("click", () => cargarHistorial(1)); // Load the first page when the filter button is clicked
-    inputs.forEach(i => i.addEventListener("keyup", () => cargarHistorial(1))); // Load the first page when any input is changed
+    // Agregar event listeners al botón de filtro y a las entradas
+    btnFiltrar.addEventListener("click", () => cargarHistorial(1)); // Cargar la primera página cuando se hace clic en el botón de filtro
+    inputs.forEach(i => i.addEventListener("keyup", () => cargarHistorial(1))); // Cargar la primera página cuando se cambia cualquier entrada
 
-    await cargarHistorial(); // Load the initial history data
+    await cargarHistorial(); // Cargar los datos iniciales del historial
 };

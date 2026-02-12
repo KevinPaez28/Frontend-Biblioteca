@@ -5,86 +5,86 @@ import * as validate from "../../../Helpers/Modules/modules";
 import { success, error, loading } from "../../../Helpers/alertas";
 
 /**
- * @description Initializes the login form functionality, including validation and submission.
+ * @description Inicializa la funcionalidad del formulario de inicio de sesión, incluyendo la validación y el envío.
  * @returns {Promise<void>}
  */
 export default async () => {
 
     // ================= OBTENER ELEMENTOS DEL DOM =================
-    // Get the form element from the DOM
+    // Obtiene el elemento del formulario desde el DOM
     const form = document.querySelector("#formulario_login");
 
-    // Get all input elements within the form
+    // Obtiene todos los elementos de entrada dentro del formulario
     const campos = form.querySelectorAll("input");
 
-    // Iterate over each input field to attach specific validation logic
+    // Itera sobre cada campo de entrada para adjuntar una lógica de validación específica
     campos.forEach(campo => {
-        // Check if the current field is the 'documento' field
+        // Comprueba si el campo actual es el campo 'documento'
         if (campo.id === "documento") {
             /**
-             * @description Validates that only numbers are allowed and limits the maximum length while typing.
-             * @param {KeyboardEvent} e - The keyboard event.
+             * @description Valida que solo se permitan números y limita la longitud máxima al escribir.
+             * @param {KeyboardEvent} e - El evento del teclado.
              */
             campo.addEventListener("keydown", e => {
-                validate.validarNumeros(e); // Validate only numbers are entered
-                validate.validarMaximo(e, campo.maxLength || 10); // Validate maximum length
+                validate.validarNumeros(e); // Valida que solo se introduzcan números
+                validate.validarMaximo(e, campo.maxLength || 10); // Valida la longitud máxima
             });
             /**
-             * @description Validates the minimum length and required field when the input loses focus.
-             * @param {FocusEvent} e - The focus event.
+             * @description Valida la longitud mínima y el campo requerido cuando la entrada pierde el foco.
+             * @param {FocusEvent} e - El evento de foco.
              */
             campo.addEventListener("blur", e => {
-                validate.validarMinimo(e, campo.minLength || 6); // Validate minimum length
-                validate.validarCampo(e); // Validate that the field is not empty
+                validate.validarMinimo(e, campo.minLength || 6); // Valida la longitud mínima
+                validate.validarCampo(e); // Valida que el campo no esté vacío
             });
-            return; // Exit the forEach loop to prevent applying other validations
+            return; // Sale del bucle forEach para evitar aplicar otras validaciones
         }
     });
     
     // ================= SUBMIT DEL FORMULARIO =================
-    // Handle the form submission
+    // Maneja el envío del formulario
     form.onsubmit = async (event) => {
-        // Prevent the default form submission behavior
+        // Previene el comportamiento de envío del formulario por defecto
         event.preventDefault();
         
-        // Validate all form fields
+        // Valida todos los campos del formulario
         if (!validate.validarCampos(event, "login")) {
-            return; // If validation fails, exit the function
+            return; // Si la validación falla, sale de la función
         }
         
-        // Get the validated data from the form
+        // Obtiene los datos validados del formulario
         const data = {
-            document: String(validate.datos.document), // Ensure document is a string
-            password: String(validate.datos.password) // Ensure password is a string
+            document: String(validate.datos.document), // Asegura que el documento sea una cadena
+            password: String(validate.datos.password) // Asegura que la contraseña sea una cadena
         };
         
         
-        loading("Iniciando Sesion") // Show a loading message
+        loading("Iniciando Sesion") // Muestra un mensaje de carga
         
-        const response = await login(data); // Send the login request to the API
+        const response = await login(data); // Envía la solicitud de inicio de sesión a la API
         
         // ===== Manejo de errores =====
-        // Check if the login was not successful or if there are errors
+        // Comprueba si el inicio de sesión no fue exitoso o si hay errores
         if (!response.ok || (response.errors && response.errors.length > 0)) {
-            // If there are specific errors, display them
+            // Si hay errores específicos, los muestra
             if (response.errors && response.errors.length > 0) {
                 response.errors.forEach(err => error(err));
             } else {
-                // If there is a general error, display it
+                // Si hay un error general, lo muestra
                 error(response.message || "Error al iniciar sesión");
             }
-            return; // Exit the function
+            return; // Sale de la función
         }
 
         // ===== Login exitoso =====
-        // If the login was successful
-        success(response.message || "Inicio de sesión exitoso"); // Display a success message
-        localStorage.setItem("role_id", response.data.role_id); // Store the user's role ID in local storage
-        localStorage.setItem("user_id", response.data.id); // Store the user's ID in local storage
-        localStorage.setItem("permissions", JSON.stringify(response.data.permissions)); // Store the user's permissions in local storage
-        localStorage.setItem("nombres", response.data.names) // Store the user's first name in local storage
-        localStorage.setItem("apellido", response.data.last_name) // Store the user's last name in local storage
-        window.location.hash = "#/Dashboard"; // Redirect to the dashboard
-        form.reset(); // Reset the form
+        // Si el inicio de sesión fue exitoso
+        success(response.message || "Inicio de sesión exitoso"); // Muestra un mensaje de éxito
+        localStorage.setItem("role_id", response.data.role_id); // Almacena el ID del rol del usuario en el almacenamiento local
+        localStorage.setItem("user_id", response.data.id); // Almacena el ID del usuario en el almacenamiento local
+        localStorage.setItem("permissions", JSON.stringify(response.data.permissions)); // Almacena los permisos del usuario en el almacenamiento local
+        localStorage.setItem("nombres", response.data.names) // Almacena el nombre del usuario en el almacenamiento local
+        localStorage.setItem("apellido", response.data.last_name) // Almacena el apellido del usuario en el almacenamiento local
+        window.location.hash = "#/Dashboard"; // Redirige al panel de control
+        form.reset(); // Restablece el formulario
     };
 };
