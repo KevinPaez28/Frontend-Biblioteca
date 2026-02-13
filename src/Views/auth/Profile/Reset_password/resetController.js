@@ -63,7 +63,7 @@ export const abrirModalCambiarPassword = (item) => {
             if (enviando) return;
 
             // Valida todos los campos del formulario
-            if (!validate.validarCampos(e)) {
+            if (!validate.validarCampos(event)) {
                 return;
             }
             // Muestra un mensaje de carga

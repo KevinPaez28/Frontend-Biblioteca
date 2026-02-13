@@ -6,6 +6,10 @@ import htmlCrearJornada from "./index.html?raw";
 import { success, error, loading } from "../../../../Helpers/alertas.js";
 import shiftsController from "../shiftsController.js";
 
+/**
+ * Función asíncrona para abrir el modal de creación de jornada.
+ * Evita abrir múltiples modales al verificar si ya existe un formulario con el ID "formJornada".
+ */
 export const abrirModalCrearJornada = async () => {
     // Evitar abrir más de un modal
     if (document.querySelector("#formJornada")) return;
@@ -20,6 +24,7 @@ export const abrirModalCrearJornada = async () => {
         const inputNombre = modal.querySelector("#inputNombre");
         const selectHorario = modal.querySelector("#selectHorario");
 
+        // Verifica que todos los elementos necesarios existan en el DOM.
         if (!btnCerrar || !form || !inputNombre || !selectHorario) {
             console.error("No se encontraron los elementos necesarios en el modal");
             cerrarModal(modal);
@@ -27,12 +32,17 @@ export const abrirModalCrearJornada = async () => {
         }
 
         // ================== BOTÓN CERRAR MODAL ==================
+        // Agrega un event listener al botón de cerrar para cerrar el modal.
         btnCerrar.addEventListener("click", () => cerrarModal(modal));
 
-        // Bandera para evitar múltiples envíos
+        // Bandera para evitar múltiples envíos del formulario.
         let enviando = false;
 
         // ================== EVENTO SUBMIT ==================
+        /**
+         * Función asíncrona para manejar el evento de envío del formulario.
+         * @param {Event} e - El objeto del evento.
+         */
         const handleSubmit = async (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -75,6 +85,7 @@ export const abrirModalCrearJornada = async () => {
       form.addEventListener("submit", handleSubmit);
 
         // ================== CARGA DE DATOS DINÁMICOS ==================
+        // Carga los horarios dinámicamente desde el servidor y los agrega al select.
         try {
             const horarios = await get("horarios");
             selectHorario.innerHTML = `<option value="">Seleccione un horario</option>`;
@@ -92,6 +103,7 @@ export const abrirModalCrearJornada = async () => {
         }
 
         // ================== VALIDACIONES POR CAMPO ==================
+        // Agrega validaciones a los campos del formulario.
         const campos = form.querySelectorAll("input, select");
         campos.forEach(campo => {
             if (campo.type === "text") {

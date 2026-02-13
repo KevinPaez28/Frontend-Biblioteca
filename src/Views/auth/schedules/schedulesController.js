@@ -5,6 +5,7 @@ import { editarmodalHorario } from "./editschedules/editschedules.js";
 import { abrirModalCrearHorario } from "./Createschedules/createSchedules.js";
 import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
+import { deleteSchedule } from "./deleteSchedules/deleteSchedules.js";
 
 export default async () => {
   const tbody = document.querySelector(".seccion-dashboard .table tbody");
@@ -90,7 +91,7 @@ export default async () => {
             btnEliminar.classList.add("btn-eliminar");
             btnEliminar.textContent = "Eliminar";
             btnEliminar.addEventListener("click", () => {
-
+              deleteSchedule(item)
             });
             td6.appendChild(btnEliminar);
           }

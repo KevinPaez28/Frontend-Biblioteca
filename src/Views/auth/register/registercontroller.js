@@ -4,7 +4,9 @@ import * as validate from "../../../Helpers/Modules/modules";
 
 import { success, error, loading } from "../../../Helpers/alertas";
 
-
+/**
+ * @description Función asíncrona principal para manejar el formulario de registro de usuarios.
+ */
 export default async () => {
 
     // Obtener el formulario de registro
