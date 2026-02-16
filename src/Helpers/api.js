@@ -1,9 +1,25 @@
-import { getCookie } from '../Helpers/getCookies.js'; // desde auth.js
+import { getCookie } from '../Helpers/getCookies.js';
 import { cerrarTodos } from './modalManagement.js';
 import { error } from './alertas.js';
 
-const url = "http://localhost:8000/api/"
+const url = "http://localhost:8000/api/";
 
+/* ================================
+   🔥 CIERRE TOTAL DE SESIÓN
+================================ */
+export const cerrarSesion = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+
+    cerrarTodos();
+    error("Sesión expirada");
+
+    window.location.href = '#/Home';
+};
+
+/* ================================
+   🔁 REFRESH TOKEN
+================================ */
 export const refreshToken = async () => {
     try {
         await fetch(`${url}refresh-token`, {
@@ -12,15 +28,16 @@ export const refreshToken = async () => {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${getCookie('refresh_token')}`
-            },
-            body: JSON.stringify([])
+            }
         });
     } catch (err) {
         console.error('Error al refrescar token:', err);
     }
 };
 
-// GET
+/* ================================
+   🌐 GET
+================================ */
 export const get = async (endpoint) => {
     try {
         let response = await fetch(`${url}${endpoint}`, {
@@ -34,6 +51,7 @@ export const get = async (endpoint) => {
 
         if (response.status === 401) {
             await refreshToken();
+
             response = await fetch(`${url}${endpoint}`, {
                 method: 'GET',
                 credentials: 'include',
@@ -44,9 +62,7 @@ export const get = async (endpoint) => {
             });
 
             if (response.status === 401) {
-                cerrarTodos();
-                error("Sesión expirada");
-                window.location.href = '#/Home';
+                cerrarSesion();
                 return null;
             }
         }
@@ -58,6 +74,9 @@ export const get = async (endpoint) => {
     }
 };
 
+/* ================================
+   📤 EXPORT FILE
+================================ */
 export const exportFile = async (endpoint) => {
     try {
         let response = await fetch(`${url}${endpoint}`, {
@@ -71,6 +90,7 @@ export const exportFile = async (endpoint) => {
 
         if (response.status === 401) {
             await refreshToken();
+
             response = await fetch(`${url}${endpoint}`, {
                 method: 'GET',
                 credentials: 'include',
@@ -81,28 +101,25 @@ export const exportFile = async (endpoint) => {
             });
 
             if (response.status === 401) {
-                cerrarTodos();
-                error("Sesión expirada");
-                window.location.href = '#/Home';
+                cerrarSesion();
                 return null;
             }
         }
 
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP ${response.status}: ${errorText}`);
+            throw new Error(`HTTP ${response.status}`);
         }
 
         return await response.blob();
-
     } catch (err) {
         console.error('Error en exportFile:', err);
         throw err;
     }
 };
 
-
-// POST
+/* ================================
+   📥 POST
+================================ */
 export const post = async (endpoint, datos) => {
     try {
         let response = await fetch(`${url}${endpoint}`, {
@@ -117,6 +134,7 @@ export const post = async (endpoint, datos) => {
 
         if (response.status === 401) {
             await refreshToken();
+
             response = await fetch(`${url}${endpoint}`, {
                 method: 'POST',
                 credentials: 'include',
@@ -128,9 +146,7 @@ export const post = async (endpoint, datos) => {
             });
 
             if (response.status === 401) {
-                cerrarTodos();
-                error("Sesión expirada");
-                window.location.href = '#/Home';
+                cerrarSesion();
                 return null;
             }
         }
@@ -141,15 +157,18 @@ export const post = async (endpoint, datos) => {
         return null;
     }
 };
-// POST IMPORT FILE
+
+/* ================================
+   📎 POST FILE
+================================ */
 export const postFile = async (endpoint, file) => {
     try {
         const formData = new FormData();
         formData.append("file", file);
 
         let response = await fetch(`${url}${endpoint}`, {
-            method: "POST",
-            credentials: "include",
+            method: 'POST',
+            credentials: 'include',
             headers: {
                 'Authorization': `Bearer ${getCookie('access_token')}`
             },
@@ -160,8 +179,8 @@ export const postFile = async (endpoint, file) => {
             await refreshToken();
 
             response = await fetch(`${url}${endpoint}`, {
-                method: "POST",
-                credentials: "include",
+                method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Authorization': `Bearer ${getCookie('access_token')}`
                 },
@@ -169,22 +188,21 @@ export const postFile = async (endpoint, file) => {
             });
 
             if (response.status === 401) {
-                cerrarTodos();
-                error("Sesión expirada");
-                window.location.href = "#/Home";
+                cerrarSesion();
                 return null;
             }
         }
 
         return await response.json();
-
     } catch (err) {
-        console.error("Error en POST FILE:", err);
+        console.error('Error en POST FILE:', err);
         return null;
     }
 };
 
-// PATCH
+/* ================================
+   ✏️ PATCH
+================================ */
 export const patch = async (endpoint, datos) => {
     try {
         let response = await fetch(`${url}${endpoint}`, {
@@ -199,6 +217,7 @@ export const patch = async (endpoint, datos) => {
 
         if (response.status === 401) {
             await refreshToken();
+
             response = await fetch(`${url}${endpoint}`, {
                 method: 'PATCH',
                 credentials: 'include',
@@ -210,9 +229,7 @@ export const patch = async (endpoint, datos) => {
             });
 
             if (response.status === 401) {
-                cerrarTodos();
-                error("Sesión expirada");
-                window.location.href = '#/Home';
+                cerrarSesion();
                 return null;
             }
         }
@@ -224,7 +241,9 @@ export const patch = async (endpoint, datos) => {
     }
 };
 
-// DELETE
+/* ================================
+   🗑️ DELETE
+================================ */
 export const delet = async (endpoint) => {
     try {
         let response = await fetch(`${url}${endpoint}`, {
@@ -238,6 +257,7 @@ export const delet = async (endpoint) => {
 
         if (response.status === 401) {
             await refreshToken();
+
             response = await fetch(`${url}${endpoint}`, {
                 method: 'DELETE',
                 credentials: 'include',
@@ -248,9 +268,7 @@ export const delet = async (endpoint) => {
             });
 
             if (response.status === 401) {
-                cerrarTodos();
-                error("Sesión expirada");
-                window.location.href = '#/Home';
+                cerrarSesion();
                 return null;
             }
         }
@@ -262,8 +280,9 @@ export const delet = async (endpoint) => {
     }
 };
 
-
-
+/* ================================
+   🔐 LOGIN
+================================ */
 export const login = async (content) => {
     try {
         const response = await fetch(`${url}login`, {
@@ -281,7 +300,6 @@ export const login = async (content) => {
             errors: data.errors || [],
             data: data.data || null
         };
-
     } catch (err) {
         console.error("Error en login:", err);
         return {
@@ -292,6 +310,3 @@ export const login = async (content) => {
         };
     }
 };
-
-
-

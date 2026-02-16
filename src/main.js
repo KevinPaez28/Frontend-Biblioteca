@@ -8,7 +8,9 @@ const app = document.querySelector("#app");
 
 // Función para manejar clases del body según rol
 const actualizarBody = () => {
-  if (getCookie("access_token")) {
+  const role = localStorage.getItem('role_id');
+
+  if (role) {
     document.body.classList.add('with-role');
     document.body.classList.remove('no-role');
   } else {

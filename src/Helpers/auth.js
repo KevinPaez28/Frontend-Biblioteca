@@ -1,9 +1,14 @@
 export function isAuth() {
+    const role = localStorage.getItem('role_id');
+    const permissions = localStorage.getItem('permissions');
 
-    if (localStorage.getItem('role_id')) return true;
+    // Si falta algo del estado mínimo → NO autenticado
+    if (!role || !permissions) return false;
 
-    return false;
+    // Si el navegador NO tiene cookies activas → NO autenticado
+    if (!navigator.cookieEnabled) return false;
 
+    return true;
 }
 
 export function isAdmin() {
@@ -64,3 +69,17 @@ export const convertirPermisosArray = (permisos) => {
     // Retorna el array de permisos
     return permisos;
 }
+
+export const cerrarSesion = () => {
+    //  limpiar TODO el estado del navegador
+    localStorage.clear();
+
+    // (opcional pero recomendado)
+    sessionStorage.clear();
+
+    // cerrar modales, alertar y mandar al home/login
+    cerrarTodos();
+    error("Sesión expirada");
+
+    window.location.href = '#/Home';
+};
