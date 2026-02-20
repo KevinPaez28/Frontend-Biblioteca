@@ -5,20 +5,13 @@ let modalesAbiertos = [];
  * Muestra un modal con contenido HTML y devuelve la referencia
  */
 export const mostrarModal = (contenido) => {
-    // Ocultar último modal si existe
-    if (modalesAbiertos.length > 0) {
-        const existente = modalesAbiertos[modalesAbiertos.length - 1];
-        existente.innerHTML = contenido; // solo cambia contenido
-        return existente;
-    }
-    const ultimo = modalesAbiertos[modalesAbiertos.length - 1];
-    if (ultimo) ultimo.classList.add('invisible');
-
     const modal = document.createElement('dialog');
     modal.classList.add('modal');
     modal.innerHTML = contenido;
+
     app.appendChild(modal);
     modalesAbiertos.push(modal);
+
     modal.showModal();
 
     requestAnimationFrame(() => {
@@ -27,6 +20,7 @@ export const mostrarModal = (contenido) => {
 
     return modal;
 };
+
 
 /**
  * Cierra un modal específico

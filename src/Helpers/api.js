@@ -2,7 +2,7 @@ import { getCookie } from '../Helpers/getCookies.js';
 import { cerrarTodos } from './modalManagement.js';
 import { error } from './alertas.js';
 
-const url = "http://localhost:8000/api/";
+const url = `${import.meta.env.VITE_API_URL}/api/`;
 
 /* ================================
    🔥 CIERRE TOTAL DE SESIÓN

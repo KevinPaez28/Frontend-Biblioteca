@@ -56,7 +56,7 @@ export const abrirModalCrearAsistenciaEvento = async () => {
         /* ================= MANEJO SUBMIT ================= */
         let enviando = false; // Previene doble envío
 
-        form.onsubmit = async (event) => {           
+        form.onsubmit = async (event) => { 
             event.preventDefault();
             if (enviando) return;
 
