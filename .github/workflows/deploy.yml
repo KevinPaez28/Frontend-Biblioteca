@@ -1,0 +1,23 @@
+name: Frontend Vanilla Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        # Aquí Vite toma el .env y el código y crea la carpeta /dist
+        run: npm run build 
+
+      - name: Permissions Fix
+        run: sudo chown -R www-data:www-data dist/
