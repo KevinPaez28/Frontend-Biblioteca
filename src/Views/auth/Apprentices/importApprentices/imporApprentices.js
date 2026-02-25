@@ -1,8 +1,8 @@
 import "../../../../Components/Models/modal.css";
-import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
+import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlContent from "./index.html?raw";
-import { error, success, loading, closeAlert } from "../../../../Helpers/alertas";
-import { postFile } from "../../../../Helpers/api";
+import { error, success, loading, closeAlert } from "../../../../helpers/alertas";
+import { postFile } from "../../../../helpers/api";
 import ApprenticesController from "../ApprenticesController";
 import "../../../../Styles/importDates/import.css";
 

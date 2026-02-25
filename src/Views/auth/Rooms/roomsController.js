@@ -1,10 +1,10 @@
-import { get, patch } from "../../../Helpers/api.js";
+import { get, patch } from "../../../helpers/api.js";
 import { abrirModalCrearArea } from "./createrooms/createrooms.js";
 import { editmodalreason } from "./EditRooms/editrooms.js";
 import { deleteAreas } from "./DeleteRooms/deleterooms.js";
 import { abrirModalReason } from "./viewRooms/viewrooms.js";
 import { tienePermiso } from "../../../helpers/auth.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 
 /**
  * @description Función principal asíncrona que se encarga de cargar y mostrar la información de las salas en el panel de administración.

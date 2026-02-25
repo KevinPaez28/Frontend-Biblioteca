@@ -1,9 +1,9 @@
 import "../../../Styles/Schedules/Schedules.css";
-import { get } from "../../../Helpers/api.js";
+import { get } from "../../../helpers/api.js";
 import { abrirModalHorario } from "./viewSchedules/SchedulesModal.js";
 import { editarmodalHorario } from "./editschedules/editschedules.js";
 import { abrirModalCrearHorario } from "./Createschedules/createSchedules.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
 import { deleteSchedule } from "./deleteSchedules/deleteSchedules.js";
 

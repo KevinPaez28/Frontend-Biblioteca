@@ -1,6 +1,6 @@
 import sidebarHtml from './index.html?raw';
 import { isAuthorize } from '../../helpers/auth.js';
-import { confirm } from '../../Helpers/alertas.js';
+import { confirm } from '../../helpers/alertas.js';
 
 export const renderSidebar = (elemento) => {
   elemento.innerHTML = sidebarHtml;

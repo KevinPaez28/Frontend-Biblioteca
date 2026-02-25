@@ -1,5 +1,5 @@
-import { success, error, confirm } from "../../../../Helpers/alertas.js";
-import { delet } from "../../../../Helpers/api.js";
+import { success, error, confirm } from "../../../../helpers/alertas.js";
+import { delet } from "../../../../helpers/api.js";
 import shiftsController from "../shiftsController.js";
 
 /**

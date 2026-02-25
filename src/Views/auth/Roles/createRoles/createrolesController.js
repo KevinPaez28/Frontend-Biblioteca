@@ -1,9 +1,9 @@
-import { post, get } from "../../../../Helpers/api.js";
-import * as validate from "../../../../Helpers/Modules/modules";
+import { post, get } from "../../../../helpers/api.js";
+import * as validate from "../../../../helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
-import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
+import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlCrearRol from "./index.html?raw";
-import { success, error } from "../../../../Helpers/alertas.js";
+import { success, error } from "../../../../helpers/alertas.js";
 import rolesController from "../RolesController.js";
 
 // Mismo mapa de permisos

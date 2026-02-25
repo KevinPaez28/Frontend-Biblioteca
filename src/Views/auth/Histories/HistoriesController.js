@@ -1,6 +1,6 @@
 import "../../../Styles/Histories/Histories.css";
-import { get } from "../../../Helpers/api.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { get } from "../../../helpers/api.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 
 /**
  * @description Esta función inicializa y popula la sección del registro de historial de la aplicación.

@@ -1,6 +1,6 @@
 import "../../../Styles/Profile/profile.css";
-import { get } from "../../../Helpers/api.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { get } from "../../../helpers/api.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
 import { editUserModal } from "./editProfile/editprofile.js";
 import { abrirModalCambiarPassword } from "./Reset_password/resetController.js";

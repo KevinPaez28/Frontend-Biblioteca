@@ -1,10 +1,10 @@
 import "../../../Styles/shifts/shifts.css";
-import { get } from "../../../Helpers/api.js";
+import { get } from "../../../helpers/api.js";
 import { editarmodalHorario } from "./EditShifts/editShiftsController.js";
 import { deleteShifts } from "./deleteShifts/deleteShecdules.js";
 import { abrirModalCrearJornada } from "./createShifts/createShifts.js";
 import { deleteJornada } from "./deleteShifts/deleteShift.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js"; 
 
 /**

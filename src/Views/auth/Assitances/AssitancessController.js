@@ -1,7 +1,7 @@
 import "../../../Styles/Assitances/assistances.css";
 import { abrirModalAsistencia } from "./ViewAssitances/viewAssistances.js";
-import { get } from "../../../Helpers/api.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { get } from "../../../helpers/api.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { abrirModalReason } from "./exportAssistances/export.js";
 
 

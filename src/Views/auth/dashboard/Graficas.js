@@ -11,7 +11,7 @@ import {
     Legend
 } from "chart.js";
 
-import { get } from "../../../Helpers/api";
+import { get } from "../../../helpers/api";
 
 // ============================================================================
 // REGISTRO GLOBAL DE COMPONENTES CHART.JS

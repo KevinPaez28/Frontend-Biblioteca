@@ -1,8 +1,8 @@
-import { get } from "../../../Helpers/api.js";
+import { get } from "../../../helpers/api.js";
 import { deleteUsuario } from "./deleteUsers/deleteController.js";
 import { editModalUsuario } from "./EditUsers/UsersController.js";
 import { abrirModalUsuario } from "./viewUsers/viewController.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
 import { modalCrearUser } from "./CreateUsers/createController.js";
 

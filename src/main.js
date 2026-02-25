@@ -1,6 +1,4 @@
-import { getCookie } from './Helpers/getCookies.js';
-import { router } from './Routers/router.js';
-import { isAuth, isAdmin } from './helpers/auth.js';
+import { router } from './routers/router.js';
 import './style.css';
 
 const sidebar = document.querySelector("#sidebar");

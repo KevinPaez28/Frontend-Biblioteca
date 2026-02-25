@@ -1,8 +1,8 @@
 import "../../../Components/Formulario/formulario.css"
-import { get, post } from "../../../Helpers/api";
-import * as validate from "../../../Helpers/Modules/modules";
+import { get, post } from "../../../helpers/api";
+import * as validate from "../../../helpers/Modules/modules";
 
-import { success, error, loading } from "../../../Helpers/alertas";
+import { success, error, loading } from "../../../helpers/alertas";
 
 /**
  * @description Función asíncrona principal para manejar el formulario de registro de usuarios.
@@ -133,7 +133,7 @@ export default async () => {
         const aprendiz = roles.data.find(r => r.name.toLowerCase() === "aprendiz");
 
         // Buscar roles administrador y ayudante
-        const adminOrHelpers = roles.data.filter(r => {
+        const adminOrhelpers = roles.data.filter(r => {
             const n = r.name.toLowerCase();
             return n === "administrador" || n === "apoyo";
         });
@@ -153,7 +153,7 @@ export default async () => {
             passwordGroup.querySelector("input").value = "";
         }
         // Si es administrador o ayudante
-        else if (adminOrHelpers.some(r => r.id === selectedId)) {
+        else if (adminOrhelpers.some(r => r.id === selectedId)) {
             passwordGroup.classList.remove("oculto");
             gruposActivos.forEach(g => g.classList.add("oculto"));
             selectFicha.value = "";

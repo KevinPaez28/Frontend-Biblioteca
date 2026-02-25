@@ -1,4 +1,4 @@
-import { get } from "../../../Helpers/api.js";
+import { get } from "../../../helpers/api.js";
 import { abrirModalCrearEvento } from "./CreateEvents/createController.js";
 import { deleteEvento } from "./deleteEvents/eventsController.js";
 import { editModalEvento } from "./EditEvents/editController.js";

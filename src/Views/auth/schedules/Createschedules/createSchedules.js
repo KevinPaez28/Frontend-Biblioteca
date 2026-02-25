@@ -1,9 +1,9 @@
-import { get, post } from "../../../../Helpers/api.js";
-import * as validate from "../../../../Helpers/Modules/modules";
+import { get, post } from "../../../../helpers/api.js";
+import * as validate from "../../../../helpers/Modules/modules";
 import "../../../../Components/Models/modal.css";
-import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
+import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlCrearHorario from "./index.html?raw";
-import { success, error, loading } from "../../../../Helpers/alertas.js";
+import { success, error, loading } from "../../../../helpers/alertas.js";
 import schedulesController from "../schedulesController.js";
 
 /**

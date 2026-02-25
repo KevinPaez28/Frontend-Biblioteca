@@ -1,7 +1,7 @@
   import { routes } from './routes';
-  import { renderSidebar } from '../Components/Sidebar/sidebar.js';
+  import { renderSidebar } from '../components/sidebar/sidebar.js';
   import { isAuth } from '../helpers/auth.js';
-  import hasPermisos from '../Helpers/Utils/haspermisos.js';
+  import hasPermisos from '../helpers/utils/haspermisos.js';
 
   let sidebarCargado = false;
 

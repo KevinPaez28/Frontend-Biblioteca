@@ -1,4 +1,4 @@
-import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
+import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import "../../../../Components/Models/modal.css";
 import htmlContent from "./viewSchedules.html?raw";
 

@@ -1,9 +1,9 @@
 import "../../../Styles/Schedules/Schedules.css"; 
-import { get } from "../../../Helpers/api.js";
+import { get } from "../../../helpers/api.js";
 import { abrirModalAsistencia } from "./viewAssistance/AssitancesModal.js";
 import { abrirModalCrearAsistenciaEvento } from "./CreateAssistance/createAsistencias.js";
 import { deleteAsistenciasFicha } from "./DeleteAssistance/AssitancesDelete.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { abrirModalExportAsistencias } from "./exportAssistances/export.js";
 
 

@@ -1,5 +1,5 @@
 import "../../../Styles/Schedules/Schedules.css";
-import { get } from "../../../Helpers/api.js";
+import { get } from "../../../helpers/api.js";
 import { abrirModalPrograma } from "./viewPrograms/FichasModal.js";
 import { editarModalPrograma } from "./editsPrograms/editsfichas.js";
 import { abrirModalCrearPrograma } from "./CreatePrograms/createPrograms.js";

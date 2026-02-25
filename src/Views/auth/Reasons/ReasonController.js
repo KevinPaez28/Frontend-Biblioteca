@@ -1,10 +1,10 @@
-import { get } from "../../../Helpers/api.js";
+import { get } from "../../../helpers/api.js";
 import { abrirModalCrearMotivo } from "./CreateReason/CreateReason.js";
 import { deleteShifts } from "./deleteReason/deleteReason.js";
 import { editmodalreason } from "./EditReason/EditReason.js";
 import { abrirModalReason } from "./viewReason/viewReason.js";
 import { tienePermiso } from "../../../helpers/auth.js";
-import { showSpinner, hideSpinner } from "../../../Helpers/spinner.js";
+import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 
 /**
  * @description Función principal que gestiona la visualización y carga de motivos en la sección de administración.

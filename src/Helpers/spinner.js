@@ -1,5 +1,5 @@
 import { Spinner } from "spin.js";
-import "../Styles/Dashboard/dashboard.css"
+import "../styles/dashboard/dashboard.css"
 const options = {
     lines: 12,
     length: 12,

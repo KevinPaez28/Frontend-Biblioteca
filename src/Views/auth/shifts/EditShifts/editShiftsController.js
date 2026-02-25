@@ -1,8 +1,8 @@
-import { mostrarModal, cerrarModal } from "../../../../Helpers/modalManagement.js";
-import { get, patch } from "../../../../Helpers/api.js";
+import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
+import { get, patch } from "../../../../helpers/api.js";
 import html from "./editShifts.html?raw";
 import "../../../../Styles/shifts/shiftsModal.css";
-import { error, success } from "../../../../Helpers/alertas.js";
+import { error, success } from "../../../../helpers/alertas.js";
 import shiftsController from "../shiftsController.js";
 
 /**

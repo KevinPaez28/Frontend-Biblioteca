@@ -1,4 +1,4 @@
-import { getCookie } from '../Helpers/getCookies.js';
+import { getCookie } from '../helpers/getCookies.js';
 import { cerrarTodos } from './modalManagement.js';
 import { error } from './alertas.js';
 

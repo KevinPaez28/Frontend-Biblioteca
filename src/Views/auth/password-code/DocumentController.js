@@ -1,7 +1,7 @@
 import "../../../Components/Formulario/formulario.css"
-import { post } from "../../../Helpers/api";
-import * as validate from "../../../Helpers/Modules/modules";
-import { success, error } from "../../../Helpers/alertas";
+import { post } from "../../../helpers/api";
+import * as validate from "../../../helpers/Modules/modules";
+import { success, error } from "../../../helpers/alertas";
 
 /**
  * @description Esta función configura el formulario de recuperación de contraseña, maneja la validación de la entrada,
