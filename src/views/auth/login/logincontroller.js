@@ -1,8 +1,8 @@
 import "../../../Components/Formulario/formulario.css"
 
 import { get, login, post } from "../../../helpers/api";
-import * as validate from "../../../helpers/Modules/modules";
-import { success, error, loading } from "../../../helpers/alertas";
+import * as validate from "../../../helpers/modules/modules.js";
+import { success, error, loading } from "../../../helpers/alertas.js";
 
 /**
  * @description Inicializa la funcionalidad del formulario de inicio de sesión, incluyendo la validación y el envío.

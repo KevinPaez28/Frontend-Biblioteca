@@ -1,7 +1,7 @@
 import "../../Components/Formulario/formulario.css"
-import { get, post } from "../../helpers/api";
-import * as validate from "../../helpers/Modules/modules"; // validaciones
-import { success, error, loading, closeAlert } from "../../helpers/alertas";
+import { get, post } from "../../helpers/api.js";
+import * as validate from "../../helpers/modules/modules.js"; // validaciones
+import { success, error, loading, closeAlert } from "../../helpers/alertas.js";
 
 export default async () => {
     // ================= OBTENER ELEMENTOS DEL DOM =================

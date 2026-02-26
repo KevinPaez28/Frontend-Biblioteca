@@ -1,6 +1,6 @@
 import "../../../Components/Formulario/formulario.css"
-import { get, post } from "../../../helpers/api";
-import * as validate from "../../../helpers/Modules/modules";
+import { get, post } from "../../../helpers/api.js";
+import * as validate from "../../../helpers/modules/modules.js";
 
 import { success, error, loading } from "../../../helpers/alertas";
 

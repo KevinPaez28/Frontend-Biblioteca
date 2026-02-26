@@ -1,5 +1,5 @@
 import { patch } from "../../../../helpers/api.js";
-import * as validate from "../../../../helpers/Modules/modules";
+import * as validate from "../../../../helpers/modules/modules.js";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlEditarHorario from "./index.html?raw";

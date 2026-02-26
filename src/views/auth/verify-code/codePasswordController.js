@@ -1,7 +1,7 @@
 import "../../../Components/Formulario/formulario.css";
 import { post } from "../../../helpers/api";
-import * as validate from "../../../helpers/Modules/modules";
-import { success, error } from "../../../helpers/alertas";
+import * as validate from "../../../helpers/modules/modules.js";
+import { success, error } from "../../../helpers/alertas.js";
 
 /**
  * @async

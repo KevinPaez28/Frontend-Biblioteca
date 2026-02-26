@@ -1,4 +1,4 @@
-  import { routes } from './routes';
+  import { routes } from './routes.js';
   import { renderSidebar } from '../components/sidebar/sidebar.js';
   import { isAuth } from '../helpers/auth.js';
   import hasPermisos from '../helpers/utils/haspermisos.js';

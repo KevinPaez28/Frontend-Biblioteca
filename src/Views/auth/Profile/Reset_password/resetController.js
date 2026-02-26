@@ -1,6 +1,6 @@
 import "../../../../Components/Formulario/formulario.css";
 import { patch } from "../../../../helpers/api.js";
-import * as validate from "../../../../helpers/Modules/modules.js";
+import * as validate from "../../../../helpers/modules/modules.js";
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import { success, error, loading } from "../../../../helpers/alertas.js";
 import htmlCambiarPassword from "./index.html?raw";

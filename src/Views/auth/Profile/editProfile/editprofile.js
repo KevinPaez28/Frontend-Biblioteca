@@ -1,5 +1,5 @@
 import { patch, get } from "../../../../helpers/api.js";
-import * as validate from "../../../../helpers/Modules/modules.js";
+import * as validate from "../../../../helpers/modules/modules.js";
 import "../../../../Components/Models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlUserModal from "./index.html?raw";
