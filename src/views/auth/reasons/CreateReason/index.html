@@ -1,0 +1,38 @@
+<form id="formMotivo" class="modal-contenido" novalidate autocomplete="off">
+
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">Crear Motivo</h3>
+        <p class="modal-subtitulo">
+            Registra la información para crear un nuevo motivo
+        </p>
+    </div>
+
+    <!-- ================= DATOS ================= -->
+    <div class="modal-seccion">
+        <h4>Datos</h4>
+
+        <div class="modal-grid vertical">
+            <div class="form__grupo">
+                <label class="label">NOMBRE *</label>
+                <input id="inputNombre" name="nombre" type="text" class="input" required>
+            </div>
+
+            <div class="form__grupo ">
+                <label class="label">DESCRIPCIÓN *</label>
+                <textarea id="inputDescripcion" name="descripcion" class="description input" rows="4" required></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="modal-footer create">
+        <button type="button" id="btnCerrarModal" class="btn-cerrar">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Crear Motivo
+        </button>
+    </div>
+
+</form>

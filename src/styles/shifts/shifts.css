@@ -1,0 +1,134 @@
+.ruta {
+    font-size: 13px;
+    color: var(--color-gris);
+    margin-bottom: 5px;
+}
+
+.titulo {
+    font-size: 22px;
+    font-weight: 600;
+    color: #16a34a;
+    margin-bottom: 15px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    height: 40%;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e5e7eb;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.switch {
+    position: relative;
+    width: 42px;
+    height: 22px;
+}
+
+.switch input {
+    display: none;
+}
+
+.switch span {
+    position: absolute;
+    inset: 0;
+    background: #e5e7eb;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.switch span::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 2px;
+    left: 2px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked+span {
+    background: #22c55e;
+}
+
+.switch input:checked+span::before {
+    transform: translateX(20px);
+}
+
+.card-body {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card-body small {
+    display: block;
+    font-size: 15px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.horarios {
+    position: relative;        /* Para que la X se posicione dentro */
+    min-height: 50px;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: var(--color-grisCardJornadas);
+    color: var(--color-fontJornadas);
+    padding: 10px;
+}
+
+.horarios.datos {
+    padding-right: 25px;       /* espacio para la X */
+}
+
+.horario-nombre {
+    font-size: 15px;
+}
+
+.horario-horas {
+    font-size: 14px;
+    margin: 2px 0 0 0;
+}
+
+.horario-eliminar {
+    position: absolute;
+    top: 20px;
+    right: 5px;
+    cursor: pointer;
+    color: #ef4444;
+    font-weight: bold;
+    font-size: 14px;
+}
+.card.deshabilitado {
+    opacity: 0.5;              /* bloque visual */
+    pointer-events: none;       /* bloquea todo */
+}
+
+.card.deshabilitado .switch,
+.card.deshabilitado input[type="checkbox"] {
+    pointer-events: auto;       /* permite seguir usando el checkbox */
+}

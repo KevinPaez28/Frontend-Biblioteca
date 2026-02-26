@@ -1,0 +1,127 @@
+.sidebar__header {
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    flex-shrink: 0; 
+}
+
+.sidebar__logo {
+    width: 50px;
+}
+
+.sidebar__title {
+    border-left: 1px solid #fff;
+    padding-left: 16px;
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.sidebar__nav {
+    flex: 1;          
+    display: flex;
+    flex-direction: column;
+    min-height: 0;    
+}
+
+.sidebar__menu {
+    flex: 1;          
+    overflow-y: auto;
+    overflow-x: hidden;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar__menu li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.sidebar__menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar__menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar__menu::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.4);
+    border-radius: 10px;
+}
+
+.sidebar__footer {
+    height: 140px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding: 0px 15px;
+}
+
+.sidebar__user {
+    display: flex;
+    gap: 10px;
+    font-size: 17px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding: 7px 15px;
+    border-radius: 5px;
+    background-color: #328a07;  
+    align-items: center;
+    justify-content: center;
+}
+
+/* 🔥 ARREGLO DEL LINK DE PERFIL */
+.sidebar__profile-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    text-decoration: none;
+    color: #fff;
+}
+
+/* 🔥 ICONO EN CÍRCULO BLANCO OTRA VEZ */
+.sidebar__profile-link i {
+    background-color: #fff;
+    color: #328a07;
+    padding: 8px;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+.sidebar__profile-link:hover {
+    opacity: 0.9;
+}
+
+.Perfil{
+    padding: 7px;
+    background-color: #fff;
+    border-radius:20px ;
+    color: #000;
+}
+
+.sidebar__logout {
+    display: flex;
+    gap: 10px;
+    font-size: 17px;
+    margin-top: 15px;
+    margin-bottom: 12px;
+    padding: 15px 15px;
+    border-radius: 5px;
+    background-color: #246106; 
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+}
+
+.sidebar__logout:hover {
+    background-color: #256f00;
+}

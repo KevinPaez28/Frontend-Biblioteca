@@ -1,0 +1,56 @@
+<div class="contenido-dashboard">
+
+    <!-- Ruta / ubicación -->
+    <div class="ruta-dashboard">
+        Inicio / <span>Roles</span>
+    </div>
+
+    <!-- Título + botón -->
+    <div class="titulo-accion">
+        <h1 class="titulo-dashboard">Roles</h1>
+
+        <button class="btn btn-primary" id="btnNuevoRol">
+            <i class="ri-add-line"></i>
+            Nuevo Rol
+        </button>
+    </div>
+
+    <!-- Filtro -->
+    <section class="seccion-dashboard">
+        <div class="filter-section filter-doble">
+            <div>
+                <label>Filtrar por rol</label>
+                <input type="text" class="input-filter" placeholder="Buscar">
+            </div>
+            <button class="btn btn-outline">
+                <i class="ri-search-line"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Tabla de roles -->
+    <section class="seccion-dashboard">
+        <div class="encabezado-seccion">
+            <span>Lista de roles</span>
+        </div>
+
+        <section class="table-section">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Rol</th>
+                        <th>Permisos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="roles-tbody">
+                    <!-- Las filas se generan dinámicamente con JS -->
+                </tbody>
+            </table>
+        </section>
+    </section>
+
+</div>
+
+<script type="module" src="rolesController.js"></script>

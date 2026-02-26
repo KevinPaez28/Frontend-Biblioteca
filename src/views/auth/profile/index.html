@@ -1,0 +1,77 @@
+<div class="contenido-dashboard">
+
+    <!-- Breadcrumb / Ruta -->
+    <div class="ruta-dashboard">
+      Inicio / <span>Perfil</span>
+    </div>
+  
+    <!-- Título + Acción -->
+    <div class="titulo-accion">
+      <h1 class="titulo-dashboard">Perfil</h1>
+    </div>
+  
+    <!-- Sección Identificación -->
+    <section class="seccion-dashboard">
+      <div class="card">
+        <h3>Identificación</h3>
+        <div class="linea"></div>
+  
+        <div class="fila">
+          <div class="campo">
+            <label>NÚMERO DE DOCUMENTO</label>
+            <p id="perfil-documento"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Sección Datos Personales -->
+    <section class="seccion-dashboard">
+      <div class="card">
+        <h3>Datos Personales</h3>
+        <div class="linea"></div>
+  
+        <div class="fila">
+          <div class="campo">
+            <label>NOMBRES</label>
+            <p id="perfil-nombres"></p>
+          </div>
+          <div class="campo">
+            <label>APELLIDOS</label>
+            <p id="perfil-apellidos"></p>
+          </div>
+        </div>
+  
+        <div class="fila">
+          <div class="campo">
+            <label>CORREO ELECTRÓNICO</label>
+            <p id="perfil-correo"></p>
+          </div>
+          <div class="campo">
+            <label>TELÉFONO</label>
+            <p id="perfil-telefono"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Sección Autenticación -->
+    <section class="seccion-dashboard">
+      <div class="card">
+        <h3>Autenticación</h3>
+        <div class="linea"></div>
+  
+        <a href="#" class="link-verde" id="perfil-cambiar-pass">Cambiar Contraseña</a>
+      </div>
+    </section>
+  
+    <!-- Botón al final, tal como lo tienes -->
+    <button class="btn btn-primary" id="btnEditarPerfil">
+      <i class="ri-edit-line"></i>
+      Editar Perfil
+    </button>
+  
+  </div>
+  
+  <script type="module" src="profileController.js"></script>
+  

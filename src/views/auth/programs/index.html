@@ -1,0 +1,56 @@
+<div class="contenido-dashboard">
+
+    <!-- Ruta / ubicación -->
+    <div class="ruta-dashboard">
+        Inicio / <span>Programas</span>
+    </div>
+
+    <!-- Título + botón -->
+    <div class="titulo-accion">
+        <h1 class="titulo-dashboard">Programas</h1>
+
+        <button class="btn btn-primary" id="btnNuevoPrograma">
+            <i class="ri-add-line"></i>
+            Nuevo programa
+        </button>
+    </div>
+
+    <!-- Filtro -->
+    <section class="seccion-dashboard">
+        <div class="filter-section filter-doble">
+            <div>
+                <label>Filtrar por programa</label>
+                <input type="text" class="input-filter" placeholder="Buscar">
+            </div>
+            <button class="btn btn-outline">
+                <i class="ri-search-line"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Tabla -->
+    <section class="seccion-dashboard">
+        <div class="encabezado-seccion">
+            <span>Lista de programas</span>
+        </div>
+
+        <section class="table-section">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Programa</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="programas-tbody">
+                    <!-- Aquí pinta el JS -->
+                </tbody>
+            </table>
+        </section>
+    </section>
+
+</div>
+
+<!-- Controlador -->
+<script type="module" src="programasController.js"></script>

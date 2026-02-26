@@ -1,0 +1,192 @@
+/* CONTENEDOR GENERAL */
+.bodyContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* LOGIN GRID */
+.login {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 60%;
+    height: auto;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* IZQUIERDA */
+.form__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background-color: #fff;
+    position: relative;
+    padding: 10px;
+}
+
+.left_back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #E8F5E9;
+    color: #1A4D0A;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.left_back i {
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.form__logo {
+    width: 40%;
+    height: auto;
+}
+
+.form__space {
+    width: 60%;
+    height: 3px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-principal);
+}
+
+.form__title {
+    color: var(--color-principal);
+    font-weight: 700;
+    font-family: "Work Sans";
+    font-style: normal;
+    text-align: center;
+}
+
+/* DERECHA */
+.form__right {
+    background: var(--color-lateralForm);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 40px;
+}
+
+.form__welcome {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--color-verdeOscuroPrincipal);
+}
+
+.form__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form__grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    position: relative;
+}
+
+.form__label {
+    font-weight: 600;
+    color: var(--color-verdeOscuroPrincipal);
+}
+
+.form__input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #4e6d3e;
+    outline: none;
+}
+
+/* FOOTER */
+.form__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.form__redirect {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-verdeOscuroPrincipal);
+}
+
+.form__button {
+    padding: 12px 0;
+    border-radius: 7px;
+    border: none;
+    background-color: var(--color-verdeOscuroPrincipal);
+    color: #fff;
+    width: 70%;
+}
+.buttonhome{
+    padding: 12px 0;
+    border-radius: 7px;
+    border: none;
+    background-color: var(--color-verdeOscuroPrincipal);
+    color: #fff;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px;
+}
+.form__link {
+    text-decoration: none;
+    color: #143501;
+}
+
+.space {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    row-gap: 25px;
+    align-items: center;
+}
+
+.space>*:nth-child(11) {
+    grid-column: 1 / 3;
+    display: flex;
+    justify-content: center;
+}
+
+.oculto {
+    display: none;
+}
+
+.form__grupo.error .form__input {
+    border-color: #D32F2F !important;
+}
+
+.form__grupo.error::after {
+    content: var(--error-message, "Campo obligatorio") !important;
+    color: #D32F2F !important;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 3px;
+    display: block !important;
+  }
+
+.form__descripcion {
+    text-align: center;       
+    color: var(--color-verdeOscuroPrincipal);            
+    max-width: 300px;          
+    margin-bottom: 20px;       
+}

@@ -1,0 +1,40 @@
+<form id="formExportAsistencias" class="modal-contenido" autocomplete="off" novalidate>
+
+    <div class="modal__titulos">
+        <h3 class="modal-titulo">
+            Exportar asistencias por rango de fechas
+        </h3>
+        <p class="modal-subtitulo">
+            Selecciona la fecha de inicio y fin para descargar el Excel
+        </p>
+    </div>
+
+    <div class="modal-seccion">
+        <h4>Rango de fechas</h4>
+
+        <div class="modal-grid">
+
+            <div class="form__grupo">
+                <label class="label">Fecha inicio *</label>
+                <input type="date" id="filtroFechaInicio" name="fecha_inicio" class="input" required>
+            </div>
+
+            <div class="form__grupo">
+                <label class="label">Fecha fin *</label>
+                <input type="date" id="filtroFechaFin" name="fecha_fin" class="input" required>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer create">
+        <button type="button" id="btnCerrarModalExport" class="btn-cerrar">
+            Cerrar
+        </button>
+
+        <button type="submit" class="btn-editar">
+            Descargar Excel
+        </button>
+    </div>
+
+</form>
