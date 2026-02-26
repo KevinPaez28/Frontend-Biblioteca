@@ -95,7 +95,6 @@ export default async () => {
                     ...validate.datos,
                     recaptcha_token: token
                 };
-                console.log(data);
                 
                 const response = await post("asistencia/create", data);
 

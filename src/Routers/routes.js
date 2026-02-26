@@ -14,7 +14,7 @@ import roomsController from "../views/auth/rooms/roomsController.js";
 import eventsController from "../views/auth/events/eventsController.js";
 import UsersController from "../views/auth/users/UsersController.js";
 import ApprenticesController from "../views/auth/apprentices/ApprenticesController.js";
-import FichasController from "../views/auth/fichas                                                                                                                                         /FichasController.js";
+import FichasController from "../views/auth/fichas/FichasController.js";
 import ProgramsController from "../views/auth/programs/ProgramsController.js";
 import AssitanceController from "../views/auth/eventAssistance/AssitanceController.js";
 import RolesController from "../views/auth/Roles/rolesController.js";

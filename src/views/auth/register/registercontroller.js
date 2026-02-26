@@ -41,8 +41,16 @@ export default async () => {
         // Activa bloqueo de envío
         enviando = true;
 
+        const token = await grecaptcha.execute(
+            "6Lc2YmksAAAAAJ_KMFarZmicnTEqWt1wdi-Q6xAf",
+            { action: "registrar" }
+        );
+
         // Copia los datos validados
-        const data = { ...validate.datos };
+        const data = {
+            ...validate.datos,
+            recaptcha_token: token
+        };
 
         console.log(data)
 
