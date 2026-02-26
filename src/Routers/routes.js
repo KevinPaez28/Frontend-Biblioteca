@@ -17,7 +17,7 @@ import ApprenticesController from "../views/auth/apprentices/ApprenticesControll
 import FichasController from "../views/auth/fichas/FichasController.js";
 import ProgramsController from "../views/auth/programs/ProgramsController.js";
 import AssitanceController from "../views/auth/eventAssistance/AssitanceController.js";
-import RolesController from "../views/auth/roles/rolesController.js";
+import RolesController from "../views/auth/roles/rolescontroller.js";
 import HistoriesController from "../views/auth/histories/HistoriesController.js";
 import asistenciaController from "../views/asistencia/asistenciaController.js";
 import profileController from "../views/auth/profile/profileController.js";
