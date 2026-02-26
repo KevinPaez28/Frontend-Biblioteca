@@ -1,8 +1,7 @@
 import "../../../components/Formulario/formulario.css"
 import { get, post } from "../../../helpers/api.js";
 import * as validate from "../../../helpers/modules/modules.js";
-
-import { success, error, loading } from "../../../helpers/alertas";
+import { success, error, loading } from "../../../helpers/alertas.js";
 
 /**
  * @description Función asíncrona principal para manejar el formulario de registro de usuarios.
