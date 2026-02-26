@@ -1,4 +1,4 @@
-import "../../components/Formulario/formulario.css"
+import "../../components/formulario/formulario.css"
 export default async () => {
    
 };
