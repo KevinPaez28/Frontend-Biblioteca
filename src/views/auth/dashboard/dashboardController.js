@@ -1,5 +1,5 @@
-import "../../../Components/sidebar/sidebar.css";
-import "../../../Styles/Dashboard/dashboard.css";
+import "../../../components/sidebar/sidebar.css";
+import "../../../styles/Dashboard/dashboard.css";
 import { cargarGraficaLineas, cargarGraficaCircular } from "./Graficas.js";
 import { get } from "../../../helpers/api.js";
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";

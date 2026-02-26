@@ -1,10 +1,10 @@
-import "../../../../Components/Models/modal.css";
+import "../../../../components/models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlContent from "./index.html?raw";
 import { error, success, loading, closeAlert } from "../../../../helpers/alertas.js";
 import { postFile } from "../../../../helpers/api.js";
 import ApprenticesController from "../ApprenticesController.js";
-import "../../../../Styles/importDates/import.css";
+import "../../../../styles/importDates/import.css";
 
 
 // ============================================================================

@@ -1,4 +1,4 @@
-import "../../../Components/Formulario/formulario.css"
+import "../../../components/Formulario/formulario.css"
 import { get, post } from "../../../helpers/api.js";
 import * as validate from "../../../helpers/modules/modules.js";
 

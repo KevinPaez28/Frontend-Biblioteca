@@ -1,6 +1,6 @@
 import { get, post } from "../../../../helpers/api.js";
 import * as validate from "../../../../helpers/modules/modules.js";
-import "../../../../Components/Models/modal.css";
+import "../../../../components/models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlCrearEvento from "./index.html?raw";
 import { success, error, loading } from "../../../../helpers/alertas.js";

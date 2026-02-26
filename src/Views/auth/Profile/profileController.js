@@ -1,4 +1,4 @@
-import "../../../Styles/Profile/profile.css";
+import "../../../styles/Profile/profile.css";
 import { get } from "../../../helpers/api.js";
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";

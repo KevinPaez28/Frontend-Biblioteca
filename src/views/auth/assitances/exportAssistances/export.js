@@ -1,5 +1,5 @@
 import { exportFile, get } from "../../../../helpers/api.js";
-import "../../../../Components/Models/modal.css";
+import "../../../../components/models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlExportAsistencias from "./index.html?raw";
 import { error, loading, success } from "../../../../helpers/alertas.js";

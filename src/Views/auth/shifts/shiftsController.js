@@ -1,4 +1,4 @@
-import "../../../Styles/shifts/shifts.css";
+import "../../../styles/shifts/shifts.css";
 import { get } from "../../../helpers/api.js";
 import { editarmodalHorario } from "./EditShifts/editShiftsController.js";
 import { deleteShifts } from "./deleteShifts/deleteShecdules.js";
