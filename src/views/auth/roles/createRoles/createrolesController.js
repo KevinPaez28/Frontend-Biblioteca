@@ -4,7 +4,7 @@ import "../../../../components/models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlCrearRol from "./index.html?raw";
 import { success, error } from "../../../../helpers/alertas.js";
-import rolesController from "../RolesController.js";
+import rolescontroller from "../rolescontroller.js";
 
 // Mismo mapa de permisos
 const permisoLabels = {
@@ -218,7 +218,7 @@ export const abrirModalCrearRol = async () => {
                 // Muestra un mensaje de éxito.
                 success(response.message || "Rol creado correctamente");
                 // Refresca la lista de roles.
-                rolesController();
+                rolescontroller();
 
             } catch (err) {
                 // Si ocurre un error inesperado, lo registra en la consola y muestra un mensaje de error.

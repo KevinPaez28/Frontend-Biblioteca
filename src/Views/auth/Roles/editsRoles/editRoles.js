@@ -4,7 +4,7 @@ import "../../../../components/models/modal.css";
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import htmlEditarRol from "./index.html?raw";
 import { success, error } from "../../../../helpers/alertas.js";
-import rolesController from "../RolesController.js";
+import rolescontroller from "../rolescontroller.js";
 
 /**
  * @description Mapa de permisos con etiquetas amigables para la interfaz de usuario.
@@ -189,7 +189,7 @@ export const editarModalRol = async (rol) => {
                 // Mostrar un mensaje de éxito.
                 success(response.message || "Rol actualizado correctamente");
                 // Recargar la lista de roles.
-                rolesController();
+                rolescontroller();
 
             } catch (err) {
                 // En caso de error inesperado, registrar el error y mostrar un mensaje.
