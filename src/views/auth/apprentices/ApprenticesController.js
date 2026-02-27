@@ -3,7 +3,7 @@ import { abrirModalCrearAprendiz } from "./CreateApprentices/createController.js
 import { editModalAprendiz } from "./EditApprentices/ApprenticeseditController.js";
 import { importApprenties } from "./importApprentices/imporApprentices.js";
 import { abrirModalAprendiz } from "./viewApprentices/viewController.js";
-import { deleteUsuario } from "./DeleteApprentices/deleteController.js"; 
+import { deleteUsuario } from "./deleteApprentices/deleteController.js"; 
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
 import "../../../styles/assitances/assistances.css";
