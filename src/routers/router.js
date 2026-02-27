@@ -66,11 +66,13 @@
 
   const cargarVista = async (path, elemento) => {
     try {
-      const module = await import(`../views/${path}?raw`);
-      elemento.innerHTML = module.default;
-    } catch (err) {
-      console.error(err);
-      elemento.innerHTML = "<h2>Error al cargar la vista</h2>";
+      const response = await fetch(`./src/views/${path}`);
+      if (!response.ok) throw new Error("No se pudo cargar la vista");
+      const html = await response.text();
+      elemento.innerHTML = html;
+    } catch (error) {
+      console.error(error);
+      elemento.innerHTML = `<h2>Error al cargar la vista</h2>`;
     }
   };
 
