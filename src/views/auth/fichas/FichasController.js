@@ -1,4 +1,4 @@
-import "../../../styles/Schedules/Schedules.css";
+import "../../../styles/schedules/schedules.css";
 import { get } from "../../../helpers/api.js";
 import { abrirModalFicha } from "./viewFichas/FichasModal.js";
 import { editarmodalFicha } from "./editsFichas/editsfichas.js";

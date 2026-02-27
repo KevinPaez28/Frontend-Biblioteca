@@ -1,4 +1,4 @@
-import "../../../styles/Assitances/assistances.css";
+import "../../../styles/assitances/assistances.css";
 import { abrirModalAsistencia } from "./ViewAssitances/viewAssistances.js";
 import { get } from "../../../helpers/api.js";
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";

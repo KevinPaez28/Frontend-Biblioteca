@@ -1,4 +1,4 @@
-import "../../../styles/Schedules/Schedules.css";
+import "../../../styles/schedules/schedules.css";
 import { get } from "../../../helpers/api.js";
 import { abrirModalRol } from "./viewRoles/RolesModal.js";
 import { editarModalRol } from "./editsRoles/editRoles.js";

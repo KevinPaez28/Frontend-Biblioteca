@@ -6,7 +6,7 @@ import { abrirModalAprendiz } from "./viewApprentices/viewController.js";
 import { deleteUsuario } from "./DeleteApprentices/deleteController.js"; 
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 import { tienePermiso } from "../../../helpers/auth.js";
-import "../../../styles/Assitances/assistances.css";
+import "../../../styles/assitances/assistances.css";
 
 
 // ============================================================================
