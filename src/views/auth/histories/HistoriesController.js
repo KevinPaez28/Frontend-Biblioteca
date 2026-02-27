@@ -1,4 +1,4 @@
-import "../../../styles/Histories/Histories.css";
+import "../../../styles/histories/Histories.css";
 import { get } from "../../../helpers/api.js";
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 
