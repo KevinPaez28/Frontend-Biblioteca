@@ -2,7 +2,7 @@ import "../../../styles/schedules/schedules.css";
 import { get } from "../../../helpers/api.js";
 import { abrirModalRol } from "./viewRoles/RolesModal.js";
 import { editarModalRol } from "./editsRoles/editRoles.js";
-import { abrirModalCrearRol } from "./createRoles/createrolescontroller.js";
+import { abrirModalCrearRol } from "./createRoles/createrolesController.js";
 
 const permisoLabels = {
     // AUTH
