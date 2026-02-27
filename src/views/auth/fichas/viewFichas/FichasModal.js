@@ -1,6 +1,6 @@
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import "../../../../components/models/modal.css";
-import htmlContent from "../../../fichas/viewFichas/viewFichas.html?raw";
+import htmlContent from "./viewfichas.html?raw";
 
 /**
  * @description Function to open a modal with ficha information.
