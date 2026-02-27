@@ -66,7 +66,7 @@
 
   const cargarVista = async (path, elemento) => {
     try {
-      const response = await fetch(`/views/${path}`);
+      const response = await fetch(`/${path}`);
       if (!response.ok) throw new Error("No se pudo cargar la vista");
       const html = await response.text();
       elemento.innerHTML = html;
