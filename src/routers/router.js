@@ -1,110 +1,69 @@
-  import { routes } from './routes.js';
-  import { renderSidebar } from '../components/sidebar/sidebar.js';
-  import { isAuth } from '../helpers/auth.js';
-  import hasPermisos from '../helpers/utils/haspermisos.js';
+import { routes } from './routes.js';
+import { renderSidebar } from '@components/sidebar/sidebar.js';
+import { isAuth } from '@helpers/auth.js';
+import hasPermisos from '@helpers/utils/haspermisos.js';
 
-  let sidebarCargado = false;
+let sidebarCargado = false;
 
-  export const router = async (sidebar, app) => {
-    const hash = location.hash.slice(1);
-    const segmentos = hash.split('/').filter(Boolean);
+export const router = async (sidebar, app) => {
+  const raw = (location.hash || '#/home').slice(2); // quita "#/"
+  const segmentos = raw.split('/').filter(Boolean);
+  const key = (segmentos[0] || 'home').toLowerCase();
 
-    const resultado = encontrarRuta(routes, segmentos);
-    if (!resultado) {
-      app.innerHTML = `<h2>Ruta no encontrada</h2>`;
+  const ruta = routes[key];
+  if (!ruta) {
+    app.innerHTML = `<h2>Ruta no encontrada: ${key}</h2>`;
+    return;
+  }
+
+  const meta = ruta.meta || {};
+
+  // Rutas públicas
+  if (!meta.public && !isAuth()) {
+    sidebar.innerHTML = "";
+    app.innerHTML = "";
+    sidebarCargado = false;
+    location.hash = '#/home';
+    return;
+  }
+
+  // Permisos
+  if (meta.can) {
+    const permisosUsuario = JSON.parse(localStorage.getItem("permissions")) || [];
+    const requeridos = Array.isArray(meta.can) ? meta.can : [meta.can];
+    const permitido = requeridos.some((permiso) => hasPermisos(permiso, permisosUsuario));
+
+    if (!permitido) {
+      app.innerHTML = `<h2>No tienes permisos</h2>`;
       return;
     }
+  }
 
-    const [ruta, params] = resultado;
-    const meta = ruta.meta || {};
+  // Sidebar
+  if (!sidebarCargado && isAuth()) {
+    renderSidebar(sidebar);
+    sidebarCargado = true;
+  }
+  if (!isAuth()) {
+    sidebar.innerHTML = "";
+    sidebarCargado = false;
+  }
 
-    // ================= RUTAS PUBLICAS =================
-    if (!meta.public && !isAuth()) {
-      sidebar.innerHTML = "";
-      app.innerHTML = "";
-      sidebarCargado = false;
-      location.hash = '#/Home';
+  // Cargar vista HTML (PROD safe)
+  // Coloca tus html en: public/views/...
+  // y se pedirán como /views/xxxx/index.html
+  if (ruta.view) {
+    const url = `/views/${ruta.view}`;
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) {
+      app.innerHTML = `<h2>Error cargando vista (${res.status})</h2><p>${url}</p>`;
       return;
     }
+    app.innerHTML = await res.text();
+  }
 
-    // ================= PERMISOS =================
-    if (meta.can) {
-      const permisosUsuario = JSON.parse(localStorage.getItem("permissions")) || [];
-      const requeridos = Array.isArray(meta.can) ? meta.can : [meta.can];
-
-      const permitido = requeridos.some(permiso =>
-        hasPermisos(permiso, permisosUsuario)
-      );
-
-      if (!permitido) {
-        app.innerHTML = `<h2>No tienes permisos</h2>`;
-        window.history.back();
-        return;
-      }
-    }
-
-    // ================= SIDEBAR =================
-    if (!sidebarCargado && isAuth()) {
-      renderSidebar(sidebar);
-      sidebarCargado = true;
-    }
-
-    // ================= CARGAR VISTA =================
-    if (ruta.path) {
-      await cargarVista(ruta.path, app);
-    }
-
-    // ================= CONTROLLER =================
-    if (ruta.controller) {
-      await ruta.controller(params);
-    }
-  };
-
-  // ==================================================
-  // ================= FUNCIONES AUX ===================
-  // ==================================================
-
-  const cargarVista = async (path, elemento) => {
-    try {
-      const response = await fetch(`/${path}`);
-      if (!response.ok) throw new Error("No se pudo cargar la vista");
-      const html = await response.text();
-      elemento.innerHTML = html;
-    } catch (error) {
-      console.error(error);
-      elemento.innerHTML = `<h2>Error al cargar la vista</h2>`;
-    }
-  };
-
-  const encontrarRuta = (routes, segmentos) => {
-    let rutaActual = routes;
-    let parametros = {};
-
-    if (segmentos.length > 0) {
-      const ultimo = segmentos[segmentos.length - 1];
-      if (ultimo.includes("=")) {
-        parametros = extraerParametros(ultimo);
-        segmentos.pop();
-      }
-    }
-
-    for (let i = 0; i < segmentos.length; i++) {
-      const segmento = segmentos[i];
-      if (rutaActual[segmento]) {
-        rutaActual = rutaActual[segmento];
-      } else {
-        return null;
-      }
-    }
-
-    return [rutaActual, parametros];
-  };
-
-  const extraerParametros = (paramStr) => {
-    const params = {};
-    paramStr.split("&").forEach(par => {
-      const [key, value] = par.split("=");
-      params[key] = value;
-    });
-    return params;
-  };
+  // Controller
+  if (ruta.controller) {
+    await ruta.controller({});
+  }
+};
