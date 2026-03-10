@@ -45,7 +45,7 @@ export default async () => {
      */
     const filtros = {
         nombre: document.querySelector("#filtroNombre"),
-        encargado: document.querySelector("#filtroApellido"),
+        encargado: document.querySelector("#filtroEncargado"),
         documento: document.querySelector("#filtroDocumento"),
         rol: document.querySelector("#filtroRol"),
         estado: document.querySelector("#filtroEstado"),
@@ -101,7 +101,7 @@ export default async () => {
             });
 
             // Construye la URL de la API con los parámetros de la consulta.
-            const url = `user/search?${params.toString()}`;
+            const url = `user/searchs?${params.toString()}`;
             // Obtiene los usuarios desde la API.
             const response = await get(url);
             console.log(response);
