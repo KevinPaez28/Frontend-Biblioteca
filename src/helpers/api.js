@@ -1,3 +1,4 @@
+import { getCookie } from '../helpers/getCookies.js';
 import { cerrarTodos } from './modalManagement.js';
 import { error } from './alertas.js';
 
@@ -23,11 +24,7 @@ export const refreshToken = async () => {
     try {
         await fetch(`${url}refresh-token`, {
             method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-                // SIN Authorization Bearer
-            }
+            credentials: 'include'
         });
     } catch (err) {
         console.error('Error al refrescar token:', err);
@@ -43,8 +40,8 @@ export const get = async (endpoint) => {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Accept': 'application/json'
-                // SIN Authorization Bearer
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
             }
         });
 
@@ -55,8 +52,8 @@ export const get = async (endpoint) => {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Accept': 'application/json'
-                    // SIN Authorization Bearer
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
                 }
             });
 
@@ -82,8 +79,8 @@ export const exportFile = async (endpoint) => {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                // SIN Authorization Bearer
+                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Authorization': `Bearer ${getCookie('access_token')}`
             }
         });
 
@@ -94,8 +91,8 @@ export const exportFile = async (endpoint) => {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                    // SIN Authorization Bearer
+                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
                 }
             });
 
@@ -125,8 +122,8 @@ export const post = async (endpoint, datos) => {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
-                // SIN Authorization Bearer
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
             },
             body: JSON.stringify(datos)
         });
@@ -138,8 +135,8 @@ export const post = async (endpoint, datos) => {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json'
-                    // SIN Authorization Bearer
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
                 },
                 body: JSON.stringify(datos)
             });
@@ -167,8 +164,11 @@ export const postFile = async (endpoint, file) => {
 
         let response = await fetch(`${url}${endpoint}`, {
             method: 'POST',
-            credentials: 'include'
-            // SIN headers Authorization (FormData no necesita Content-Type)
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${getCookie('access_token')}`
+            },
+            body: formData
         });
 
         if (response.status === 401) {
@@ -176,14 +176,17 @@ export const postFile = async (endpoint, file) => {
 
             response = await fetch(`${url}${endpoint}`, {
                 method: 'POST',
-                credentials: 'include'
-                // SIN Authorization Bearer
-            }, formData);
-        }
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${getCookie('access_token')}`
+                },
+                body: formData
+            });
 
-        if (response.status === 401) {
-            cerrarSesion();
-            return null;
+            if (response.status === 401) {
+                cerrarSesion();
+                return null;
+            }
         }
 
         return await response.json();
@@ -202,8 +205,8 @@ export const patch = async (endpoint, datos) => {
             method: 'PATCH',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
-                // SIN Authorization Bearer
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
             },
             body: JSON.stringify(datos)
         });
@@ -215,8 +218,8 @@ export const patch = async (endpoint, datos) => {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json'
-                    // SIN Authorization Bearer
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
                 },
                 body: JSON.stringify(datos)
             });
@@ -243,8 +246,8 @@ export const delet = async (endpoint) => {
             method: 'DELETE',
             credentials: 'include',
             headers: {
-                'Accept': 'application/json'
-                // SIN Authorization Bearer
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie('access_token')}`
             }
         });
 
@@ -255,8 +258,8 @@ export const delet = async (endpoint) => {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
-                    'Accept': 'application/json'
-                    // SIN Authorization Bearer
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('access_token')}`
                 }
             });
 
