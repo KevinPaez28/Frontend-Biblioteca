@@ -45,7 +45,7 @@ export default async () => {
      */
     const filtros = {
         nombre: document.querySelector("#filtroNombre"),
-        encargado: document.querySelector("#filtroEncargado"),
+        encargado: document.querySelector("#filtroApellido"),
         documento: document.querySelector("#filtroDocumento"),
         rol: document.querySelector("#filtroRol"),
         estado: document.querySelector("#filtroEstado"),
