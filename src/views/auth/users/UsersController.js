@@ -101,7 +101,7 @@ export default async () => {
             });
 
             // Construye la URL de la API con los parámetros de la consulta.
-            const url = `user/searchs?${params.toString()}`;
+            const url = `user/search?${params.toString()}`;
             // Obtiene los usuarios desde la API.
             const response = await get(url);
             console.log(response);
