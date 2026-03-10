@@ -1,4 +1,3 @@
-import { getCookie } from '../helpers/getCookies.js';
 import { cerrarTodos } from './modalManagement.js';
 import { error } from './alertas.js';
 
@@ -26,8 +25,7 @@ export const refreshToken = async () => {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('refresh_token')}`
+                'Content-Type': 'application/json'
             }
         });
     } catch (err) {
@@ -44,8 +42,7 @@ export const get = async (endpoint) => {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Content-Type': 'application/json'
             }
         });
 
@@ -56,8 +53,7 @@ export const get = async (endpoint) => {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -83,8 +79,7 @@ export const exportFile = async (endpoint) => {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }
         });
 
@@ -95,8 +90,7 @@ export const exportFile = async (endpoint) => {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 }
             });
 
@@ -126,8 +120,7 @@ export const post = async (endpoint, datos) => {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(datos)
         });
@@ -139,8 +132,7 @@ export const post = async (endpoint, datos) => {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(datos)
             });
@@ -169,9 +161,6 @@ export const postFile = async (endpoint, file) => {
         let response = await fetch(`${url}${endpoint}`, {
             method: 'POST',
             credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${getCookie('access_token')}`
-            },
             body: formData
         });
 
@@ -181,9 +170,6 @@ export const postFile = async (endpoint, file) => {
             response = await fetch(`${url}${endpoint}`, {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                },
                 body: formData
             });
 
@@ -209,8 +195,7 @@ export const patch = async (endpoint, datos) => {
             method: 'PATCH',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(datos)
         });
@@ -222,8 +207,7 @@ export const patch = async (endpoint, datos) => {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(datos)
             });
@@ -250,8 +234,7 @@ export const delet = async (endpoint) => {
             method: 'DELETE',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Content-Type': 'application/json'
             }
         });
 
@@ -262,8 +245,7 @@ export const delet = async (endpoint) => {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Content-Type': 'application/json'
                 }
             });
 
