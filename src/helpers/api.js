@@ -3,9 +3,6 @@ import { error } from './alertas.js';
 
 const url = `${import.meta.env.VITE_API_URL}/api/`;
 
-let refreshing = false;
-let refreshPromise = null;
-
 /* ================================
    🔥 CIERRE TOTAL DE SESIÓN
 ================================ */
@@ -23,177 +20,275 @@ export const cerrarSesion = () => {
    🔁 REFRESH TOKEN
 ================================ */
 export const refreshToken = async () => {
-
-    if (refreshing) {
-        return refreshPromise;
+    try {
+        await fetch(`${url}refresh-token`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (err) {
+        console.error('Error al refrescar token:', err);
     }
-
-    refreshing = true;
-
-    refreshPromise = fetch(`${url}refresh-token`, {
-        method: 'POST',
-        credentials: 'include'
-    })
-    .then(res => {
-        refreshing = false;
-
-        if (!res.ok) {
-            cerrarSesion();
-            throw new Error("Refresh token inválido");
-        }
-
-        return res;
-    })
-    .catch(err => {
-        refreshing = false;
-        cerrarSesion();
-        throw err;
-    });
-
-    return refreshPromise;
-};
-
-/* ================================
-   🌐 CLIENTE BASE
-================================ */
-const apiFetch = async (endpoint, options = {}) => {
-
-    let response = await fetch(`${url}${endpoint}`, {
-        ...options,
-        credentials: 'include'
-    });
-
-    if (response.status === 401) {
-
-        try {
-
-            await refreshToken();
-
-            response = await fetch(`${url}${endpoint}`, {
-                ...options,
-                credentials: 'include'
-            });
-
-        } catch (err) {
-
-            cerrarSesion();
-            return null;
-
-        }
-    }
-
-    return response;
 };
 
 /* ================================
    🌐 GET
 ================================ */
 export const get = async (endpoint) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    const response = await apiFetch(endpoint, {
-        method: 'GET'
-    });
+        if (response.status === 401) {
+            await refreshToken();
 
-    return response ? await response.json() : null;
-};
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-/* ================================
-   📥 POST
-================================ */
-export const post = async (endpoint, datos) => {
+            if (response.status === 401) {
+                cerrarSesion();
+                return null;
+            }
+        }
 
-    const response = await apiFetch(endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos)
-    });
-
-    return response ? await response.json() : null;
-};
-
-/* ================================
-   ✏️ PATCH
-================================ */
-export const patch = async (endpoint, datos) => {
-
-    const response = await apiFetch(endpoint, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos)
-    });
-
-    return response ? await response.json() : null;
-};
-
-/* ================================
-   🗑️ DELETE
-================================ */
-export const delet = async (endpoint) => {
-
-    const response = await apiFetch(endpoint, {
-        method: 'DELETE'
-    });
-
-    return response ? await response.json() : null;
-};
-
-/* ================================
-   📎 POST FILE
-================================ */
-export const postFile = async (endpoint, file) => {
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await apiFetch(endpoint, {
-        method: 'POST',
-        body: formData
-    });
-
-    return response ? await response.json() : null;
+        return await response.json();
+    } catch (err) {
+        console.error('Error en GET:', err);
+        return null;
+    }
 };
 
 /* ================================
    📤 EXPORT FILE
 ================================ */
 export const exportFile = async (endpoint) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }
+        });
 
-    const response = await apiFetch(endpoint, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        if (response.status === 401) {
+            await refreshToken();
+
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                }
+            });
+
+            if (response.status === 401) {
+                cerrarSesion();
+                return null;
+            }
         }
-    });
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
 
-    return await response.blob();
+        return await response.blob();
+    } catch (err) {
+        console.error('Error en exportFile:', err);
+        throw err;
+    }
+};
+
+/* ================================
+   📥 POST
+================================ */
+export const post = async (endpoint, datos) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos)
+            });
+
+            if (response.status === 401) {
+                cerrarSesion();
+                return null;
+            }
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error en POST:', err);
+        return null;
+    }
+};
+
+/* ================================
+   📎 POST FILE
+================================ */
+export const postFile = async (endpoint, file) => {
+    try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'POST',
+                credentials: 'include',
+                body: formData
+            });
+
+            if (response.status === 401) {
+                cerrarSesion();
+                return null;
+            }
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error en POST FILE:', err);
+        return null;
+    }
+};
+
+/* ================================
+   ✏️ PATCH
+================================ */
+export const patch = async (endpoint, datos) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos)
+            });
+
+            if (response.status === 401) {
+                cerrarSesion();
+                return null;
+            }
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error en PATCH:', err);
+        return null;
+    }
+};
+
+/* ================================
+   🗑️ DELETE
+================================ */
+export const delet = async (endpoint) => {
+    try {
+        let response = await fetch(`${url}${endpoint}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 401) {
+            await refreshToken();
+
+            response = await fetch(`${url}${endpoint}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 401) {
+                cerrarSesion();
+                return null;
+            }
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error en DELETE:', err);
+        return null;
+    }
 };
 
 /* ================================
    🔐 LOGIN
 ================================ */
 export const login = async (content) => {
+    try {
+        const response = await fetch(`${url}login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(content)
+        });
 
-    const response = await fetch(`${url}login`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify(content)
-    });
+        const data = await response.json();
 
-    const data = await response.json();
-
-    return {
-        ok: response.ok,
-        message: data.message || "Error desconocido",
-        errors: data.errors || [],
-        data: data.data || null
-    };
+        return {
+            ok: response.ok,
+            message: data.message || "Error desconocido",
+            errors: data.errors || [],
+            data: data.data || null
+        };
+    } catch (err) {
+        console.error("Error en login:", err);
+        return {
+            ok: false,
+            message: "Error inesperado al iniciar sesión",
+            errors: [],
+            data: null
+        };
+    }
 };
