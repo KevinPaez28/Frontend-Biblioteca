@@ -26,8 +26,8 @@ export const refreshToken = async () => {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('refresh_token')}`
+                'Content-Type': 'application/json'
+                // SIN Authorization Bearer
             }
         });
     } catch (err) {
@@ -44,8 +44,8 @@ export const get = async (endpoint) => {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Accept': 'application/json'
+                // SIN Authorization Bearer
             }
         });
 
@@ -56,8 +56,8 @@ export const get = async (endpoint) => {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Accept': 'application/json'
+                    // SIN Authorization Bearer
                 }
             });
 
@@ -83,8 +83,8 @@ export const exportFile = async (endpoint) => {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                // SIN Authorization Bearer
             }
         });
 
@@ -95,8 +95,8 @@ export const exportFile = async (endpoint) => {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    // SIN Authorization Bearer
                 }
             });
 
@@ -126,8 +126,8 @@ export const post = async (endpoint, datos) => {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Content-Type': 'application/json'
+                // SIN Authorization Bearer
             },
             body: JSON.stringify(datos)
         });
@@ -139,8 +139,8 @@ export const post = async (endpoint, datos) => {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Content-Type': 'application/json'
+                    // SIN Authorization Bearer
                 },
                 body: JSON.stringify(datos)
             });
@@ -168,11 +168,8 @@ export const postFile = async (endpoint, file) => {
 
         let response = await fetch(`${url}${endpoint}`, {
             method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${getCookie('access_token')}`
-            },
-            body: formData
+            credentials: 'include'
+            // SIN headers Authorization (FormData no necesita Content-Type)
         });
 
         if (response.status === 401) {
@@ -180,17 +177,14 @@ export const postFile = async (endpoint, file) => {
 
             response = await fetch(`${url}${endpoint}`, {
                 method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                },
-                body: formData
-            });
+                credentials: 'include'
+                // SIN Authorization Bearer
+            }, formData);
+        }
 
-            if (response.status === 401) {
-                cerrarSesion();
-                return null;
-            }
+        if (response.status === 401) {
+            cerrarSesion();
+            return null;
         }
 
         return await response.json();
@@ -209,8 +203,8 @@ export const patch = async (endpoint, datos) => {
             method: 'PATCH',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Content-Type': 'application/json'
+                // SIN Authorization Bearer
             },
             body: JSON.stringify(datos)
         });
@@ -222,8 +216,8 @@ export const patch = async (endpoint, datos) => {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Content-Type': 'application/json'
+                    // SIN Authorization Bearer
                 },
                 body: JSON.stringify(datos)
             });
@@ -250,8 +244,8 @@ export const delet = async (endpoint) => {
             method: 'DELETE',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Accept': 'application/json'
+                // SIN Authorization Bearer
             }
         });
 
@@ -262,8 +256,8 @@ export const delet = async (endpoint) => {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
+                    'Accept': 'application/json'
+                    // SIN Authorization Bearer
                 }
             });
 
