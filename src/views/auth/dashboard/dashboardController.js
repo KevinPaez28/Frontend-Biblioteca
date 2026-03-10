@@ -4,18 +4,12 @@ import { cargarGraficaLineas, cargarGraficaCircular } from "./Graficas.js";
 import { get } from "../../../helpers/api.js";
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
 
-
 // ============================================================================
-// DASHBOARD CONTROLLER PRINCIPAL (export default)
-// ============================================================================
-// - Carga **KPI cards** de asistencias (día/semana/mes/egresados).
-// - Lista dinámica de **eventos del día** con cards estilizadas.
-// - Renderiza **gráficas** (líneas + circular).
-// - Manejo robusto de errores + spinner always.
+// DASHBOARD CONTROLLER - PETICIONES CON setTimeout SECUENCIAL
 // ============================================================================
 export default async () => {
-    // Contenedor principal de tarjetas KPI
     const contenedor = document.querySelector(".tarjetas-dashboard");
+    const contenedorEventos = document.querySelector(".eventos-lista");
 
     try {
         // Spinner inicial
@@ -23,48 +17,54 @@ export default async () => {
             showSpinner(contenedor);
         }
 
-        // ================= PETICIONES PARALELAS ASISTENCIAS =================
-        // 4 endpoints independientes para métricas KPI
+
+        // ================= PETICIONES CON setTimeout SECUENCIAL =================
+        // Cada petición espera X segundos antes de ejecutarse (evita sobrecarga servidor)
+
+        // 1. TOTAL DÍA (0.3s delay)
+        await new Promise(resolve => setTimeout(resolve, 300));
         const totalDia = await get("asistencia/total-dia");
+
+        // 2. TOTAL SEMANA (0.6s delay acumulativo)
+        await new Promise(resolve => setTimeout(resolve, 300));
         const totalSemana = await get("asistencia/total-semana");
+
+        // 3. TOTAL MES (0.9s delay acumulativo)
+        await new Promise(resolve => setTimeout(resolve, 300));
         const totalMes = await get("asistencia/total-mes");
+
+        // 4. TOTAL EGRESADOS (1.2s delay acumulativo)
+        await new Promise(resolve => setTimeout(resolve, 300));
         const totalEgresados = await get("asistencia/total-egresados");
 
-        // ===== TOTAL DÍA (Card #1) =====
-        let valorDia = 0;
-        if (totalDia && totalDia.data && totalDia.data.total !== undefined) {
-            valorDia = totalDia.data.total;
-        }
-        document.querySelector("#totalDia").textContent = valorDia;
 
-        // ===== TOTAL SEMANA (Card #2) =====
-        let valorSemana = 0;
-        if (totalSemana && totalSemana.data && totalSemana.data.total !== undefined) {
-            valorSemana = totalSemana.data.total;
-        }
-        document.querySelector("#totalSemana").textContent = valorSemana;
+        // Card #1 - TOTAL DÍA
+        let valorDia = totalDia?.data?.total ?? 0;
+        const elDia = document.querySelector("#totalDia");
+        if (elDia) elDia.textContent = valorDia;
 
-        // ===== TOTAL MES (Card #3) =====
-        let valorMes = 0;
-        if (totalMes && totalMes.data && totalMes.data.total !== undefined) {
-            valorMes = totalMes.data.total;
-        }
-        document.querySelector("#totalMes").textContent = valorMes;
+        // Card #2 - TOTAL SEMANA
+        let valorSemana = totalSemana?.data?.total ?? 0;
+        const elSemana = document.querySelector("#totalSemana");
+        if (elSemana) elSemana.textContent = valorSemana;
 
-        // ===== TOTAL EGRESADOS (Card #4) =====
-        let valorEgresados = 0;
-        if (totalEgresados && totalEgresados.data && totalEgresados.data.total !== undefined) {
-            valorEgresados = totalEgresados.data.total;
-        }
-        document.querySelector("#totalEgresados").textContent = valorEgresados;
+        // Card #3 - TOTAL MES
+        let valorMes = totalMes?.data?.total ?? 0;
+        const elMes = document.querySelector("#totalMes");
+        if (elMes) elMes.textContent = valorMes;
 
-        // ================= EVENTOS DEL DÍA =================
-        const eventos = await get("eventos/today"); // Eventos programados para hoy
-        
-        const contenedorEventos = document.querySelector(".eventos-lista");
+        // Card #4 - TOTAL EGRESADOS
+        let valorEgresados = totalEgresados?.data?.total ?? 0;
+        const elEgresados = document.querySelector("#totalEgresados");
+        if (elEgresados) elEgresados.textContent = valorEgresados;
 
-        if (eventos && eventos.data && eventos.data.length > 0) {
-            // Crea cards dinámicas para cada evento
+        // ================= EVENTOS DEL DÍA (1.5s delay) =================
+        await new Promise(resolve => setTimeout(resolve, 300));
+        const eventos = await get("eventos/today");
+
+        if (eventos?.data?.length > 0 && contenedorEventos) {
+            contenedorEventos.innerHTML = ""; // Limpia previo
+
             eventos.data.forEach(evento => {
                 const article = document.createElement("article");
                 article.classList.add("evento-card");
@@ -74,22 +74,22 @@ export default async () => {
                 badge.classList.add("evento-badge");
                 badge.textContent = "Hoy";
 
-                // Título del evento
+                // Título
                 const titulo = document.createElement("h3");
                 titulo.classList.add("evento-titulo");
                 titulo.textContent = evento.name;
 
-                // Subtítulo (mandated = obligatorio?)
+                // Subtítulo
                 const sub = document.createElement("p");
                 sub.classList.add("evento-sub");
                 sub.textContent = `● ${evento.mandated}`;
 
-                // Footer con hora y fecha
+                // Footer
                 const footer = document.createElement("div");
                 footer.classList.add("evento-footer");
 
                 const hora = document.createElement("span");
-                hora.textContent = `Inicio ${evento.start_time}`; 
+                hora.textContent = `Inicio ${evento.start_time}`;
 
                 const fecha = document.createElement("span");
                 fecha.textContent = evento.date;
@@ -97,7 +97,6 @@ export default async () => {
                 footer.appendChild(hora);
                 footer.appendChild(fecha);
 
-                // Arma estructura completa de la card
                 article.appendChild(badge);
                 article.appendChild(titulo);
                 article.appendChild(sub);
@@ -105,25 +104,31 @@ export default async () => {
 
                 contenedorEventos.appendChild(article);
             });
-        } else {
-            // Fallback sin eventos
+        } else if (contenedorEventos) {
             contenedorEventos.textContent = "No hay eventos próximos";
         }
 
-        // ================= GRÁFICAS DASHBOARD =================
-        await cargarGraficaLineas();    // Gráfica de líneas
-        await cargarGraficaCircular();  // Gráfica circular/pastel
+        // ================= GRÁFICAS CON setTimeout =================
+        
+        // Gráfica líneas (1.8s delay)
+        await new Promise(resolve => setTimeout(resolve, 300));
+        await cargarGraficaLineas();
+
+        // Gráfica circular (2.1s delay)
+        await new Promise(resolve => setTimeout(resolve, 300));
+        await cargarGraficaCircular();
+
 
     } catch (error) {
-        console.error("Error dashboard:", error);
+        if (contenedorEventos) {
+            contenedorEventos.innerHTML = '<p class="error-msg">Error al cargar datos</p>';
+        }
     } finally {
-        // Garantiza que el spinner se oculte SIEMPRE
-        try {
+        // Ocultar spinner después de TODO (máx 5s)
+        setTimeout(() => {
             if (contenedor) {
                 hideSpinner(contenedor);
             }
-        } catch (e) {
-            console.error("Error spinner:", e);
-        }
+        }, 5000);
     }
 };
