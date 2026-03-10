@@ -1,4 +1,3 @@
-import { getCookie } from '../helpers/getCookies.js';
 import { cerrarTodos } from './modalManagement.js';
 import { error } from './alertas.js';
 
@@ -27,8 +26,36 @@ export const refreshToken = async () => {
             credentials: 'include'
         });
     } catch (err) {
-        console.error('Error al refrescar token:', err);
+        console.error('Error refrescando token:', err);
     }
+};
+
+/* ================================
+   🌐 CLIENTE BASE
+================================ */
+const apiFetch = async (endpoint, options = {}) => {
+
+    let response = await fetch(`${url}${endpoint}`, {
+        ...options,
+        credentials: 'include'
+    });
+
+    if (response.status === 401) {
+
+        await refreshToken();
+
+        response = await fetch(`${url}${endpoint}`, {
+            ...options,
+            credentials: 'include'
+        });
+
+        if (response.status === 401) {
+            cerrarSesion();
+            return null;
+        }
+    }
+
+    return response;
 };
 
 /* ================================
@@ -36,80 +63,14 @@ export const refreshToken = async () => {
 ================================ */
 export const get = async (endpoint) => {
     try {
-        let response = await fetch(`${url}${endpoint}`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
-            }
+        const response = await apiFetch(endpoint, {
+            method: 'GET'
         });
 
-        if (response.status === 401) {
-            await refreshToken();
-
-            response = await fetch(`${url}${endpoint}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                }
-            });
-
-            if (response.status === 401) {
-                cerrarSesion();
-                return null;
-            }
-        }
-
-        return await response.json();
+        return response ? await response.json() : null;
     } catch (err) {
         console.error('Error en GET:', err);
         return null;
-    }
-};
-
-/* ================================
-   📤 EXPORT FILE
-================================ */
-export const exportFile = async (endpoint) => {
-    try {
-        let response = await fetch(`${url}${endpoint}`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Authorization': `Bearer ${getCookie('access_token')}`
-            }
-        });
-
-        if (response.status === 401) {
-            await refreshToken();
-
-            response = await fetch(`${url}${endpoint}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                }
-            });
-
-            if (response.status === 401) {
-                cerrarSesion();
-                return null;
-            }
-        }
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        return await response.blob();
-    } catch (err) {
-        console.error('Error en exportFile:', err);
-        throw err;
     }
 };
 
@@ -118,38 +79,53 @@ export const exportFile = async (endpoint) => {
 ================================ */
 export const post = async (endpoint, datos) => {
     try {
-        let response = await fetch(`${url}${endpoint}`, {
+        const response = await apiFetch(endpoint, {
             method: 'POST',
-            credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(datos)
         });
 
-        if (response.status === 401) {
-            await refreshToken();
-
-            response = await fetch(`${url}${endpoint}`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                },
-                body: JSON.stringify(datos)
-            });
-
-            if (response.status === 401) {
-                cerrarSesion();
-                return null;
-            }
-        }
-
-        return await response.json();
+        return response ? await response.json() : null;
     } catch (err) {
         console.error('Error en POST:', err);
+        return null;
+    }
+};
+
+/* ================================
+   ✏️ PATCH
+================================ */
+export const patch = async (endpoint, datos) => {
+    try {
+        const response = await apiFetch(endpoint, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        });
+
+        return response ? await response.json() : null;
+    } catch (err) {
+        console.error('Error en PATCH:', err);
+        return null;
+    }
+};
+
+/* ================================
+   🗑️ DELETE
+================================ */
+export const delet = async (endpoint) => {
+    try {
+        const response = await apiFetch(endpoint, {
+            method: 'DELETE'
+        });
+
+        return response ? await response.json() : null;
+    } catch (err) {
+        console.error('Error en DELETE:', err);
         return null;
     }
 };
@@ -162,34 +138,12 @@ export const postFile = async (endpoint, file) => {
         const formData = new FormData();
         formData.append("file", file);
 
-        let response = await fetch(`${url}${endpoint}`, {
+        const response = await apiFetch(endpoint, {
             method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${getCookie('access_token')}`
-            },
             body: formData
         });
 
-        if (response.status === 401) {
-            await refreshToken();
-
-            response = await fetch(`${url}${endpoint}`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                },
-                body: formData
-            });
-
-            if (response.status === 401) {
-                cerrarSesion();
-                return null;
-            }
-        }
-
-        return await response.json();
+        return response ? await response.json() : null;
     } catch (err) {
         console.error('Error en POST FILE:', err);
         return null;
@@ -197,82 +151,23 @@ export const postFile = async (endpoint, file) => {
 };
 
 /* ================================
-   ✏️ PATCH
+   📤 EXPORT FILE
 ================================ */
-export const patch = async (endpoint, datos) => {
+export const exportFile = async (endpoint) => {
     try {
-        let response = await fetch(`${url}${endpoint}`, {
-            method: 'PATCH',
-            credentials: 'include',
+        const response = await apiFetch(endpoint, {
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
-            },
-            body: JSON.stringify(datos)
-        });
-
-        if (response.status === 401) {
-            await refreshToken();
-
-            response = await fetch(`${url}${endpoint}`, {
-                method: 'PATCH',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                },
-                body: JSON.stringify(datos)
-            });
-
-            if (response.status === 401) {
-                cerrarSesion();
-                return null;
-            }
-        }
-
-        return await response.json();
-    } catch (err) {
-        console.error('Error en PATCH:', err);
-        return null;
-    }
-};
-
-/* ================================
-   🗑️ DELETE
-================================ */
-export const delet = async (endpoint) => {
-    try {
-        let response = await fetch(`${url}${endpoint}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('access_token')}`
+                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }
         });
 
-        if (response.status === 401) {
-            await refreshToken();
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-            response = await fetch(`${url}${endpoint}`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getCookie('access_token')}`
-                }
-            });
-
-            if (response.status === 401) {
-                cerrarSesion();
-                return null;
-            }
-        }
-
-        return await response.json();
+        return await response.blob();
     } catch (err) {
-        console.error('Error en DELETE:', err);
-        return null;
+        console.error('Error exportando archivo:', err);
+        throw err;
     }
 };
 
