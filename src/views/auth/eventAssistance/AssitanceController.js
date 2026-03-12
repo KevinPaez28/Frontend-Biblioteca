@@ -4,7 +4,7 @@ import { abrirModalAsistencia } from "./viewAssistance/AssitancesModal.js";
 import { abrirModalCrearAsistenciaEvento } from "./CreateAssistance/createAsistencias.js";
 import { deleteAsistenciasFicha } from "./DeleteAssistance/AssitancesDelete.js";
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
-import { abrirModalExportAsistencias } from "./exportAssistances/importExcel.js";
+import { abrirModalExportAsistencias } from "./exportAssistances/importexcel.js";
 
 
 // ============================================================================
