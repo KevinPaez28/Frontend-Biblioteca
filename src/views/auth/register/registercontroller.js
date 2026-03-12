@@ -93,7 +93,7 @@ export default async () => {
 
     const fichas = await get("ficha");
     const programas = await get("programa");
-    const roles = await get("roles");
+    const roles = await get("roles/select");
     const tipo = await get("Tipo_documento")
 
     console.log(tipo);
