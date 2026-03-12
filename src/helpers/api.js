@@ -22,19 +22,23 @@ export const cerrarSesion = () => {
 ================================ */
 export const refreshToken = async () => {
     try {
-        await fetch(`${url}refresh-token`, {
+
+        const response = await fetch(`${url}refresh-token`, {
             method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('refresh_token')}`
-            }
+            credentials: 'include'
         });
+
+        if (!response.ok) {
+            throw new Error("No se pudo refrescar el token");
+        }
+
+        return await response.json();
+
     } catch (err) {
         console.error('Error al refrescar token:', err);
+        cerrarSesion();
     }
 };
-
 /* ================================
    🌐 GET
 ================================ */
@@ -88,9 +92,9 @@ export const exportFile = async (endpoint) => {
             }
         });
 
+        // Manejo de 401
         if (response.status === 401) {
             await refreshToken();
-
             response = await fetch(`${url}${endpoint}`, {
                 method: 'GET',
                 credentials: 'include',
@@ -106,14 +110,25 @@ export const exportFile = async (endpoint) => {
             }
         }
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+        const contentType = response.headers.get('Content-Type');
+
+        // Si el backend devuelve JSON (error)
+        if (contentType?.includes('application/json')) {
+            const data = await response.json();
+            throw new Error(data?.message || `HTTP ${response.status}`);
         }
 
+        // Si no es Excel ni JSON
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.message}`);
+        }
+
+        // Respuesta tipo Excel
         return await response.blob();
+
     } catch (err) {
         console.error('Error en exportFile:', err);
-        throw err;
+        throw err; // El modal lo captura
     }
 };
 

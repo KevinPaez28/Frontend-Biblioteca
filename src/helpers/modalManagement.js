@@ -9,9 +9,15 @@ export const mostrarModal = (contenido) => {
     modal.classList.add('modal');
     modal.innerHTML = contenido;
 
-    app.appendChild(modal);
-    modalesAbiertos.push(modal);
+    // Buscar la primera alerta existente
+    const primeraAlerta = app.querySelector('.alerta');
+    if (primeraAlerta) {
+        app.insertBefore(modal, primeraAlerta); // modal detrás de la alerta
+    } else {
+        app.appendChild(modal);
+    }
 
+    modalesAbiertos.push(modal);
     modal.showModal();
 
     requestAnimationFrame(() => {
@@ -20,7 +26,6 @@ export const mostrarModal = (contenido) => {
 
     return modal;
 };
-
 
 /**
  * Cierra un modal específico

@@ -9,31 +9,21 @@ import { deletePrograma } from "./deletePrograms/deleteProgram.js";
 export default async () => {
 
     const tbody = document.getElementById("programas-tbody");
-    const btnNuevoPrograma = document.getElementById("btnNuevoPrograma");
+    const pagination = document.querySelector(".pagination");
 
+    const btnNuevoPrograma = document.getElementById("btnNuevoPrograma");
     const inputBuscar = document.getElementById("inputBuscarPrograma");
     const btnBuscar = document.getElementById("btnBuscarPrograma");
-
-    const pagination = document.querySelector(".pagination");
 
     let currentPage = 1;
 
     // =============================
-    // BOTÓN NUEVO PROGRAMA
+    // BOTÓN NUEVO PROGRAMA (RBAC)
     // =============================
-    if (btnNuevoPrograma) {
-
-        if (tienePermiso("programs.store")) {
-
-            btnNuevoPrograma.addEventListener("click", () => {
-                abrirModalCrearPrograma();
-            });
-
-        } else {
-
-            btnNuevoPrograma.style.display = "none";
-
-        }
+    if (btnNuevoPrograma && tienePermiso("programs.store")) {
+        btnNuevoPrograma.addEventListener("click", () => abrirModalCrearPrograma());
+    } else if (btnNuevoPrograma) {
+        btnNuevoPrograma.style.display = "none";
     }
 
     // =============================
@@ -47,29 +37,26 @@ export default async () => {
 
             const response = await get(`programa/search?page=${page}&nombre=${search}`);
 
-            const records = response?.data?.records || [];
-            const meta = response?.data?.meta;
-
             tbody.innerHTML = "";
             pagination.innerHTML = "";
 
-            // =============================
-            // TABLA VACÍA
-            // =============================
-            if (records.length === 0) {
+            if (!response?.data?.records || response.data.records.length === 0) {
 
                 const tr = document.createElement("tr");
                 const td = document.createElement("td");
 
                 td.colSpan = 3;
-                td.textContent = "No hay programas registrados";
                 td.style.textAlign = "center";
+                td.textContent = "No hay programas registrados";
 
                 tr.appendChild(td);
                 tbody.appendChild(tr);
 
                 return;
             }
+
+            const records = response.data.records;
+            const meta = response.data.meta;
 
             // =============================
             // RENDER TABLA
@@ -78,11 +65,9 @@ export default async () => {
 
                 const tr = document.createElement("tr");
 
-                // # NUMERO
+                // NUMERO
                 const td1 = document.createElement("td");
-
-                td1.textContent =
-                    (meta.current_page - 1) * meta.per_page + index + 1;
+                td1.textContent = (meta.current_page - 1) * meta.per_page + index + 1;
 
                 // PROGRAMA
                 const td2 = document.createElement("td");
@@ -91,22 +76,17 @@ export default async () => {
                 // ACCIONES
                 const td3 = document.createElement("td");
 
-                // VER
+                // VER (siempre)
                 const btnVer = document.createElement("button");
                 btnVer.classList.add("btn-ver");
                 btnVer.textContent = "Ver";
+                btnVer.addEventListener("click", () => abrirModalPrograma(item));
+                td3.append(btnVer);
 
-                btnVer.addEventListener("click", () => {
-                    abrirModalPrograma(item);
-                });
-
-                td3.appendChild(btnVer);
-
-                // EDITAR
+                // EDITAR (RBAC)
                 if (tienePermiso("programs.update")) {
 
                     const btnEditar = document.createElement("button");
-
                     btnEditar.classList.add("btn-editar");
                     btnEditar.textContent = "Editar";
 
@@ -114,14 +94,13 @@ export default async () => {
                         editarModalPrograma(item);
                     });
 
-                    td3.appendChild(btnEditar);
+                    td3.append(btnEditar);
                 }
 
-                // ELIMINAR
+                // ELIMINAR (RBAC)
                 if (tienePermiso("programs.destroy")) {
 
                     const btnEliminar = document.createElement("button");
-
                     btnEliminar.classList.add("btn-eliminar");
                     btnEliminar.textContent = "Eliminar";
 
@@ -129,11 +108,10 @@ export default async () => {
                         deletePrograma(item);
                     });
 
-                    td3.appendChild(btnEliminar);
+                    td3.append(btnEliminar);
                 }
 
                 tr.append(td1, td2, td3);
-
                 tbody.appendChild(tr);
 
             });
@@ -143,13 +121,12 @@ export default async () => {
             // =============================
 
             const btnPrev = document.createElement("button");
-
-            btnPrev.textContent = "«";
-
+            btnPrev.textContent = "« Anterior";
             btnPrev.disabled = meta.current_page === 1;
 
-            btnPrev.onclick = () =>
+            btnPrev.addEventListener("click", () => {
                 cargarProgramas(meta.current_page - 1, inputBuscar.value.trim());
+            });
 
             pagination.appendChild(btnPrev);
 
@@ -158,25 +135,25 @@ export default async () => {
                 const btn = document.createElement("button");
 
                 btn.textContent = i;
+                btn.classList.add("btn-pag");
 
-                if (i === meta.current_page)
-                    btn.disabled = true;
+                if (i === meta.current_page) btn.disabled = true;
 
-                btn.onclick = () =>
+                btn.addEventListener("click", () => {
                     cargarProgramas(i, inputBuscar.value.trim());
+                });
 
                 pagination.appendChild(btn);
-
             }
 
             const btnNext = document.createElement("button");
 
-            btnNext.textContent = "»";
-
+            btnNext.textContent = "Siguiente »";
             btnNext.disabled = meta.current_page === meta.last_page;
 
-            btnNext.onclick = () =>
+            btnNext.addEventListener("click", () => {
                 cargarProgramas(meta.current_page + 1, inputBuscar.value.trim());
+            });
 
             pagination.appendChild(btnNext);
 
@@ -206,9 +183,7 @@ export default async () => {
         inputBuscar.addEventListener("keyup", (e) => {
 
             if (e.key === "Enter") {
-
                 cargarProgramas(1, inputBuscar.value.trim());
-
             }
 
         });
@@ -218,5 +193,4 @@ export default async () => {
     // CARGA INICIAL
     // =============================
     await cargarProgramas(1);
-
 };
