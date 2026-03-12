@@ -6,134 +6,217 @@ import { abrirModalCrearPrograma } from "./CreatePrograms/createPrograms.js";
 import { tienePermiso } from "../../../helpers/auth.js";
 import { deletePrograma } from "./deletePrograms/deleteProgram.js";
 
-/**
- * @description This function is the main entry point for the programs management page.
- * It fetches the program data, renders it in a table, and handles user interactions such as creating, editing, viewing, and deleting programs.
- */
 export default async () => {
-    // Get references to DOM elements
-    const tbody = document.querySelector(".seccion-dashboard .table tbody"); // Table body where program data will be inserted
-    const btnNuevoPrograma = document.getElementById("btnNuevoPrograma"); // Button to open the modal for creating a new program
-    const inputBuscar = document.querySelector(".input-filter"); // Input field for searching programs
-    const btnBuscar = document.querySelector(".btn-outline"); // Button to trigger the search
 
-    // ===== CONTROL DE BOTÓN NUEVO PROGRAMA =====
-    // Check if the "Nuevo Programa" button exists
+    const tbody = document.getElementById("programas-tbody");
+    const btnNuevoPrograma = document.getElementById("btnNuevoPrograma");
+
+    const inputBuscar = document.getElementById("inputBuscarPrograma");
+    const btnBuscar = document.getElementById("btnBuscarPrograma");
+
+    const pagination = document.querySelector(".pagination");
+
+    let currentPage = 1;
+
+    // =============================
+    // BOTÓN NUEVO PROGRAMA
+    // =============================
     if (btnNuevoPrograma) {
-        // Check if the user has permission to create programs
+
         if (tienePermiso("programs.store")) {
-            // If both conditions are true, add an event listener to the button
+
             btnNuevoPrograma.addEventListener("click", () => {
-                abrirModalCrearPrograma(); // Open the modal to create a new program
+                abrirModalCrearPrograma();
             });
+
         } else {
-            // If the user doesn't have permission, hide the button
+
             btnNuevoPrograma.style.display = "none";
+
         }
     }
 
-    /**
-     * @description Function to load program data from the API and display it in the table.
-     * @param {string} [search=""] - The search term to filter programs.
-     */
-    const cargarProgramas = async (search = "") => {
+    // =============================
+    // CARGAR PROGRAMAS
+    // =============================
+    const cargarProgramas = async (page = 1, search = "") => {
+
+        currentPage = page;
+
         try {
-            // Fetch program data from the API with an optional search parameter
-            const response = await get(`programa?search=${search}`);
-            tbody.innerHTML = ""; // Clear the table body before adding new data
 
-            // Check if the response contains data and if there are any programs
-            if (response && response.data && response.data.length > 0) {
-                // Iterate over each program in the data
-                response.data.forEach((item, index) => {
-                    const tr = document.createElement("tr"); // Create a new table row for each program
+            const response = await get(`programa/search?page=${page}&nombre=${search}`);
 
-                    // ===== # =====
-                    const td1 = document.createElement("td"); // Create a table data cell for the index
-                    td1.textContent = index + 1; // Set the index as the text content of the cell
+            const records = response?.data?.records || [];
+            const meta = response?.data?.meta;
 
-                    // ===== PROGRAMA =====
-                    const td2 = document.createElement("td"); // Create a table data cell for the program name
-                    td2.textContent = item.training_program || "—"; // Set the program name as the text content of the cell, or "—" if it doesn't exist
+            tbody.innerHTML = "";
+            pagination.innerHTML = "";
 
-                    // ===== ACCIONES =====
-                    const td3 = document.createElement("td"); // Create a table data cell for the action buttons
+            // =============================
+            // TABLA VACÍA
+            // =============================
+            if (records.length === 0) {
 
-                    // Botón VER siempre visible
-                    const btnVer = document.createElement("button"); // Create a button to view the program
-                    btnVer.classList.add("btn-ver"); // Add a class for styling
-                    btnVer.textContent = "Ver"; // Set the button text
-                    btnVer.addEventListener("click", () => {
-                        abrirModalPrograma(item, index); // Open the modal to view the program data
-                    });
-                    td3.appendChild(btnVer); // Add the view button to the cell
-
-                    // Botón EDITAR condicional
-                    // Check if the user has permission to update programs
-                    if (tienePermiso("programs.update")) {
-                        const btnEditar = document.createElement("button"); // Create a button to edit the program
-                        btnEditar.classList.add("btn-editar"); // Add a class for styling
-                        btnEditar.textContent = "Editar"; // Set the button text
-                        btnEditar.addEventListener("click", () => {
-                            editarModalPrograma(item, index); // Open the modal to edit the program
-                        });
-                        td3.appendChild(btnEditar); // Add the edit button to the cell
-                    }
-
-                    // Botón ELIMINAR condicional
-                    if (tienePermiso("programs.destroy")) {
-                        const btnEliminar = document.createElement("button");
-                        btnEliminar.classList.add("btn-eliminar");
-                        btnEliminar.textContent = "Eliminar";
-                        btnEliminar.addEventListener("click", () => {
-                            deletePrograma(item, index);
-                        });
-                        td3.appendChild(btnEliminar);
-                    }
-
-                    // ===== APPEND FINAL =====
-                    tr.appendChild(td1); // Add the index cell to the row
-                    tr.appendChild(td2); // Add the program name cell to the row
-                    tr.appendChild(td3); // Add the action buttons cell to the row
-
-                    tbody.appendChild(tr); // Add the row to the table body
-                });
-            } else {
-                // If there are no programs registered, display a message
                 const tr = document.createElement("tr");
                 const td = document.createElement("td");
+
                 td.colSpan = 3;
                 td.textContent = "No hay programas registrados";
+                td.style.textAlign = "center";
+
                 tr.appendChild(td);
                 tbody.appendChild(tr);
+
+                return;
             }
+
+            // =============================
+            // RENDER TABLA
+            // =============================
+            records.forEach((item, index) => {
+
+                const tr = document.createElement("tr");
+
+                // # NUMERO
+                const td1 = document.createElement("td");
+
+                td1.textContent =
+                    (meta.current_page - 1) * meta.per_page + index + 1;
+
+                // PROGRAMA
+                const td2 = document.createElement("td");
+                td2.textContent = item.training_program || "—";
+
+                // ACCIONES
+                const td3 = document.createElement("td");
+
+                // VER
+                const btnVer = document.createElement("button");
+                btnVer.classList.add("btn-ver");
+                btnVer.textContent = "Ver";
+
+                btnVer.addEventListener("click", () => {
+                    abrirModalPrograma(item);
+                });
+
+                td3.appendChild(btnVer);
+
+                // EDITAR
+                if (tienePermiso("programs.update")) {
+
+                    const btnEditar = document.createElement("button");
+
+                    btnEditar.classList.add("btn-editar");
+                    btnEditar.textContent = "Editar";
+
+                    btnEditar.addEventListener("click", () => {
+                        editarModalPrograma(item);
+                    });
+
+                    td3.appendChild(btnEditar);
+                }
+
+                // ELIMINAR
+                if (tienePermiso("programs.destroy")) {
+
+                    const btnEliminar = document.createElement("button");
+
+                    btnEliminar.classList.add("btn-eliminar");
+                    btnEliminar.textContent = "Eliminar";
+
+                    btnEliminar.addEventListener("click", () => {
+                        deletePrograma(item);
+                    });
+
+                    td3.appendChild(btnEliminar);
+                }
+
+                tr.append(td1, td2, td3);
+
+                tbody.appendChild(tr);
+
+            });
+
+            // =============================
+            // PAGINACIÓN
+            // =============================
+
+            const btnPrev = document.createElement("button");
+
+            btnPrev.textContent = "«";
+
+            btnPrev.disabled = meta.current_page === 1;
+
+            btnPrev.onclick = () =>
+                cargarProgramas(meta.current_page - 1, inputBuscar.value.trim());
+
+            pagination.appendChild(btnPrev);
+
+            for (let i = 1; i <= meta.last_page; i++) {
+
+                const btn = document.createElement("button");
+
+                btn.textContent = i;
+
+                if (i === meta.current_page)
+                    btn.disabled = true;
+
+                btn.onclick = () =>
+                    cargarProgramas(i, inputBuscar.value.trim());
+
+                pagination.appendChild(btn);
+
+            }
+
+            const btnNext = document.createElement("button");
+
+            btnNext.textContent = "»";
+
+            btnNext.disabled = meta.current_page === meta.last_page;
+
+            btnNext.onclick = () =>
+                cargarProgramas(meta.current_page + 1, inputBuscar.value.trim());
+
+            pagination.appendChild(btnNext);
+
         } catch (error) {
-            // If there is an error loading programs, display an error message
+
             console.error("Error cargando programas:", error);
-            tbody.innerHTML = "";
-            const tr = document.createElement("tr");
-            const td = document.createElement("td");
-            td.colSpan = 3;
-            td.textContent = "Error al cargar programas.";
-            td.style.textAlign = "center";
-            td.style.color = "red";
-            tr.appendChild(td);
-            tbody.appendChild(tr);
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align:center;color:red">
+                        Error al cargar programas
+                    </td>
+                </tr>
+            `;
         }
     };
 
-    // Add event listeners to the search button and input field
+    // =============================
+    // BUSCAR
+    // =============================
     if (btnBuscar && inputBuscar) {
+
         btnBuscar.addEventListener("click", () => {
-            cargarProgramas(inputBuscar.value.trim()); // Load programs based on the search input
+            cargarProgramas(1, inputBuscar.value.trim());
         });
 
         inputBuscar.addEventListener("keyup", (e) => {
+
             if (e.key === "Enter") {
-                cargarProgramas(inputBuscar.value.trim()); // Load programs when Enter key is pressed in the search input
+
+                cargarProgramas(1, inputBuscar.value.trim());
+
             }
+
         });
     }
 
-    await cargarProgramas(); // Load all programs when the page loads
+    // =============================
+    // CARGA INICIAL
+    // =============================
+    await cargarProgramas(1);
+
 };

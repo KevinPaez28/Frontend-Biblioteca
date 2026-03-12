@@ -4,7 +4,7 @@ import { abrirModalAsistencia } from "./viewAssistance/AssitancesModal.js";
 import { abrirModalCrearAsistenciaEvento } from "./CreateAssistance/createAsistencias.js";
 import { deleteAsistenciasFicha } from "./DeleteAssistance/AssitancesDelete.js";
 import { showSpinner, hideSpinner } from "../../../helpers/spinner.js";
-import { abrirModalExportAsistencias } from "./exportAssistances/export.js";
+import { abrirModalExportAsistencias } from "./exportAssistances/importExcel.js";
 
 
 // ============================================================================
@@ -53,7 +53,6 @@ export default async () => {
                     // Columna 3: Número de ficha
                     const td3 = document.createElement("td");
                     td3.textContent = item.Ficha || "—";
-
                     // Columna 4: Fecha y hora formateada
                     const td4 = document.createElement("td");
                     td4.textContent = item.DateTime

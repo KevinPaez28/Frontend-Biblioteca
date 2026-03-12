@@ -20,9 +20,15 @@
         <div class="filter-section filter-doble">
             <div>
                 <label>Filtrar por programa</label>
-                <input type="text" class="input-filter" placeholder="Buscar">
+                <input 
+                    type="text" 
+                    class="input-filter" 
+                    id="inputBuscarPrograma"
+                    placeholder="Buscar programa"
+                >
             </div>
-            <button class="btn btn-outline">
+
+            <button class="btn btn-outline" id="btnBuscarPrograma">
                 <i class="ri-search-line"></i>
             </button>
         </div>
@@ -43,14 +49,18 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
+
                 <tbody id="programas-tbody">
-                    <!-- Aquí pinta el JS -->
+                    <!-- JS -->
                 </tbody>
             </table>
         </section>
+
+        <!-- PAGINACIÓN -->
+        <div class="pagination"></div>
+
     </section>
 
 </div>
 
-<!-- Controlador -->
 <script type="module" src="programasController.js"></script>
