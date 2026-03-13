@@ -7,128 +7,253 @@ import { deleteFicha } from "./deleteFichas/deleteFichas.js";
 import { tienePermiso } from "../../../helpers/auth.js";
 
 /**
- * @description This is the main function to load and display the "fichas" (records).
- * It fetches data, renders it in a table, and handles user interactions
- * such as creating, editing, viewing, and deleting "fichas".
+ * Controlador principal del módulo de fichas
+ * Este archivo se encarga de:
+ * - consultar las fichas en la API
+ * - aplicar filtros de búsqueda
+ * - renderizar la tabla
+ * - manejar permisos de usuario
  */
 export default async () => {
-    // Get references to DOM elements
-    const tbody = document.querySelector(".seccion-dashboard .table tbody"); // Table body where data will be inserted
-    const btnNuevaFicha = document.getElementById("btnNuevaFicha"); // Button to open the modal for creating a new "ficha"
-    const inputBuscar = document.querySelector(".input-filter"); // Input field for searching "fichas"
-    const btnBuscar = document.querySelector(".btn-outline"); // Button to trigger the search
 
-    // Check if the "Nueva Ficha" button exists and if the user has permission to create "fichas"
+    /* =========================================
+       REFERENCIAS A ELEMENTOS DEL DOM
+    ========================================= */
+
+    // tbody donde se renderizarán las fichas
+    const tbody = document.querySelector(".seccion-dashboard .table tbody");
+
+    // botón para crear nueva ficha
+    const btnNuevaFicha = document.getElementById("btnNuevaFicha");
+
+    // input de búsqueda
+    const inputBuscar = document.querySelector(".input-filter");
+
+    // botón de búsqueda
+    const btnBuscar = document.querySelector(".btn-outline");
+
+
+    /* =========================================
+       CONTROL DE PERMISOS PARA CREAR FICHAS
+    ========================================= */
+
     if (btnNuevaFicha && tienePermiso("fichas.store")) {
-        // If both conditions are true, add an event listener to the button
+
+        // si tiene permiso abrimos el modal
         btnNuevaFicha.addEventListener("click", () => {
-            abrirModalCrearFicha(); // Open the modal to create a new "ficha"
+            abrirModalCrearFicha();
         });
+
     } else if (btnNuevaFicha) {
-        // If the button exists but the user doesn't have permission, hide the button
+
+        // si no tiene permiso ocultamos el botón
         btnNuevaFicha.style.display = "none";
     }
 
-    /**
-     * @description Function to load "fichas" data from the API and display it in the table.
-     * @param {string} [search=""] - The search term to filter "fichas".
-     */
-    const cargarFichas = async (search = "") => {
+
+    /* =========================================
+       OBJETO DE FILTROS
+       Permite escalar filtros fácilmente
+    ========================================= */
+
+    const filtros = {
+        search: inputBuscar
+    };
+
+
+    /* =========================================
+       FUNCIÓN PRINCIPAL PARA CARGAR FICHAS
+    ========================================= */
+
+    const cargarFichas = async () => {
+
         try {
-            // Fetch "fichas" data from the API with an optional search parameter
-            const response = await get(`ficha?search=${search}`);
-            tbody.innerHTML = ""; // Clear the table body before adding new data
 
-            // Check if the response contains data and if there are any "fichas"
-            if (response && response.data && response.data.length > 0) {
-                // Iterate over each "ficha" in the data
-                response.data.forEach((item, index) => {
-                    const tr = document.createElement("tr"); // Create a new table row for each "ficha"
+            // creamos los parámetros de búsqueda
+            const params = new URLSearchParams();
 
-                    const td1 = document.createElement("td"); // Create a table data cell for the index
-                    td1.textContent = index + 1; // Set the index as the text content of the cell
+            Object.entries(filtros).forEach(([key, input]) => {
 
-                    const td2 = document.createElement("td"); // Create a table data cell for the "ficha" number
-                    td2.textContent = item.ficha; // Set the "ficha" number as the text content of the cell
+                if (input && input.value.trim() !== "") {
+                    params.append(key, input.value.trim());
+                }
 
-                    const td3 = document.createElement("td"); // Create a table data cell for the training program
-                    td3.textContent = item.programa?.training_program || "—"; // Set the training program name as the text content of the cell, or "—" if it doesn't exist
+            });
 
-                    const td4 = document.createElement("td"); // Create a table data cell for the action buttons
+            // endpoint de búsqueda
+            const url = `ficha/search?${params.toString()}`;
 
-                    const btnVer = document.createElement("button"); // Create a button to view the "ficha"
-                    btnVer.classList.add("btn-ver"); // Add a class for styling
-                    btnVer.textContent = "Ver"; // Set the button text
-                    btnVer.addEventListener("click", () => {
-                        // Add an event listener to open the "ficha" modal
-                        abrirModalFicha(item, index); // Open the modal to view the "ficha" data
-                    });
-                    td4.appendChild(btnVer); // Add the view button to the cell
+            // petición a la API
+            const response = await get(url);
 
-                    // Check if the user has permission to update "fichas"
-                    if (tienePermiso("fichas.update")) {
-                        const btnEditar = document.createElement("button"); // Create a button to edit the "ficha"
-                        btnEditar.classList.add("btn-editar"); // Add a class for styling
-                        btnEditar.textContent = "Editar"; // Set the button text
-                        btnEditar.addEventListener("click", () => {
-                            // Add an event listener to open the "ficha" edit modal
-                            editarmodalFicha(item, index); // Open the modal to edit the "ficha"
-                        });
-                        td4.appendChild(btnEditar); // Add the edit button to the cell
-                    }
+            // limpiamos la tabla antes de renderizar
+            tbody.innerHTML = "";
 
-                    // Check if the user has permission to delete "fichas"
-                    if (tienePermiso("fichas.destroy")) {
-                        const btnEliminar = document.createElement("button"); // Create a button to delete the "ficha"
-                        btnEliminar.classList.add("btn-eliminar"); // Add a class for styling
-                        btnEliminar.textContent = "Eliminar"; // Set the button text
-                        btnEliminar.addEventListener("click", () => {
-                            // Add an event listener to delete the "ficha"
-                            deleteFicha(item); // Delete the "ficha"
-                        });
-                        td4.appendChild(btnEliminar); // Add the delete button to the cell
-                    }
 
-                    tr.appendChild(td1); // Add the index cell to the row
-                    tr.appendChild(td2); // Add the "ficha" number cell to the row
-                    tr.appendChild(td3); // Add the training program cell to the row
-                    tr.appendChild(td4); // Add the action buttons cell to the row
+            /* =========================================
+               DESESTRUCTURAR RESPUESTA
+               records = datos
+               meta = info de paginación
+            ========================================= */
 
-                    tbody.appendChild(tr); // Add the row to the table body
-                });
-            } else {
-                // If there are no "fichas" registered, display a message
+            const records = response?.data?.records || [];
+            const meta = response?.data?.meta || {};
+
+
+            /* =========================================
+               VALIDACIÓN SI NO HAY DATOS
+            ========================================= */
+
+            if (records.length === 0) {
+
                 const tr = document.createElement("tr");
                 const td = document.createElement("td");
+
                 td.colSpan = 4;
                 td.textContent = "No hay fichas registradas";
+                td.style.textAlign = "center";
+
                 tr.appendChild(td);
                 tbody.appendChild(tr);
+
+                return;
             }
+
+
+            /* =========================================
+               RENDERIZAR FILAS
+            ========================================= */
+
+            records.forEach((item, index) => {
+
+                const tr = document.createElement("tr");
+
+
+                /* -------- COLUMNA # -------- */
+
+                const td1 = document.createElement("td");
+                td1.textContent = index + 1;
+
+
+                /* -------- COLUMNA FICHA -------- */
+
+                const td2 = document.createElement("td");
+                td2.textContent = item.ficha;
+
+
+                /* -------- COLUMNA PROGRAMA -------- */
+
+                const td3 = document.createElement("td");
+                td3.textContent = item.programa?.training_program || "—";
+
+
+                /* -------- COLUMNA ACCIONES -------- */
+
+                const td4 = document.createElement("td");
+
+
+                /* ===== BOTÓN VER ===== */
+
+                const btnVer = document.createElement("button");
+                btnVer.classList.add("btn-ver");
+                btnVer.textContent = "Ver";
+
+                btnVer.addEventListener("click", () => {
+                    abrirModalFicha(item, index);
+                });
+
+                td4.appendChild(btnVer);
+
+
+                /* ===== BOTÓN EDITAR ===== */
+
+                if (tienePermiso("fichas.update")) {
+
+                    const btnEditar = document.createElement("button");
+
+                    btnEditar.classList.add("btn-editar");
+                    btnEditar.textContent = "Editar";
+
+                    btnEditar.addEventListener("click", () => {
+                        editarmodalFicha(item, index);
+                    });
+
+                    td4.appendChild(btnEditar);
+                }
+
+
+                /* ===== BOTÓN ELIMINAR ===== */
+
+                if (tienePermiso("fichas.destroy")) {
+
+                    const btnEliminar = document.createElement("button");
+
+                    btnEliminar.classList.add("btn-eliminar");
+                    btnEliminar.textContent = "Eliminar";
+
+                    btnEliminar.addEventListener("click", () => {
+                        deleteFicha(item);
+                    });
+
+                    td4.appendChild(btnEliminar);
+                }
+
+
+                /* -------- AGREGAR CELDAS A LA FILA -------- */
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+
+                tbody.appendChild(tr);
+
+            });
+
+
         } catch (error) {
-            // If there is an error loading "fichas", display an error message
+
+            /* =========================================
+               MANEJO DE ERRORES
+            ========================================= */
+
             console.error("Error cargando fichas:", error);
+
             tbody.innerHTML = "";
+
             const tr = document.createElement("tr");
             const td = document.createElement("td");
+
             td.colSpan = 4;
             td.textContent = "Error al cargar fichas.";
             td.style.textAlign = "center";
             td.style.color = "red";
+
             tr.appendChild(td);
             tbody.appendChild(tr);
         }
     };
 
-    // Add an event listener to the search button to trigger the search
+
+    /* =========================================
+       EVENTOS DE BÚSQUEDA
+    ========================================= */
+
+    // botón buscar
     btnBuscar.addEventListener("click", () => {
-        cargarFichas(inputBuscar.value.trim()); // Load "fichas" based on the search input
+        cargarFichas();
     });
 
-    // Add an event listener to the search input to trigger the search on keyup
-    inputBuscar.addEventListener("keyup", () => {
-        cargarFichas(inputBuscar.value.trim()); // Load "fichas" based on the search input
+    // búsqueda en tiempo real
+    inputBuscar.addEventListener("input", () => {
+        cargarFichas();
     });
 
-    await cargarFichas(); // Load all "fichas" when the page loads
+
+    /* =========================================
+       CARGA INICIAL
+    ========================================= */
+
+    await cargarFichas();
+
 };
