@@ -3,41 +3,26 @@ import { get, post } from "../../../helpers/api.js";
 import * as validate from "../../../helpers/modules/modules.js";
 import { success, error, loading } from "../../../helpers/alertas.js";
 
-/**
- * @description Función asíncrona principal para manejar el formulario de registro de usuarios.
- */
 export default async () => {
 
-    // Obtener el formulario de registro
     const form = document.querySelector("#formulario_register");
-    if (!form) return; // Si no existe, no ejecuta nada
+    if (!form) return;
 
-    // Selects del formulario
     const selectRol = form.querySelector(".rol");
     const selectFicha = form.querySelector(".ficha");
     const selectPrograma = form.querySelector(".programa");
     const Tdocumento = form.querySelector(".Tdocumento");
 
-    // Bandera para evitar múltiples envíos seguidos
     let enviando = false;
 
-
-    // ================= EVENTO SUBMIT DEL FORMULARIO =================
+    // ================= SUBMIT =================
     form.onsubmit = async (event) => {
-
-        // Evita que la página se recargue
         event.preventDefault();
 
-        // Si ya se está enviando, no deja volver a enviar
         if (enviando) return;
-
-        // Ejecuta validaciones generales
         if (!validate.validarCampos(event)) return;
 
-        // Muestra alerta de carga
         loading("Registrando usuario");
-
-        // Activa bloqueo de envío
         enviando = true;
 
         const token = await grecaptcha.execute(
@@ -45,62 +30,40 @@ export default async () => {
             { action: "registrar" }
         );
 
-        // Copia los datos validados
         const data = {
             ...validate.datos,
             recaptcha_token: token
         };
 
-        console.log(data)
-
-        // Petición al backend
         const response = await post("user/create", data);
 
-
-        // ================= MANEJO DE ERRORES =================
         if (!response || !response.success) {
-
-            // Si el backend envía lista de errores
             if (response?.errors?.length) {
                 response.errors.forEach(err => error(err));
             } else {
                 error(response?.message || "Error al crear usuario");
             }
-
-            // Libera el formulario para volver a intentar
             enviando = false;
             return;
         }
 
-
-        // ================= REGISTRO EXITOSO =================
-
-        // Cierra el loading (ESTO ES LO QUE FALTABA)
         success(response.message || "Usuario creado exitosamente");
-
-        // Limpia formulario
         form.reset();
 
-        // Permite volver a enviar después
+        // 👇 limpiar programa después de reset
+        selectPrograma.innerHTML = `<option value="">Seleccione un programa</option>`;
+        selectPrograma.disabled = true;
+
         enviando = false;
     };
 
-
-
-    // ================= CARGA DE DATOS DESDE API =================
-
-    // Trae fichas, programas y roles al mismo tiempo
+    // ================= CARGA DE DATOS =================
 
     const fichas = await get("ficha");
-    const programas = await get("programa");
     const roles = await get("roles/select");
-    const tipo = await get("Tipo_documento")
+    const tipo = await get("Tipo_documento");
 
-    console.log(tipo);
-
-
-
-    // Llena select de roles
+    // Roles
     roles.data.forEach(r => {
         const op = document.createElement("option");
         op.value = r.id;
@@ -108,6 +71,7 @@ export default async () => {
         selectRol.append(op);
     });
 
+    // Tipo documento
     tipo.data.forEach(r => {
         const op = document.createElement("option");
         op.value = r.id;
@@ -115,58 +79,69 @@ export default async () => {
         Tdocumento.append(op);
     });
 
-    // // Llena select de fichas
+    // ================= FICHAS (CON PROGRAMA) =================
     fichas.data.forEach(f => {
         const op = document.createElement("option");
         op.value = f.id;
         op.textContent = f.ficha;
+
+        // 👇 guardamos programa
+        op.dataset.programaId = f.programa?.id || "";
+        op.dataset.programaNombre = f.programa?.training_program || "";
+
         selectFicha.append(op);
     });
 
-    // // Llena select de programas
-    programas.data.forEach(p => {
+    // ================= FICHA → PROGRAMA =================
+    selectFicha.addEventListener("change", () => {
+
+        selectPrograma.innerHTML = `<option value="">Seleccione un programa</option>`;
+        selectPrograma.disabled = true;
+
+        if (!selectFicha.value) return;
+
+        const selected = selectFicha.selectedOptions[0];
+
+        const programaId = selected.dataset.programaId;
+        const programaNombre = selected.dataset.programaNombre;
+
+        if (!programaId) return;
+
         const op = document.createElement("option");
-        op.value = p.id;
-        op.textContent = p.training_program;
+        op.value = programaId;
+        op.textContent = programaNombre;
+
         selectPrograma.append(op);
+        selectPrograma.value = programaId;
+        selectPrograma.disabled = false;
     });
 
-
-
-    // ================= MOSTRAR / OCULTAR CAMPOS SEGÚN ROL =================
+    // ================= ROLES =================
     selectRol.addEventListener("change", () => {
 
-        // Buscar rol aprendiz
         const aprendiz = roles.data.find(r => r.name.toLowerCase() === "aprendiz");
 
-        // Buscar roles administrador y ayudante
         const adminOrhelpers = roles.data.filter(r => {
             const n = r.name.toLowerCase();
             return n === "administrador" || n === "apoyo";
         });
 
-        // Grupos que dependen de ficha/programa
         const gruposActivos = form.querySelectorAll(".form__grupo.activo");
-
-        // Grupo de contraseña
         const passwordGroup = form.querySelector(".form__grupo.password");
 
         const selectedId = parseInt(selectRol.value);
 
-        // Si es aprendiz
         if (aprendiz && selectedId === aprendiz.id) {
             gruposActivos.forEach(g => g.classList.remove("oculto"));
             passwordGroup.classList.add("oculto");
             passwordGroup.querySelector("input").value = "";
         }
-        // Si es administrador o ayudante
         else if (adminOrhelpers.some(r => r.id === selectedId)) {
             passwordGroup.classList.remove("oculto");
             gruposActivos.forEach(g => g.classList.add("oculto"));
             selectFicha.value = "";
             selectPrograma.value = "";
         }
-        // Cualquier otro rol
         else {
             gruposActivos.forEach(g => g.classList.add("oculto"));
             passwordGroup.classList.add("oculto");
@@ -176,14 +151,11 @@ export default async () => {
         }
     });
 
-
-
-    // ================= VALIDACIONES POR CAMPO =================
+    // ================= VALIDACIONES =================
     const campos = form.querySelectorAll("input, select");
 
     campos.forEach(campo => {
 
-        // Validación para documento y teléfono (solo números)
         if (campo.id === "documento" || campo.id === "telefono") {
 
             campo.addEventListener("keydown", e => {
@@ -199,9 +171,7 @@ export default async () => {
             return;
         }
 
-        // Campos de texto normal
         if (campo.type === "text") {
-
             campo.addEventListener("keydown", e => {
                 validate.validarTexto(e);
                 validate.validarMaximo(e, campo.maxLength || 50);
@@ -213,14 +183,11 @@ export default async () => {
             });
         }
 
-        // Validación de correo
         if (campo.type === "email") {
             campo.addEventListener("blur", validate.validarCorreo);
         }
 
-        // Validación de contraseña solo si está visible
         if (campo.type === "password") {
-
             campo.addEventListener("blur", e => {
                 if (!campo.closest(".form__grupo").classList.contains("oculto")) {
                     validate.validarPassword(e);

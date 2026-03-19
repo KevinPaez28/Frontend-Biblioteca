@@ -1,6 +1,6 @@
 import { mostrarModal, cerrarModal } from "../../../../helpers/modalManagement.js";
 import "../../../../components/models/modal.css";
-import htmlContent from "./index.html?raw";
+import htmlContent from "./Index.html?raw";
 
 
 // ============================================================================
